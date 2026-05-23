@@ -13,6 +13,9 @@ import {
   Skeleton,
   Button,
   Grid,
+  Card,
+  CardMedia,
+  CardContent,
 } from '@mui/material'
 import {
   CalendarToday,
@@ -34,6 +37,7 @@ import Link from 'next/link'
 interface Blog {
   _id: string
   title: string
+  slug: string  // ✅ Added slug property
   content: string
   excerpt: string
   category: string
@@ -65,6 +69,7 @@ export default function BlogDetailPage() {
       const relatedResponse = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/blogs`, {
         params: { category: response.data.data.category, limit: 3 },
       })
+      // ✅ Now b.slug exists because we added it to interface
       setRelatedBlogs(relatedResponse.data.data.filter((b: Blog) => b.slug !== slug))
     } catch (error) {
       console.error('Error fetching blog:', error)
@@ -165,7 +170,7 @@ export default function BlogDetailPage() {
               </Box>
 
               {/* Title */}
-              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 3 }}>
+              <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 3, color: '#1a1a1a' }}>
                 {blog.title}
               </Typography>
 
@@ -221,21 +226,21 @@ export default function BlogDetailPage() {
           {/* Related Blogs */}
           {relatedBlogs.length > 0 && (
             <Box sx={{ mt: 6 }}>
-              <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
+              <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: 'bold' }}>
                 Related Articles
               </Typography>
               <Grid container spacing={3}>
                 {relatedBlogs.map((relatedBlog) => (
                   <Grid item xs={12} md={4} key={relatedBlog._id}>
-                    <Card sx={{ height: '100%' }}>
+                    <Card sx={{ height: '100%', transition: 'all 0.3s ease', '&:hover': { transform: 'translateY(-5px)', boxShadow: '0 10px 25px rgba(0,0,0,0.1)' } }}>
                       <CardMedia
                         component="img"
-                        height="150"
+                        height="180"
                         image={relatedBlog.featuredImage?.url || '/blog-placeholder.jpg'}
                         alt={relatedBlog.title}
                       />
                       <CardContent>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
                           {relatedBlog.title}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
@@ -246,6 +251,7 @@ export default function BlogDetailPage() {
                           href={`/blogs/${relatedBlog.slug}`}
                           variant="outlined"
                           size="small"
+                          sx={{ color: '#ff6b35', borderColor: '#ff6b35', '&:hover': { bgcolor: 'rgba(255,107,53,0.05)', borderColor: '#e55a2b' } }}
                         >
                           Read More
                         </Button>
