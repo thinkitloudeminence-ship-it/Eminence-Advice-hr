@@ -116,7 +116,7 @@ export default function AboutPage() {
                 fontSize: { xs: '1rem', md: '1.25rem' },
               }}
             >
-              Bridging the gap between talent and opportunity since 2019
+              Bridging the gap between talent and opportunity since 2009
             </Typography>
           </motion.div>
         </Container>
@@ -156,7 +156,7 @@ export default function AboutPage() {
                 </Typography>
               </Typography>
               <Typography paragraph sx={{ color: '#666', lineHeight: 1.7 }}>
-                Eminance Advice was founded in 2019 with a vision to transform the career 
+                Eminance Advice was founded in 2009 with a vision to transform the career 
                 landscape in India. What started as a small career counseling center has 
                 grown into a comprehensive HR services platform serving thousands of 
                 students, professionals, and companies.

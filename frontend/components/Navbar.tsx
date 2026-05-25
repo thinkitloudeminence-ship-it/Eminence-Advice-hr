@@ -1,14 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import {
   AppBar,
   Toolbar,
-  Typography,
   Button,
   IconButton,
   Drawer,
@@ -17,8 +15,6 @@ import {
   ListItemText,
   Container,
   Box,
-  useMediaQuery,
-  useTheme,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
@@ -36,12 +32,10 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
+      setScrolled(window.scrollY > 10)
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
@@ -52,20 +46,20 @@ export default function Navbar() {
   }
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Image
-            src="/Eminenceadvicelogo.png"
-            alt="Eminance Advice Logo"
-            width={50}
-            height={50}
-            style={{ borderRadius: '8px', objectFit: 'contain' }}
-          />
-        </Box>
-        <IconButton>
+    <Box sx={{ width: 260, p: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <IconButton onClick={handleDrawerToggle}>
           <CloseIcon />
         </IconButton>
+      </Box>
+      <Box sx={{ textAlign: 'center', my: 2 }}>
+        <Image
+          src="/Eminenceadvicelogo.png"
+          alt="Logo"
+          width={130}
+          height={40}
+          style={{ objectFit: 'contain' }}
+        />
       </Box>
       <List>
         {navItems.map((item) => (
@@ -73,26 +67,28 @@ export default function Navbar() {
             key={item.label}
             component={Link}
             href={item.path}
+            onClick={handleDrawerToggle}
             sx={{
               textAlign: 'center',
+              justifyContent: 'center',
               color: pathname === item.path ? '#ff6b35' : '#333',
+              '&:hover': { bgcolor: '#fff5f0', color: '#ff6b35' }
             }}
           >
             <ListItemText primary={item.label} />
           </ListItem>
         ))}
       </List>
-      <Box sx={{ p: 2 }}>
-        <Button
-          variant="contained"
-          fullWidth
-          component={Link}
-          href="/jobs"
-          sx={{ bgcolor: '#ff6b35', '&:hover': { bgcolor: '#e55a2b' } }}
-        >
-          Apply Now
-        </Button>
-      </Box>
+      <Button
+        fullWidth
+        variant="contained"
+        component={Link}
+        href="/jobs"
+        onClick={handleDrawerToggle}
+        sx={{ bgcolor: '#ff6b35', '&:hover': { bgcolor: '#e55a2b' }, mt: 2 }}
+      >
+        Apply Now
+      </Button>
     </Box>
   )
 
@@ -100,102 +96,77 @@ export default function Navbar() {
     <>
       <AppBar
         position="fixed"
-        elevation={scrolled ? 4 : 0}
+        elevation={0}
         sx={{
-          backgroundColor: 'white',
-          transition: 'all 0.3s ease',
-          boxShadow: scrolled ? '0 2px 10px rgba(0,0,0,0.1)' : '0 1px 0 rgba(0,0,0,0.05)',
+          bgcolor: scrolled ? '#ffffff' : '#ffffff',
+          boxShadow: scrolled ? '0 1px 8px rgba(0,0,0,0.05)' : 'none',
+          borderBottom: '1px solid #eee',
         }}
       >
         <Container maxWidth="xl">
-          <Toolbar disableGutters sx={{ justifyContent: 'space-between', py: 2 }}>
-            <motion.div
-              initial={{ x: -50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-                <Image
-                  src="/Eminenceadvicelogo.png"
-                  alt="Eminance Advice Logo"
-                  width={100}
-                  height={60}
-                  style={{ borderRadius: '10px', objectFit: 'contain' }}
-                  priority
-                />
-              </Link>
-            </motion.div>
+          <Toolbar sx={{ justifyContent: 'space-between', minHeight: '64px !important', px: { xs: 1, sm: 2 } }}>
+            {/* Logo */}
+            <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
+              <Image
+                src="/Eminenceadvicelogo.png"
+                alt="Eminance Advice"
+                width={140}
+                height={42}
+                priority
+                style={{ width: 'auto', height: '42px', objectFit: 'contain' }}
+              />
+            </Link>
 
-            {!isMobile && (
-              <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                {navItems.map((item, index) => (
-                  <motion.div
-                    key={item.label}
-                    initial={{ y: -50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                  >
-                    <Button
-                      component={Link}
-                      href={item.path}
-                      sx={{
-                        color: pathname === item.path ? '#ff6b35' : '#333',
-                        fontWeight: pathname === item.path ? 600 : 400,
-                        fontSize: '0.95rem',
-                        '&:hover': {
-                          color: '#ff6b35',
-                          backgroundColor: 'transparent',
-                        },
-                      }}
-                    >
-                      {item.label}
-                    </Button>
-                  </motion.div>
-                ))}
+            {/* Desktop Menu */}
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1 }}>
+              {navItems.map((item) => (
                 <Button
-                  variant="contained"
-                  sx={{
-                    bgcolor: '#ff6b35',
-                    '&:hover': { bgcolor: '#e55a2b' },
-                    textTransform: 'none',
-                    px: 3,
-                    py: 0.75,
-                    fontSize: '0.9rem',
-                  }}
+                  key={item.label}
                   component={Link}
-                  href="/jobs"
+                  href={item.path}
+                  sx={{
+                    color: pathname === item.path ? '#ff6b35' : '#444',
+                    fontWeight: pathname === item.path ? 600 : 400,
+                    fontSize: '0.9rem',
+                    px: 1.5,
+                    '&:hover': { color: '#ff6b35', bgcolor: 'transparent' }
+                  }}
                 >
-                  Apply Now
+                  {item.label}
                 </Button>
-              </Box>
-            )}
-
-            {isMobile && (
-              <IconButton
-                aria-label="open drawer"
-                edge="start"
-                onClick={handleDrawerToggle}
-                sx={{ color: '#ff6b35' }}
+              ))}
+              <Button
+                variant="contained"
+                component={Link}
+                href="/jobs"
+                sx={{
+                  bgcolor: '#ff6b35',
+                  '&:hover': { bgcolor: '#e55a2b' },
+                  ml: 1,
+                  px: 2.5,
+                  py: 0.7,
+                  fontSize: '0.85rem',
+                  textTransform: 'none',
+                  borderRadius: 2
+                }}
               >
-                <MenuIcon />
-              </IconButton>
-            )}
+                Apply Now
+              </Button>
+            </Box>
+
+            {/* Mobile Menu */}
+            <IconButton onClick={handleDrawerToggle} sx={{ display: { xs: 'flex', md: 'none' }, color: '#ff6b35' }}>
+              <MenuIcon />
+            </IconButton>
           </Toolbar>
         </Container>
       </AppBar>
 
-      <Drawer
-        anchor="right"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{ keepMounted: true }}
-        sx={{
-          display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 280 },
-        }}
-      >
+      <Drawer anchor="right" open={mobileOpen} onClose={handleDrawerToggle}>
         {drawer}
       </Drawer>
+
+      <Box sx={{ height: '64px' }} />
     </>
   )
 }

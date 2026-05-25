@@ -6,7 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import Box from '@mui/material/Box'
 import AdminNavbar from '@/components/AdminNavbar'
 import AdminSidebar from '@/components/AdminSidebar'
-import { Providers } from '@/redux/provider'
+import { Providers } from '../redux/store/provider'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Box, Container, Typography, Grid, Card, CardContent } from '@mui/material'
+import { Box, Container, Typography, Grid, Card, CardContent, useMediaQuery, useTheme } from '@mui/material'
 import { School, Work, Business, TrendingUp, CheckCircle, People, EmojiEvents } from '@mui/icons-material'
 import Image from 'next/image'
 
@@ -13,10 +13,15 @@ const stats = [
 ]
 
 export default function AboutOverview() {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'))
+
   return (
-    <Box sx={{ py: 8, bgcolor: 'white' }}>
-      <Container maxWidth="lg">
-        <Grid container spacing={6} alignItems="center">
+    <Box sx={{ py: { xs: 5, sm: 6, md: 8 }, bgcolor: 'white' }}>
+      <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
+        <Grid container spacing={{ xs: 4, sm: 5, md: 6 }} alignItems="center">
+          {/* Left Content */}
           <Grid item xs={12} md={6}>
             <motion.div
               initial={{ x: -50, opacity: 0 }}
@@ -24,7 +29,7 @@ export default function AboutOverview() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <Box sx={{ mb: 2 }}>
+              <Box sx={{ mb: 2, textAlign: { xs: 'center', md: 'left' } }}>
                 <Typography
                   component="span"
                   sx={{
@@ -33,7 +38,7 @@ export default function AboutOverview() {
                     px: 2,
                     py: 0.5,
                     borderRadius: 20,
-                    fontSize: '0.85rem',
+                    fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.85rem' },
                     fontWeight: 600,
                     display: 'inline-block',
                   }}
@@ -45,10 +50,11 @@ export default function AboutOverview() {
               <Typography
                 variant="h2"
                 sx={{ 
-                  fontSize: { xs: '1.8rem', md: '2.2rem', lg: '2.5rem' }, 
+                  fontSize: { xs: '1.6rem', sm: '1.8rem', md: '2rem', lg: '2.5rem' }, 
                   fontWeight: 'bold', 
-                  mb: 3,
+                  mb: { xs: 2, sm: 3 },
                   color: '#1a1a1a',
+                  textAlign: { xs: 'center', md: 'left' },
                 }}
               >
                 About{' '}
@@ -60,49 +66,75 @@ export default function AboutOverview() {
                 </Typography>
               </Typography>
               
-              <Typography variant="body1" paragraph sx={{ color: '#666', mb: 2, lineHeight: 1.6, fontSize: '0.95rem' }}>
+              <Typography 
+                variant="body1" 
+                sx={{ 
+                  color: '#666', 
+                  mb: 2, 
+                  lineHeight: 1.6, 
+                  fontSize: { xs: '0.85rem', sm: '0.9rem', md: '0.95rem' },
+                  textAlign: { xs: 'center', md: 'left' },
+                  px: { xs: 1, sm: 0 }
+                }}
+              >
                 Eminance Advice is a leading HR services and career counseling platform dedicated to 
                 bridging the gap between talent and opportunity. We provide comprehensive support to 
                 students, freshers, professionals, and companies.
               </Typography>
               
-              <Typography variant="body1" paragraph sx={{ color: '#666', mb: 3, lineHeight: 1.6, fontSize: '0.95rem' }}>
+              <Typography 
+                variant="body1" 
+                sx={{ 
+                  color: '#666', 
+                  mb: { xs: 2, sm: 3 }, 
+                  lineHeight: 1.6, 
+                  fontSize: { xs: '0.85rem', sm: '0.9rem', md: '0.95rem' },
+                  textAlign: { xs: 'center', md: 'left' },
+                  px: { xs: 1, sm: 0 }
+                }}
+              >
                 Our mission is to empower individuals with the right skills, guidance, and opportunities 
                 to achieve their career goals while helping organizations find the perfect talent.
               </Typography>
               
-              <Box sx={{ display: 'flex', gap: 3, mt: 3 }}>
-                <Box>
-                  <Typography variant="h4" sx={{ color: '#ff6b35', fontWeight: 'bold', fontSize: '1.5rem' }}>
+              <Box sx={{ display: 'flex', gap: 3, mt: 3, justifyContent: { xs: 'center', md: 'flex-start' } }}>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Typography variant="h4" sx={{ color: '#ff6b35', fontWeight: 'bold', fontSize: { xs: '1.3rem', sm: '1.5rem' } }}>
                     2009
                   </Typography>
-                  <Typography variant="body2" sx={{ color: '#666', fontSize: '0.8rem' }}>Founded</Typography>
+                  <Typography variant="body2" sx={{ color: '#666', fontSize: { xs: '0.7rem', sm: '0.8rem' } }}>Founded</Typography>
                 </Box>
-                <Box>
-                  <Typography variant="h4" sx={{ color: '#ff6b35', fontWeight: 'bold', fontSize: '1.5rem' }}>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Typography variant="h4" sx={{ color: '#ff6b35', fontWeight: 'bold', fontSize: { xs: '1.3rem', sm: '1.5rem' } }}>
                     50+
                   </Typography>
-                  <Typography variant="body2" sx={{ color: '#666', fontSize: '0.8rem' }}>Team Members</Typography>
+                  <Typography variant="body2" sx={{ color: '#666', fontSize: { xs: '0.7rem', sm: '0.8rem' } }}>Team Members</Typography>
                 </Box>
               </Box>
               
               {/* Key Features */}
-              <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <Box sx={{ 
+                mt: 3, 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: 1,
+                alignItems: { xs: 'center', md: 'flex-start' }
+              }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                  <CheckCircle sx={{ color: '#ff6b35', fontSize: 18 }} />
-                  <Typography variant="body2" sx={{ color: '#555', fontSize: '0.85rem' }}>
+                  <CheckCircle sx={{ color: '#ff6b35', fontSize: { xs: 16, sm: 18 } }} />
+                  <Typography variant="body2" sx={{ color: '#555', fontSize: { xs: '0.75rem', sm: '0.85rem' } }}>
                     100% Placement Assistance
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                  <CheckCircle sx={{ color: '#ff6b35', fontSize: 18 }} />
-                  <Typography variant="body2" sx={{ color: '#555', fontSize: '0.85rem' }}>
+                  <CheckCircle sx={{ color: '#ff6b35', fontSize: { xs: 16, sm: 18 } }} />
+                  <Typography variant="body2" sx={{ color: '#555', fontSize: { xs: '0.75rem', sm: '0.85rem' } }}>
                     Industry Expert Trainers
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                  <CheckCircle sx={{ color: '#ff6b35', fontSize: 18 }} />
-                  <Typography variant="body2" sx={{ color: '#555', fontSize: '0.85rem' }}>
+                  <CheckCircle sx={{ color: '#ff6b35', fontSize: { xs: 16, sm: 18 } }} />
+                  <Typography variant="body2" sx={{ color: '#555', fontSize: { xs: '0.75rem', sm: '0.85rem' } }}>
                     Lifetime Support & Guidance
                   </Typography>
                 </Box>
@@ -110,6 +142,7 @@ export default function AboutOverview() {
             </motion.div>
           </Grid>
           
+          {/* Right Side - Image */}
           <Grid item xs={12} md={6}>
             <motion.div
               initial={{ x: 50, opacity: 0 }}
@@ -120,35 +153,38 @@ export default function AboutOverview() {
               <Box
                 sx={{
                   position: 'relative',
-                  borderRadius: 3,
+                  borderRadius: { xs: 2, sm: 3 },
                   overflow: 'hidden',
                   boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+                  mx: { xs: 2, sm: 3, md: 0 },
                 }}
               >
                 <Box
                   component="img"
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=450&fit=crop"
-                  alt="Team collaboration at Eminance Advice"
+                  src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&h=450&fit=crop"
+                  alt="Business team collaboration"
                   sx={{ 
                     width: '100%', 
                     height: 'auto',
                     display: 'block',
+                    minHeight: { xs: 250, sm: 300, md: 350 },
+                    objectFit: 'cover',
                   }}
                 />
                 <Box
                   sx={{
                     position: 'absolute',
-                    bottom: 20,
-                    left: 20,
-                    right: 20,
+                    bottom: { xs: 10, sm: 15, md: 20 },
+                    left: { xs: 10, sm: 15, md: 20 },
+                    right: { xs: 10, sm: 15, md: 20 },
                     bgcolor: 'rgba(255,107,53,0.95)',
                     color: 'white',
-                    p: 1.5,
-                    borderRadius: 2,
+                    p: { xs: 1, sm: 1.5 },
+                    borderRadius: { xs: 1.5, sm: 2 },
                     textAlign: 'center',
                   }}
                 >
-                  <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.85rem' }}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.85rem' } }}>
                     10+ Years of Excellence in Career Guidance
                   </Typography>
                 </Box>
@@ -157,8 +193,8 @@ export default function AboutOverview() {
           </Grid>
         </Grid>
         
-        {/* Stats Cards - Fixed Size */}
-        <Grid container spacing={3} sx={{ mt: 4 }}>
+        {/* Stats Cards - Fully Responsive */}
+        <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }} sx={{ mt: { xs: 3, sm: 4, md: 5 } }}>
           {stats.map((stat, index) => (
             <Grid item xs={6} sm={3} md={3} key={index}>
               <motion.div
@@ -170,8 +206,8 @@ export default function AboutOverview() {
                 <Card 
                   sx={{ 
                     textAlign: 'center', 
-                    py: 2.5,
-                    px: 1,
+                    py: { xs: 1.5, sm: 2, md: 2.5 },
+                    px: { xs: 0.5, sm: 1, md: 1 },
                     height: '100%',
                     transition: 'all 0.3s ease',
                     '&:hover': {
@@ -182,26 +218,26 @@ export default function AboutOverview() {
                     cursor: 'pointer',
                   }}
                 >
-                  <CardContent sx={{ p: 1 }}>
+                  <CardContent sx={{ p: { xs: 0.5, sm: 1 } }}>
                     <Box
                       sx={{
                         bgcolor: '#fff5f0',
                         borderRadius: '50%',
-                        width: 50,
-                        height: 50,
+                        width: { xs: 40, sm: 45, md: 50 },
+                        height: { xs: 40, sm: 45, md: 50 },
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         mx: 'auto',
-                        mb: 1.5,
+                        mb: { xs: 1, sm: 1.5 },
                       }}
                     >
-                      <stat.icon sx={{ fontSize: 28, color: stat.color }} />
+                      <stat.icon sx={{ fontSize: { xs: 22, sm: 24, md: 28 }, color: stat.color }} />
                     </Box>
-                    <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 0.5, color: '#1a1a1a', fontSize: '1.3rem' }}>
+                    <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 0.5, color: '#1a1a1a', fontSize: { xs: '1rem', sm: '1.1rem', md: '1.3rem' } }}>
                       {stat.number}
                     </Typography>
-                    <Typography variant="caption" sx={{ color: '#666', fontWeight: 500, fontSize: '0.7rem' }}>
+                    <Typography variant="caption" sx={{ color: '#666', fontWeight: 500, fontSize: { xs: '0.6rem', sm: '0.65rem', md: '0.7rem' } }}>
                       {stat.label}
                     </Typography>
                   </CardContent>

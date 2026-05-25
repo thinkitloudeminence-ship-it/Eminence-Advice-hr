@@ -19,45 +19,61 @@ const jobSchema = new mongoose.Schema({
   jobType: {
     type: String,
     enum: ['Full-time', 'Part-time', 'Contract', 'Internship', 'Remote', 'Hybrid'],
-    required: true
+    required: [true, 'Job type is required']
   },
-  experience: {
-    min: Number,
-    max: Number,
-    required: true
+  experienceMin: {
+    type: Number,
+    default: 0
   },
-  salary: {
-    min: Number,
-    max: Number,
-    currency: {
-      type: String,
-      default: 'INR'
-    }
+  experienceMax: {
+    type: Number,
+    default: 0
   },
-  skills: [{
+  salaryMin: {
+    type: Number,
+    default: 0
+  },
+  salaryMax: {
+    type: Number,
+    default: 0
+  },
+  salaryCurrency: {
     type: String,
-    required: true
-  }],
+    default: 'INR'
+  },
+  skills: {
+    type: [String],
+    default: []
+  },
   description: {
     type: String,
     required: [true, 'Job description is required']
   },
-  responsibilities: [String],
-  requirements: [String],
-  benefits: [String],
+  responsibilities: {
+    type: [String],
+    default: []
+  },
+  requirements: {
+    type: [String],
+    default: []
+  },
+  benefits: {
+    type: [String],
+    default: []
+  },
   category: {
     type: String,
     enum: ['IT', 'HR', 'Finance', 'Sales', 'Marketing', 'BDE', 'Other'],
-    required: true
+    required: [true, 'Category is required']
   },
   positions: {
     type: Number,
-    required: true,
+    required: [true, 'Number of positions is required'],
     min: 1
   },
   deadline: {
     type: Date,
-    required: true
+    required: [true, 'Deadline is required']
   },
   status: {
     type: String,
@@ -67,7 +83,7 @@ const jobSchema = new mongoose.Schema({
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: [true, 'Posted by is required']
   },
   views: {
     type: Number,
@@ -81,7 +97,6 @@ const jobSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for search
 jobSchema.index({ title: 'text', description: 'text', skills: 'text' });
 
 module.exports = mongoose.model('Job', jobSchema);

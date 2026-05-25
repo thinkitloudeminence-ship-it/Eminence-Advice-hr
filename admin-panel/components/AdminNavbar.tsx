@@ -42,7 +42,7 @@ export default function AdminNavbar({ open, setOpen }: AdminNavbarProps) {
   }
 
   return (
-    <AppBar position="static" sx={{ zIndex: 1201 }}>
+    <AppBar position="absolute" sx={{ zIndex: 1201, ml: open ? 240 : 7 }}>
       <Toolbar>
         <IconButton
           color="inherit"

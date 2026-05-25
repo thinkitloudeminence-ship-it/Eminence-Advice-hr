@@ -59,7 +59,6 @@ const blogSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Create slug before saving
 blogSchema.pre('save', function(next) {
   if (this.isModified('title')) {
     this.slug = slugify(this.title, { lower: true, strict: true });

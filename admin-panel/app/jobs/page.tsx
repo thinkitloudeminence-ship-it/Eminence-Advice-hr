@@ -24,10 +24,28 @@ import {
 } from '@mui/material'
 import { Add, Edit, Delete, Visibility } from '@mui/icons-material'
 import axios from 'axios'
-import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+
+const zodResolver = (schema: z.ZodTypeAny) => async (values: any) => {
+  const parsed = schema.safeParse(values)
+
+  if (parsed.success) {
+    return { values: parsed.data, errors: {} }
+  }
+
+  const fieldErrors = parsed.error.formErrors.fieldErrors
+  const errors = Object.keys(fieldErrors).reduce((acc, key) => {
+    const messages = fieldErrors[key as keyof typeof fieldErrors]
+    if (messages && messages.length) {
+      acc[key] = { type: 'validation', message: messages[0] }
+    }
+    return acc
+  }, {} as Record<string, { type: string; message: string }>)
+
+  return { values: {}, errors }
+}
 
 const jobSchema = z.object({
   title: z.string().min(1),

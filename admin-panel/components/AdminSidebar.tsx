@@ -4,11 +4,13 @@ import {
   Drawer,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Toolbar,
   Divider,
   Box,
+  IconButton,
 } from '@mui/material'
 import {
   Dashboard,
@@ -20,6 +22,7 @@ import {
   Analytics,
   Description,
   RateReview,
+  ChevronLeft,
 } from '@mui/icons-material'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -43,31 +46,50 @@ interface AdminSidebarProps {
 
 export default function AdminSidebar({ open, setOpen }: AdminSidebarProps) {
   const pathname = usePathname()
+  const drawerWidth = 240
 
   return (
     <Drawer
       variant="permanent"
       open={open}
       sx={{
-        width: open ? 240 : 73,
+        width: open ? drawerWidth : 73,
         flexShrink: 0,
         '& .MuiDrawer-paper': {
-          width: open ? 240 : 73,
+          width: open ? drawerWidth : 73,
           boxSizing: 'border-box',
           transition: 'width 0.3s',
           overflowX: 'hidden',
+          position: 'relative',
+          whiteSpace: 'nowrap',
         },
       }}
     >
-      <Toolbar />
-      <Box sx={{ overflow: 'auto' }}>
-        <List>
-          {menuItems.map((item) => (
-            <ListItem
-              button
-              key={item.title}
-              component={Link}
-              href={item.path}
+      <Toolbar
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          px: [1],
+        }}
+      >
+        <IconButton onClick={() => setOpen(false)}>
+          <ChevronLeft />
+        </IconButton>
+      </Toolbar>
+      <Divider />
+      <List>
+        {menuItems.map((item) => (
+          <ListItem
+            key={item.title}
+            component={Link}
+            href={item.path}
+            disablePadding
+            sx={{
+              display: 'block',
+            }}
+          >
+            <ListItemButton
               selected={pathname === item.path}
               sx={{
                 minHeight: 48,
@@ -88,11 +110,10 @@ export default function AdminSidebar({ open, setOpen }: AdminSidebarProps) {
                 primary={item.title}
                 sx={{ opacity: open ? 1 : 0 }}
               />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-      </Box>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
     </Drawer>
   )
 }

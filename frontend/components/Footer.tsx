@@ -8,6 +8,7 @@ import {
   Link,
   IconButton,
   Divider,
+  Stack,
 } from '@mui/material'
 import {
   Facebook,
@@ -53,130 +54,185 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        // bgcolor: '#1a1a1a',
-        color: 'white',
+        bgcolor: '#111827', // Dark background - same as navbar's dark mode
+        color: '#f3f4f6',
         pt: 6,
         pb: 4,
         mt: 'auto',
+        borderTop: '1px solid #374151',
       }}
     >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
+          {/* Column 1 - Logo & Description */}
           <Grid item xs={12} md={4}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
               <Image
                 src="/Eminenceadvicelogo.png"
                 alt="Eminance Advice Logo"
-                width={60}
-                height={60}
-                style={{ borderRadius: '10px', objectFit: 'contain' }}
+                width={190}
+                height={70}
+                style={{
+                  width: '190px',
+                  height: '70px',
+                  objectFit: 'contain',
+                }}
               />
-              
+
             </Box>
-            <Typography variant="body2" sx={{ mb: 2, color: '#999', lineHeight: 1.6 }}>
-              Transforming careers and workforce with expert guidance, training, 
+            <Typography variant="body2" sx={{ color: '#9ca3af', lineHeight: 1.7, mb: 3, fontSize: '0.875rem' }}>
+              Transforming careers and workforce with expert guidance, training,
               and placement assistance. Your trusted partner in professional growth.
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1.5, mt: 2 }}>
-              <IconButton sx={{ color: '#ff6b35', '&:hover': { color: '#e55a2b' } }}>
-                <Facebook />
+            <Stack direction="row" spacing={1}>
+              <IconButton sx={{ color: '#9ca3af', '&:hover': { color: '#ff6b35' } }}>
+                <Facebook sx={{ fontSize: 20 }} />
               </IconButton>
-              <IconButton sx={{ color: '#ff6b35', '&:hover': { color: '#e55a2b' } }}>
-                <Twitter />
+              <IconButton sx={{ color: '#9ca3af', '&:hover': { color: '#ff6b35' } }}>
+                <Twitter sx={{ fontSize: 20 }} />
               </IconButton>
-              <IconButton sx={{ color: '#ff6b35', '&:hover': { color: '#e55a2b' } }}>
-                <LinkedIn />
+              <IconButton sx={{ color: '#9ca3af', '&:hover': { color: '#ff6b35' } }}>
+                <LinkedIn sx={{ fontSize: 20 }} />
               </IconButton>
-              <IconButton sx={{ color: '#ff6b35', '&:hover': { color: '#e55a2b' } }}>
-                <Instagram />
+              <IconButton sx={{ color: '#9ca3af', '&:hover': { color: '#ff6b35' } }}>
+                <Instagram sx={{ fontSize: 20 }} />
               </IconButton>
-            </Box>
+            </Stack>
           </Grid>
-          
-          {Object.entries(footerLinks).map(([title, links]) => (
-            <Grid item xs={12} sm={6} md={2.5} key={title}>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: '#ff6b35' }}>
-                {title}
-              </Typography>
-              {links.map((link) => (
-                <Box key={link.label} sx={{ mb: 1.5 }}>
-                  <Link
-                    href={link.href}
-                    sx={{
-                      color: '#999',
-                      textDecoration: 'none',
-                      '&:hover': { color: '#ff6b35' },
-                      transition: 'color 0.3s',
-                    }}
-                  >
-                    {link.label}
-                  </Link>
-                </Box>
-              ))}
-            </Grid>
-          ))}
-          
-          <Grid item xs={12} md={3}>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: '#ff6b35' }}>
-              Contact Info
-            </Typography>
-            
-            {/* Clickable Address with Google Maps */}
-            <Box 
-              sx={{ display: 'flex', alignItems: 'flex-start', mb: 2, cursor: 'pointer' }}
-              onClick={openGoogleMap}
-            >
-              <LocationOn sx={{ fontSize: 18, mr: 1, color: '#ff6b35', mt: 0.3 }} />
-              <Typography variant="body2" sx={{ color: '#999', '&:hover': { color: '#ff6b35' } }}>
-                Near Hotel Amrit, Chhoti Gwaltoli, Indore, Madhya Pradesh 452001
-              </Typography>
-            </Box>
-            
-            {/* Phone Number - Click to Call */}
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Phone sx={{ fontSize: 18, mr: 1, color: '#ff6b35' }} />
-              <Link
-                href="tel:9826667279"
-                sx={{
-                  color: '#999',
-                  textDecoration: 'none',
-                  '&:hover': { color: '#ff6b35' },
-                }}
-              >
-                <Typography variant="body2">98266 67279</Typography>
-              </Link>
-            </Box>
-            
-            {/* Email */}
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Email sx={{ fontSize: 18, mr: 1, color: '#ff6b35' }} />
-              <Link
-                href="mailto:info@eminanceadvice.com"
-                sx={{
-                  color: '#999',
-                  textDecoration: 'none',
-                  '&:hover': { color: '#ff6b35' },
-                }}
-              >
-                <Typography variant="body2">info@eminanceadvice.com</Typography>
-              </Link>
-            </Box>
 
-            {/* Since 2009 */}
-            <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-              <AccessTime sx={{ fontSize: 18, mr: 1, color: '#ff6b35' }} />
-              <Typography variant="body2" sx={{ color: '#999' }}>
-                Since 2009
-              </Typography>
-            </Box>
+          {/* Column 2 - Company Links */}
+          <Grid item xs={6} sm={4} md={2}>
+            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold', color: '#ff6b35', mb: 2, fontSize: '1rem' }}>
+              Company
+            </Typography>
+            <Stack spacing={1.5}>
+              {footerLinks.Company.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  sx={{
+                    color: '#9ca3af',
+                    textDecoration: 'none',
+                    fontSize: '0.85rem',
+                    '&:hover': { color: '#ff6b35' },
+                    transition: 'color 0.3s',
+                  }}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </Stack>
+          </Grid>
+
+          {/* Column 3 - Services Links */}
+          <Grid item xs={6} sm={4} md={2}>
+            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold', color: '#ff6b35', mb: 2, fontSize: '1rem' }}>
+              Services
+            </Typography>
+            <Stack spacing={1.5}>
+              {footerLinks.Services.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  sx={{
+                    color: '#9ca3af',
+                    textDecoration: 'none',
+                    fontSize: '0.85rem',
+                    '&:hover': { color: '#ff6b35' },
+                    transition: 'color 0.3s',
+                  }}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </Stack>
+          </Grid>
+
+          {/* Column 4 - Resources Links */}
+          <Grid item xs={6} sm={4} md={2}>
+            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold', color: '#ff6b35', mb: 2, fontSize: '1rem' }}>
+              Resources
+            </Typography>
+            <Stack spacing={1.5}>
+              {footerLinks.Resources.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  sx={{
+                    color: '#9ca3af',
+                    textDecoration: 'none',
+                    fontSize: '0.85rem',
+                    '&:hover': { color: '#ff6b35' },
+                    transition: 'color 0.3s',
+                  }}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </Stack>
+          </Grid>
+
+          {/* Column 5 - Contact Info */}
+          <Grid item xs={12} md={2}>
+            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold', color: '#ff6b35', mb: 2, fontSize: '1rem' }}>
+              Contact
+            </Typography>
+            <Stack spacing={2}>
+              <Box
+                sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, cursor: 'pointer' }}
+                onClick={openGoogleMap}
+              >
+                <LocationOn sx={{ fontSize: 16, color: '#9ca3af', mt: 0.2, flexShrink: 0 }} />
+                <Typography variant="body2" sx={{ color: '#9ca3af', fontSize: '0.8rem', lineHeight: 1.4, '&:hover': { color: '#ff6b35' } }}>
+                  Near Hotel Amrit, Chhoti Gwaltoli, Indore, MP 452001
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Phone sx={{ fontSize: 16, color: '#9ca3af', flexShrink: 0 }} />
+                <Link
+                  href="tel:9826667279"
+                  sx={{
+                    color: '#9ca3af',
+                    textDecoration: 'none',
+                    fontSize: '0.8rem',
+                    '&:hover': { color: '#ff6b35' },
+                  }}
+                >
+                  98266 67279
+                </Link>
+              </Box>
+
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Email sx={{ fontSize: 16, color: '#9ca3af', flexShrink: 0 }} />
+                <Link
+                  href="mailto:info@eminanceadvice.com"
+                  sx={{
+                    color: '#9ca3af',
+                    textDecoration: 'none',
+                    fontSize: '0.8rem',
+                    '&:hover': { color: '#ff6b35' },
+                  }}
+                >
+                  info@eminanceadvice.com
+                </Link>
+              </Box>
+
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <AccessTime sx={{ fontSize: 16, color: '#9ca3af', flexShrink: 0 }} />
+                <Typography variant="body2" sx={{ color: '#9ca3af', fontSize: '0.8rem' }}>
+                  Since 2009
+                </Typography>
+              </Box>
+            </Stack>
           </Grid>
         </Grid>
-        
-        <Divider sx={{ my: 4, bgcolor: '#333' }} />
-        
+
+        <Divider sx={{ my: 4, borderColor: '#374151' }} />
+
         <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="body2" sx={{ color: '#999' }}>
-            © {currentYear} Eminance Advice. All rights reserved. | Established Since 2009 
+          <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem' }}>
+            © {currentYear} Eminance Advice. All rights reserved. | Established Since 2009
           </Typography>
         </Box>
       </Container>
