@@ -14,13 +14,13 @@ export default function HomePage() {
   return (
     <>
       <NextSeo
-        title="Eminance Advice - Transform Your Career & Workforce with Expert Guidance"
-        description="Get expert career counseling, training, placement assistance, and recruitment services. 5000+ students placed, 200+ corporate partners. Start your career journey today!"
+        title="Home | Eminance Advice - Career Counseling & Job Placement"
+        description="Start your career journey with Eminance Advice. Get expert career counseling, training, placement assistance, and recruitment services. 5000+ students placed successfully."
         canonical="https://eminenceadvice.com/"
         openGraph={{
           url: 'https://eminenceadvice.com/',
           title: 'Eminance Advice - Career Counseling & Placement Services',
-          description: 'Expert career guidance, training, and placement assistance for your professional growth.',
+          description: 'Start your career journey with expert guidance and placement assistance.',
         }}
       />
       <motion.div

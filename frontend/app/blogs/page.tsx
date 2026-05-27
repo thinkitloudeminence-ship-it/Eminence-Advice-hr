@@ -80,13 +80,13 @@ export default function BlogsPage() {
    return (
     <>
       <NextSeo
-        title="Career Blogs - Tips, Insights & Guidance | Eminance Advice"
-        description="Read expert career advice, interview tips, resume building guides, and industry insights to accelerate your professional growth."
+        title="Career Blogs | Expert Tips, Insights & Guidance"
+        description="Read expert career advice, interview tips, resume building guides, HR insights, and placement guidance. Stay updated with latest career trends and job search strategies."
         canonical="https://eminenceadvice.com/blogs"
         openGraph={{
           url: 'https://eminenceadvice.com/blogs',
           title: 'Career Guidance Blogs - Expert Insights',
-          description: 'Stay updated with latest career trends and job search strategies.',
+          description: 'Get expert career tips and job search strategies.',
         }}
       />
     <Box sx={{ pt: 12, pb: 8, minHeight: '100vh', bgcolor: '#f5f5f5' }}>

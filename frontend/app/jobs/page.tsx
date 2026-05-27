@@ -73,16 +73,15 @@ export default function JobsPage() {
   return (
     <>
       <NextSeo
-        title="Latest Job Openings - Apply Now | Eminance Advice"
-        description="Find your dream job with Eminance Advice. Browse thousands of job opportunities from top companies. Apply now for full-time, part-time, remote, and internship positions."
+        title="Job Openings | Apply Now for Latest Vacancies"
+        description="Find your dream job with Eminance Advice. Browse latest job openings across IT, HR, Finance, Sales, and more. Apply now for full-time, part-time, remote, and internship positions."
         canonical="https://eminenceadvice.com/jobs"
         openGraph={{
           url: 'https://eminenceadvice.com/jobs',
-          title: 'Job Openings - Start Your Career Journey',
-          description: 'Apply for latest job openings across IT, HR, Finance, Sales, and more.',
+          title: 'Latest Job Openings - Apply Now',
+          description: 'Apply for latest job vacancies from top companies.',
         }}
       />
-
       <Box sx={{ pt: 12, pb: 8, minHeight: '100vh' }}>
         <Container maxWidth="lg">
           <motion.div

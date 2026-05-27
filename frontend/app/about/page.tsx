@@ -87,15 +87,15 @@ const team = [
 
 export default function AboutPage() {
   return (
-    <>
+     <>
       <NextSeo
-        title="About Us - Eminance Advice | Career Counseling & HR Services"
-        description="Learn about Eminance Advice - India's leading career counseling and HR services platform. 10+ years of excellence, 5000+ students placed, 200+ corporate partners."
+        title="About Us | Eminance Advice - Our Story & Mission"
+        description="Learn about Eminance Advice - India's trusted career counseling and HR services platform. Founded in 2009, we've helped 5000+ students achieve their career dreams."
         canonical="https://eminenceadvice.com/about"
         openGraph={{
           url: 'https://eminenceadvice.com/about',
-          title: 'About Eminance Advice - Our Story & Mission',
-          description: 'Bridging the gap between talent and opportunity since 2009.',
+          title: 'About Eminance Advice - Our Journey Since 2009',
+          description: 'Discover our mission to bridge the gap between talent and opportunity.',
         }}
       />
     <Box sx={{ pt: 12, pb: 8, bgcolor: 'white' }}>

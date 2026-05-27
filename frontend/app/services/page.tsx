@@ -113,8 +113,8 @@ export default function ServicesPage() {
   return (
     <>
       <NextSeo
-        title="Our Services - Career Counseling, Training & Placement | Eminance Advice"
-        description="Explore our comprehensive career services: career counseling, soft skills training, placement assistance, resume building, interview preparation, and freelancing support."
+        title="Our Services | Career Counseling, Training & Placement"
+        description="Explore Eminance Advice's comprehensive career services: career counseling, soft skills training, placement assistance, resume building, interview prep, and freelancing support."
         canonical="https://eminenceadvice.com/services"
         openGraph={{
           url: 'https://eminenceadvice.com/services',
