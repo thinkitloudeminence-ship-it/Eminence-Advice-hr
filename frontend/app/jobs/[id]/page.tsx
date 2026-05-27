@@ -2,68 +2,28 @@
 
 import { useState, useEffect } from 'react'
 import {
-  Container,
-  Typography,
-  Grid,
-  Paper,
-  Box,
-  Button,
-  Chip,
-  Divider,
-  TextField,
-  MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Alert,
-  Stepper,
-  Step,
-  StepLabel,
-  IconButton,
+  Container, Typography, Grid, Paper, Box, Button, Chip, Divider,
+  TextField, MenuItem, Dialog, DialogTitle, DialogContent, Alert,
+  Stepper, Step, StepLabel, IconButton, CircularProgress,
 } from '@mui/material'
 import {
-  LocationOn,
-  Work,
-  AttachMoney,
-  Business,
-  CalendarToday,
-  Close,
-  Upload,
+  LocationOn, Work, AttachMoney, Business, CalendarToday,
+  Close, Upload, ArrowBack, ArrowForward, CheckCircle,
 } from '@mui/icons-material'
-import { useForm, Controller } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import axios from 'axios'
 import { useParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 
-const applicationSchema = z.object({
-  fullName: z.string().min(2, 'Name is required'),
-  email: z.string().email('Invalid email'),
-  phone: z.string().min(10, 'Valid phone number required'),
-  experienceType: z.enum(['fresher', 'experienced']),
-  experienceDetails: z.object({
-    years: z.number().optional(),
-    months: z.number().optional(),
-    currentCompany: z.string().optional(),
-    currentRole: z.string().optional(),
-  }).optional(),
-  qualification: z.object({
-    degree: z.string(),
-    institution: z.string(),
-    yearOfPassing: z.number(),
-    percentage: z.number(),
-  }),
-  skills: z.string(),
-  preferredJobRole: z.string(),
-  currentLocation: z.string(),
-  linkedinProfile: z.string().url().optional(),
-  portfolioUrl: z.string().url().optional(),
-  message: z.string().optional(),
-})
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+const steps = ['Personal Info', 'Education & Skills', 'Upload & Submit']
 
-type ApplicationForm = z.infer<typeof applicationSchema>
+const emptyForm = {
+  fullName: '', email: '', phone: '', experienceType: 'fresher',
+  expYears: '', expMonths: '', currentCompany: '', currentRole: '',
+  degree: '', institution: '', yearOfPassing: '', percentage: '',
+  skills: '', preferredJobRole: '', currentLocation: '',
+  linkedinProfile: '', portfolioUrl: '', message: '',
+}
 
 export default function JobDetailPage() {
   const { id } = useParams()
@@ -75,435 +35,404 @@ export default function JobDetailPage() {
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
+  const [formData, setFormData] = useState(emptyForm)
+  const [errors, setErrors] = useState<any>({})
 
-  const { control, handleSubmit, formState: { errors } } = useForm<ApplicationForm>({
-    resolver: zodResolver(applicationSchema),
-    defaultValues: {
-      experienceType: 'fresher',
-      skills: '',
-    },
-  })
+  useEffect(() => { fetchJob() }, [id])
 
-  useEffect(() => {
-    fetchJobDetails()
-  }, [id])
-
-  const fetchJobDetails = async () => {
+  const fetchJob = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/jobs/${id}`)
-      setJob(response.data.data)
-    } catch (error) {
-      console.error('Error fetching job:', error)
-    } finally {
-      setLoading(false)
-    }
+      const res = await axios.get(`${API_URL}/jobs/${id}`)
+      setJob(res.data.data)
+    } catch (e) { console.error(e) }
+    finally { setLoading(false) }
   }
 
-  const onSubmit = async (data: ApplicationForm) => {
-    if (!resumeFile) {
-      alert('Please upload your resume')
-      return
-    }
+  const set = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+    if (errors[field]) setErrors((prev: any) => ({ ...prev, [field]: '' }))
+  }
 
+  const validateStep = () => {
+    const e: any = {}
+    if (activeStep === 0) {
+      if (!formData.fullName) e.fullName = 'Name required'
+      if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) e.email = 'Valid email required'
+      if (!formData.phone || formData.phone.length < 10) e.phone = 'Valid phone required'
+    }
+    if (activeStep === 1) {
+      if (!formData.degree) e.degree = 'Degree required'
+      if (!formData.institution) e.institution = 'Institution required'
+      if (!formData.yearOfPassing) e.yearOfPassing = 'Year required'
+      if (!formData.skills) e.skills = 'Skills required'
+      if (!formData.preferredJobRole) e.preferredJobRole = 'Preferred role required'
+      if (!formData.currentLocation) e.currentLocation = 'Location required'
+    }
+    if (activeStep === 2) {
+      if (!resumeFile) e.resume = 'Resume required'
+    }
+    setErrors(e)
+    return Object.keys(e).length === 0
+  }
+
+  const handleNext = () => {
+    if (validateStep()) setActiveStep(prev => prev + 1)
+  }
+
+  const handleSubmit = async () => {
+    if (!validateStep()) return
     setSubmitting(true)
-    const formData = new FormData()
-    formData.append('job', id as string)
-    formData.append('fullName', data.fullName)
-    formData.append('email', data.email)
-    formData.append('phone', data.phone)
-    formData.append('experienceType', data.experienceType)
-    formData.append('skills', data.skills.split(',').map(s => s.trim()))
-    formData.append('preferredJobRole', data.preferredJobRole)
-    formData.append('currentLocation', data.currentLocation)
-    formData.append('qualification', JSON.stringify(data.qualification))
-    if (data.linkedinProfile) formData.append('linkedinProfile', data.linkedinProfile)
-    if (data.portfolioUrl) formData.append('portfolioUrl', data.portfolioUrl)
-    if (data.message) formData.append('message', data.message)
-    if (data.experienceType === 'experienced' && data.experienceDetails) {
-      formData.append('experienceDetails', JSON.stringify(data.experienceDetails))
-    }
-    formData.append('resume', resumeFile)
-
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/applications`, formData, {
+      const fd = new FormData()
+      fd.append('job', id as string)
+      fd.append('fullName', formData.fullName)
+      fd.append('email', formData.email)
+      fd.append('phone', formData.phone)
+      fd.append('experienceType', formData.experienceType)
+      fd.append('preferredJobRole', formData.preferredJobRole)
+      fd.append('currentLocation', formData.currentLocation)
+      fd.append('skills', JSON.stringify(formData.skills.split(',').map(s => s.trim()).filter(Boolean)))
+      fd.append('qualification', JSON.stringify({
+        degree: formData.degree,
+        institution: formData.institution,
+        yearOfPassing: Number(formData.yearOfPassing),
+        percentage: Number(formData.percentage) || 0,
+      }))
+      if (formData.experienceType === 'experienced') {
+        fd.append('experienceDetails', JSON.stringify({
+          years: Number(formData.expYears) || 0,
+          months: Number(formData.expMonths) || 0,
+          currentCompany: formData.currentCompany,
+          currentRole: formData.currentRole,
+        }))
+      }
+      if (formData.linkedinProfile) fd.append('linkedinProfile', formData.linkedinProfile)
+      if (formData.portfolioUrl) fd.append('portfolioUrl', formData.portfolioUrl)
+      if (formData.message) fd.append('message', formData.message)
+      fd.append('resume', resumeFile!)
+
+      await axios.post(`${API_URL}/applications`, fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       setSuccess(true)
-      setTimeout(() => {
-        setOpenDialog(false)
-        router.push('/jobs')
-      }, 2000)
-    } catch (error) {
-      console.error('Error submitting application:', error)
-      alert('Error submitting application. Please try again.')
+      setTimeout(() => { setOpenDialog(false); router.push('/jobs') }, 3000)
+    } catch (e: any) {
+      setErrors({ submit: e.response?.data?.message || 'Submission failed. Please try again.' })
     } finally {
       setSubmitting(false)
     }
   }
 
-  if (loading) {
-    return (
-      <Container sx={{ pt: 12, pb: 8 }}>
-        <Typography>Loading...</Typography>
-      </Container>
-    )
+  const openApply = () => {
+    setFormData(emptyForm)
+    setResumeFile(null)
+    setErrors({})
+    setActiveStep(0)
+    setSuccess(false)
+    setOpenDialog(true)
   }
 
-  if (!job) {
-    return (
-      <Container sx={{ pt: 12, pb: 8 }}>
-        <Typography>Job not found</Typography>
-      </Container>
-    )
-  }
+  if (loading) return (
+    <Container sx={{ pt: 12, pb: 8 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', pt: 10 }}>
+        <CircularProgress sx={{ color: '#ff6b35' }} />
+      </Box>
+    </Container>
+  )
+
+  if (!job) return (
+    <Container sx={{ pt: 12, pb: 8, textAlign: 'center' }}>
+      <Typography variant="h5" gutterBottom>Job not found</Typography>
+      <Button variant="contained" href="/jobs" sx={{ bgcolor: '#ff6b35' }}>Back to Jobs</Button>
+    </Container>
+  )
 
   return (
-    <Box sx={{ pt: 12, pb: 8, minHeight: '100vh', bgcolor: '#f5f5f5' }}>
+    <Box sx={{ pt: 12, pb: 8, minHeight: '100vh', bgcolor: '#fafafa' }}>
       <Container maxWidth="lg">
-        <motion.div
-          initial={{ y: -30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          <Paper sx={{ p: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Typography variant="h4" gutterBottom>
-                  {job.title}
-                </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
-                  <Chip icon={<Business />} label={job.company} />
-                  <Chip icon={<LocationOn />} label={job.location} />
-                  <Chip icon={<Work />} label={job.jobType} />
-                  <Chip
-                    icon={<AttachMoney />}
-                    label={`${job.salary.currency} ${job.salary.min} - ${job.salary.max}`}
-                  />
-                  <Chip
-                    icon={<CalendarToday />}
-                    label={`Deadline: ${new Date(job.deadline).toLocaleDateString()}`}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
+        <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
 
-            <Divider sx={{ my: 3 }} />
+          <Button startIcon={<ArrowBack />} onClick={() => router.back()}
+            sx={{ mb: 3, color: '#ff6b35' }}>Back to Jobs</Button>
 
-            <Typography variant="h6" gutterBottom>
-              Job Description
-            </Typography>
-            <Typography paragraph>{job.description}</Typography>
-
-            <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-              Responsibilities
-            </Typography>
-            <ul>
-              {job.responsibilities?.map((item: string, index: number) => (
-                <li key={index}>
-                  <Typography>{item}</Typography>
-                </li>
-              ))}
-            </ul>
-
-            <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-              Requirements
-            </Typography>
-            <ul>
-              {job.requirements?.map((item: string, index: number) => (
-                <li key={index}>
-                  <Typography>{item}</Typography>
-                </li>
-              ))}
-            </ul>
-
-            <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-              Required Skills
-            </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-              {job.skills?.map((skill: string) => (
-                <Chip key={skill} label={skill} color="primary" variant="outlined" />
-              ))}
+          <Paper sx={{ borderRadius: 3, overflow: 'hidden' }}>
+            {/* Orange Header */}
+            <Box sx={{ bgcolor: '#ff6b35', p: 4, color: '#fff' }}>
+              <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>{job.title}</Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
+                <Chip icon={<Business sx={{ color: '#fff !important' }} />} label={job.company}
+                  sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
+                <Chip icon={<LocationOn sx={{ color: '#fff !important' }} />} label={job.location}
+                  sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
+                <Chip icon={<Work sx={{ color: '#fff !important' }} />} label={job.jobType}
+                  sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
+                <Chip icon={<AttachMoney sx={{ color: '#fff !important' }} />}
+                  label={`${job.salary?.currency} ${job.salary?.min?.toLocaleString()} - ${job.salary?.max?.toLocaleString()}`}
+                  sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
+                <Chip icon={<CalendarToday sx={{ color: '#fff !important' }} />}
+                  label={`Deadline: ${new Date(job.deadline).toLocaleDateString()}`}
+                  sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
+              </Box>
             </Box>
 
-            <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
-              <Button
-                variant="contained"
-                size="large"
-                onClick={() => setOpenDialog(true)}
-                sx={{ px: 6, py: 1.5 }}
-              >
-                Apply Now
-              </Button>
+            <Box sx={{ p: 4 }}>
+              <Grid container spacing={4}>
+                <Grid item xs={12} md={8}>
+                  <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff6b35', mb: 1 }}>Description</Typography>
+                  <Typography sx={{ color: '#444', lineHeight: 1.8, mb: 3 }}>{job.description}</Typography>
+
+                  {job.responsibilities?.length > 0 && <>
+                    <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff6b35', mb: 1 }}>Responsibilities</Typography>
+                    <Box component="ul" sx={{ pl: 2, mb: 3 }}>
+                      {job.responsibilities.map((r: string, i: number) => (
+                        <Box component="li" key={i} sx={{ mb: 0.5 }}>
+                          <Typography sx={{ color: '#444' }}>{r}</Typography>
+                        </Box>
+                      ))}
+                    </Box>
+                  </>}
+
+                  {job.requirements?.length > 0 && <>
+                    <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff6b35', mb: 1 }}>Requirements</Typography>
+                    <Box component="ul" sx={{ pl: 2, mb: 3 }}>
+                      {job.requirements.map((r: string, i: number) => (
+                        <Box component="li" key={i} sx={{ mb: 0.5 }}>
+                          <Typography sx={{ color: '#444' }}>{r}</Typography>
+                        </Box>
+                      ))}
+                    </Box>
+                  </>}
+
+                  {job.benefits?.length > 0 && <>
+                    <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff6b35', mb: 1 }}>Benefits</Typography>
+                    <Box component="ul" sx={{ pl: 2, mb: 3 }}>
+                      {job.benefits.map((b: string, i: number) => (
+                        <Box component="li" key={i} sx={{ mb: 0.5 }}>
+                          <Typography sx={{ color: '#444' }}>{b}</Typography>
+                        </Box>
+                      ))}
+                    </Box>
+                  </>}
+                </Grid>
+
+                <Grid item xs={12} md={4}>
+                  <Paper sx={{ p: 3, borderRadius: 2, border: '1px solid #f0f0f0', mb: 3 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2 }}>Job Details</Typography>
+                    {[
+                      { label: 'Category', value: job.category },
+                      { label: 'Experience', value: `${job.experience?.min}-${job.experience?.max} years` },
+                      { label: 'Positions', value: job.positions },
+                      { label: 'Status', value: job.status },
+                    ].map(({ label, value }) => (
+                      <Box key={label} sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5, pb: 1.5, borderBottom: '1px solid #f5f5f5' }}>
+                        <Typography variant="body2" color="textSecondary">{label}</Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 600, textTransform: 'capitalize' }}>{value}</Typography>
+                      </Box>
+                    ))}
+                  </Paper>
+
+                  {job.skills?.length > 0 && (
+                    <Paper sx={{ p: 3, borderRadius: 2, border: '1px solid #f0f0f0', mb: 3 }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2 }}>Required Skills</Typography>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                        {job.skills.map((s: string) => (
+                          <Chip key={s} label={s} size="small"
+                            sx={{ bgcolor: '#fff5f0', color: '#ff6b35', fontWeight: 600 }} />
+                        ))}
+                      </Box>
+                    </Paper>
+                  )}
+
+                  <Button variant="contained" fullWidth size="large" onClick={openApply}
+                    sx={{ bgcolor: '#ff6b35', '&:hover': { bgcolor: '#e55a2b' }, borderRadius: 2, py: 1.5, fontWeight: 700, fontSize: '1rem' }}>
+                    Apply Now
+                  </Button>
+                </Grid>
+              </Grid>
             </Box>
           </Paper>
         </motion.div>
       </Container>
 
-      {/* Application Dialog */}
-      <Dialog
-        open={openDialog}
-        onClose={() => !submitting && setOpenDialog(false)}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogTitle>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h6">Job Application</Typography>
-            <IconButton onClick={() => setOpenDialog(false)} disabled={submitting}>
-              <Close />
-            </IconButton>
-          </Box>
+      {/* ─── Apply Dialog ─── */}
+      <Dialog open={openDialog} onClose={() => !submitting && setOpenDialog(false)} maxWidth="md" fullWidth>
+        <DialogTitle sx={{ bgcolor: '#ff6b35', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>Apply for {job.title}</Typography>
+          <IconButton onClick={() => setOpenDialog(false)} disabled={submitting} sx={{ color: '#fff' }}>
+            <Close />
+          </IconButton>
         </DialogTitle>
 
-        <DialogContent>
+        <DialogContent sx={{ pt: 3 }}>
           {success ? (
-            <Alert severity="success" sx={{ mt: 2 }}>
-              Application submitted successfully! We will contact you soon.
-            </Alert>
+            <Box sx={{ textAlign: 'center', py: 6 }}>
+              <CheckCircle sx={{ fontSize: 80, color: '#4caf50', mb: 2 }} />
+              <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>Application Submitted!</Typography>
+              <Typography color="textSecondary">We'll review your application and get back to you soon.</Typography>
+            </Box>
           ) : (
-            <form id="application-form" onSubmit={handleSubmit(onSubmit)}>
-              <Stepper activeStep={activeStep} sx={{ mb: 4, mt: 2 }}>
-                <Step>
-                  <StepLabel>Personal Info</StepLabel>
-                </Step>
-                <Step>
-                  <StepLabel>Education & Skills</StepLabel>
-                </Step>
-                <Step>
-                  <StepLabel>Additional Info</StepLabel>
-                </Step>
+            <Box>
+              <Stepper activeStep={activeStep} sx={{ mb: 4, mt: 1 }}>
+                {steps.map(label => (
+                  <Step key={label}>
+                    <StepLabel sx={{ '& .MuiStepLabel-label.Mui-active': { color: '#ff6b35' }, '& .MuiStepIcon-root.Mui-active': { color: '#ff6b35' }, '& .MuiStepIcon-root.Mui-completed': { color: '#ff6b35' } }}>
+                      {label}
+                    </StepLabel>
+                  </Step>
+                ))}
               </Stepper>
 
+              {errors.submit && <Alert severity="error" sx={{ mb: 2 }}>{errors.submit}</Alert>}
+
+              {/* Step 0 — Personal Info */}
               {activeStep === 0 && (
-                <Box>
-                  <Controller
-                    name="fullName"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label="Full Name"
-                        margin="normal"
-                        error={!!errors.fullName}
-                        helperText={errors.fullName?.message}
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="email"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label="Email"
-                        type="email"
-                        margin="normal"
-                        error={!!errors.email}
-                        helperText={errors.email?.message}
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="phone"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label="Phone Number"
-                        margin="normal"
-                        error={!!errors.phone}
-                        helperText={errors.phone?.message}
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="experienceType"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        select
-                        label="Experience Type"
-                        margin="normal"
-                        error={!!errors.experienceType}
-                        helperText={errors.experienceType?.message}
-                      >
-                        <MenuItem value="fresher">Fresher</MenuItem>
-                        <MenuItem value="experienced">Experienced</MenuItem>
-                      </TextField>
-                    )}
-                  />
-                  <Box sx={{ mt: 2 }}>
-                    <Button
-                      variant="contained"
-                      onClick={() => setActiveStep(1)}
-                    >
-                      Next
-                    </Button>
-                  </Box>
-                </Box>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <TextField fullWidth label="Full Name *" value={formData.fullName}
+                      onChange={e => set('fullName', e.target.value)}
+                      error={!!errors.fullName} helperText={errors.fullName} />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField fullWidth label="Email *" type="email" value={formData.email}
+                      onChange={e => set('email', e.target.value)}
+                      error={!!errors.email} helperText={errors.email} />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField fullWidth label="Phone *" value={formData.phone}
+                      onChange={e => set('phone', e.target.value)}
+                      error={!!errors.phone} helperText={errors.phone} />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField fullWidth select label="Experience Type *" value={formData.experienceType}
+                      onChange={e => set('experienceType', e.target.value)}>
+                      <MenuItem value="fresher">Fresher</MenuItem>
+                      <MenuItem value="experienced">Experienced</MenuItem>
+                    </TextField>
+                  </Grid>
+                  {formData.experienceType === 'experienced' && <>
+                    <Grid item xs={6} md={3}>
+                      <TextField fullWidth label="Exp Years" type="number" value={formData.expYears}
+                        onChange={e => set('expYears', e.target.value)} />
+                    </Grid>
+                    <Grid item xs={6} md={3}>
+                      <TextField fullWidth label="Exp Months" type="number" value={formData.expMonths}
+                        onChange={e => set('expMonths', e.target.value)} />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField fullWidth label="Current Company" value={formData.currentCompany}
+                        onChange={e => set('currentCompany', e.target.value)} />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField fullWidth label="Current Role" value={formData.currentRole}
+                        onChange={e => set('currentRole', e.target.value)} />
+                    </Grid>
+                  </>}
+                </Grid>
               )}
 
+              {/* Step 1 — Education & Skills */}
               {activeStep === 1 && (
-                <Box>
-                  <Controller
-                    name="qualification.degree"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label="Degree"
-                        margin="normal"
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="qualification.institution"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label="Institution"
-                        margin="normal"
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="qualification.yearOfPassing"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        type="number"
-                        label="Year of Passing"
-                        margin="normal"
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="skills"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label="Skills (comma-separated)"
-                        placeholder="React, Node.js, Python"
-                        margin="normal"
-                      />
-                    )}
-                  />
-                  <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-                    <Button variant="outlined" onClick={() => setActiveStep(0)}>
-                      Back
-                    </Button>
-                    <Button variant="contained" onClick={() => setActiveStep(2)}>
-                      Next
-                    </Button>
-                  </Box>
-                </Box>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <TextField fullWidth label="Degree *" value={formData.degree}
+                      onChange={e => set('degree', e.target.value)}
+                      error={!!errors.degree} helperText={errors.degree}
+                      placeholder="B.Tech, MBA, BCA..." />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField fullWidth label="Institution *" value={formData.institution}
+                      onChange={e => set('institution', e.target.value)}
+                      error={!!errors.institution} helperText={errors.institution} />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField fullWidth label="Year of Passing *" type="number" value={formData.yearOfPassing}
+                      onChange={e => set('yearOfPassing', e.target.value)}
+                      error={!!errors.yearOfPassing} helperText={errors.yearOfPassing} />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField fullWidth label="Percentage / CGPA" type="number" value={formData.percentage}
+                      onChange={e => set('percentage', e.target.value)} />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField fullWidth label="Skills * (comma separated)" value={formData.skills}
+                      onChange={e => set('skills', e.target.value)}
+                      error={!!errors.skills} helperText={errors.skills || 'e.g. React, Node.js, Python'}
+                      placeholder="React, Node.js, Python" />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField fullWidth label="Preferred Job Role *" value={formData.preferredJobRole}
+                      onChange={e => set('preferredJobRole', e.target.value)}
+                      error={!!errors.preferredJobRole} helperText={errors.preferredJobRole} />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField fullWidth label="Current Location *" value={formData.currentLocation}
+                      onChange={e => set('currentLocation', e.target.value)}
+                      error={!!errors.currentLocation} helperText={errors.currentLocation} />
+                  </Grid>
+                </Grid>
               )}
 
+              {/* Step 2 — Upload & Submit */}
               {activeStep === 2 && (
-                <Box>
-                  <Controller
-                    name="preferredJobRole"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label="Preferred Job Role"
-                        margin="normal"
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="currentLocation"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label="Current Location"
-                        margin="normal"
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="linkedinProfile"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label="LinkedIn Profile URL"
-                        margin="normal"
-                      />
-                    )}
-                  />
-                  
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="body2" gutterBottom>
-                      Resume (PDF/DOC)
-                    </Typography>
-                    <Button
-                      variant="outlined"
-                      component="label"
-                      startIcon={<Upload />}
-                    >
-                      Upload Resume
-                      <input
-                        type="file"
-                        hidden
-                        accept=".pdf,.doc,.docx"
-                        onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
-                      />
-                    </Button>
-                    {resumeFile && (
-                      <Typography variant="caption" sx={{ ml: 2 }}>
-                        {resumeFile.name}
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, borderColor: errors.resume ? '#d32f2f' : '#ddd', borderStyle: 'dashed', textAlign: 'center' }}>
+                      <Upload sx={{ fontSize: 40, color: '#ff6b35', mb: 1 }} />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 0.5 }}>Upload Resume *</Typography>
+                      <Typography variant="caption" color="textSecondary" sx={{ display: 'block', mb: 2 }}>
+                        PDF, DOC, DOCX (max 5MB)
                       </Typography>
-                    )}
-                  </Box>
-
-                  <Controller
-                    name="message"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        multiline
-                        rows={4}
-                        label="Additional Message (Optional)"
-                        margin="normal"
-                      />
-                    )}
-                  />
-
-                  <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-                    <Button variant="outlined" onClick={() => setActiveStep(1)}>
-                      Back
-                    </Button>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      disabled={submitting || !resumeFile}
-                    >
-                      {submitting ? 'Submitting...' : 'Submit Application'}
-                    </Button>
-                  </Box>
-                </Box>
+                      <Button variant="outlined" component="label"
+                        sx={{ borderColor: '#ff6b35', color: '#ff6b35', '&:hover': { borderColor: '#e55a2b' } }}>
+                        Choose File
+                        <input type="file" hidden accept=".pdf,.doc,.docx"
+                          onChange={e => { setResumeFile(e.target.files?.[0] || null); setErrors((p: any) => ({ ...p, resume: '' })) }} />
+                      </Button>
+                      {resumeFile && (
+                        <Typography variant="body2" sx={{ mt: 1.5, color: '#4caf50', fontWeight: 600 }}>
+                          ✓ {resumeFile.name}
+                        </Typography>
+                      )}
+                      {errors.resume && <Typography variant="caption" color="error">{errors.resume}</Typography>}
+                    </Paper>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField fullWidth label="LinkedIn Profile URL" value={formData.linkedinProfile}
+                      onChange={e => set('linkedinProfile', e.target.value)}
+                      placeholder="https://linkedin.com/in/yourprofile" />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField fullWidth label="Portfolio / GitHub URL" value={formData.portfolioUrl}
+                      onChange={e => set('portfolioUrl', e.target.value)}
+                      placeholder="https://github.com/yourprofile" />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField fullWidth multiline rows={3} label="Cover Message (Optional)"
+                      value={formData.message} onChange={e => set('message', e.target.value)}
+                      placeholder="Why are you a great fit for this role?" />
+                  </Grid>
+                </Grid>
               )}
-            </form>
+
+              {/* Navigation Buttons */}
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, pt: 2, borderTop: '1px solid #f0f0f0' }}>
+                <Button onClick={() => setActiveStep(p => p - 1)} disabled={activeStep === 0}
+                  startIcon={<ArrowBack />} sx={{ color: '#ff6b35' }}>
+                  Back
+                </Button>
+                {activeStep < 2 ? (
+                  <Button variant="contained" onClick={handleNext} endIcon={<ArrowForward />}
+                    sx={{ bgcolor: '#ff6b35', '&:hover': { bgcolor: '#e55a2b' }, borderRadius: 2, px: 4 }}>
+                    Next
+                  </Button>
+                ) : (
+                  <Button variant="contained" onClick={handleSubmit} disabled={submitting}
+                    sx={{ bgcolor: '#ff6b35', '&:hover': { bgcolor: '#e55a2b' }, borderRadius: 2, px: 4 }}>
+                    {submitting ? <CircularProgress size={22} sx={{ color: '#fff' }} /> : 'Submit Application'}
+                  </Button>
+                )}
+              </Box>
+            </Box>
           )}
         </DialogContent>
       </Dialog>
