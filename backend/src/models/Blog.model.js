@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const slugify = require('slugify');
 
 const blogSchema = new mongoose.Schema({
   title: {
@@ -19,7 +18,7 @@ const blogSchema = new mongoose.Schema({
   excerpt: {
     type: String,
     required: [true, 'Blog excerpt is required'],
-    maxlength: 200
+    maxlength: 500
   },
   category: {
     type: String,
@@ -53,17 +52,13 @@ const blogSchema = new mongoose.Schema({
   seo: {
     metaTitle: String,
     metaDescription: String,
-    keywords: [String]
+    keywords: [String],
+    canonicalUrl: String
   }
 }, {
   timestamps: true
 });
 
-blogSchema.pre('save', function(next) {
-  if (this.isModified('title')) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
-  }
-  next();
-});
+// ✅ Pre-save hook completely removed - slug controller mein set hota hai
 
 module.exports = mongoose.model('Blog', blogSchema);

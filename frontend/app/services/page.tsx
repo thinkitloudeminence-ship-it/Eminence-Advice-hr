@@ -32,6 +32,7 @@ import {
   ArrowForward,
 } from '@mui/icons-material'
 import Link from 'next/link'
+import { NextSeo } from 'next-seo'
 
 const serviceCategories = [
   {
@@ -110,6 +111,17 @@ const benefits = [
 
 export default function ServicesPage() {
   return (
+    <>
+      <NextSeo
+        title="Our Services - Career Counseling, Training & Placement | Eminance Advice"
+        description="Explore our comprehensive career services: career counseling, soft skills training, placement assistance, resume building, interview preparation, and freelancing support."
+        canonical="https://eminenceadvice.com/services"
+        openGraph={{
+          url: 'https://eminenceadvice.com/services',
+          title: 'Eminance Advice Services - Your Career Growth Partner',
+          description: 'Expert career guidance and placement services for students and professionals.',
+        }}
+      />
     <Box sx={{ pt: 12, pb: 8, bgcolor: 'white' }}>
       {/* Hero Section - Orange Theme */}
       <Box sx={{ bgcolor: '#ff6b35', color: 'white', py: 8 }}>
@@ -452,5 +464,6 @@ export default function ServicesPage() {
         </Container>
       </Box>
     </Box>
+     </>
   )
 }

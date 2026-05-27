@@ -4,24 +4,22 @@ const { validationResult } = require('express-validator');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE
+    expiresIn: process.env.JWT_EXPIRE || '7d'
   });
 };
 
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
-  
   user.password = undefined;
   
   res.status(statusCode).json({
-    status: 'success',
+    success: true,
     token,
-    data: {
-      user
-    }
+    data: { user }
   });
 };
 
+// Register function
 exports.register = async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -50,60 +48,41 @@ exports.register = async (req, res, next) => {
   }
 };
 
+// Login function
 exports.login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
     
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Please provide email and password' });
-    }
+    email = email.trim().toLowerCase();
+    
+    console.log('Login attempt - Email:', email);
+    console.log('Login attempt - Password:', password);
     
     const user = await User.findOne({ email }).select('+password');
+    console.log('User found:', user ? 'Yes' : 'No');
     
-    if (!user || !(await user.comparePassword(password))) {
+    if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
     
-    user.lastLogin = Date.now();
-    await user.save({ validateBeforeSave: false });
+    const isMatch = await user.comparePassword(password);
+    console.log('Password match:', isMatch);
+    
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+    
+    // ✅ Don't let lastLogin failure block login
+    try {
+      user.lastLogin = Date.now();
+      await user.save({ validateBeforeSave: false });
+    } catch (saveError) {
+      console.warn('⚠️ Could not update lastLogin:', saveError.message);
+    }
     
     createSendToken(user, 200, res);
   } catch (error) {
+    console.error('Login error:', error);
     next(error);
   }
-};
-
-exports.protect = async (req, res, next) => {
-  try {
-    let token;
-    
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-      token = req.headers.authorization.split(' ')[1];
-    }
-    
-    if (!token) {
-      return res.status(401).json({ message: 'You are not logged in' });
-    }
-    
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
-    
-    if (!user) {
-      return res.status(401).json({ message: 'User no longer exists' });
-    }
-    
-    req.user = user;
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.restrictTo = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ message: 'You do not have permission' });
-    }
-    next();
-  };
 };

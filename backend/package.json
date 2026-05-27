@@ -16,19 +16,18 @@
     "cloudinary": "^2.10.0",
     "compression": "^1.8.1",
     "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
+    "dotenv": "^16.6.1",
     "express": "^5.2.1",
-    "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^8.5.2",
     "express-validator": "^7.3.2",
     "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.2.0",
     "mongoose": "^9.6.2",
+    "mongoose-sanitize": "^1.5.0",
     "multer": "^2.1.1",
     "nodemailer": "^8.0.7",
-    "slugify": "^1.6.9",
-    "xss-clean": "^0.1.4"
+    "slugify": "^1.6.9"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

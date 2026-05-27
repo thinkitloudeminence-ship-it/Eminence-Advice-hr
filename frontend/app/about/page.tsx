@@ -26,6 +26,7 @@ import {
   ArrowForward,
 } from '@mui/icons-material'
 import Link from 'next/link'
+import { NextSeo } from 'next-seo'
 
 const stats = [
   { number: '5000+', label: 'Students Placed', icon: School, delay: 0 },
@@ -86,6 +87,17 @@ const team = [
 
 export default function AboutPage() {
   return (
+    <>
+      <NextSeo
+        title="About Us - Eminance Advice | Career Counseling & HR Services"
+        description="Learn about Eminance Advice - India's leading career counseling and HR services platform. 10+ years of excellence, 5000+ students placed, 200+ corporate partners."
+        canonical="https://eminenceadvice.com/about"
+        openGraph={{
+          url: 'https://eminenceadvice.com/about',
+          title: 'About Eminance Advice - Our Story & Mission',
+          description: 'Bridging the gap between talent and opportunity since 2009.',
+        }}
+      />
     <Box sx={{ pt: 12, pb: 8, bgcolor: 'white' }}>
       {/* Hero Section - Orange Accent */}
       <Box sx={{ bgcolor: '#ff6b35', color: 'white', py: 8 }}>
@@ -518,5 +530,6 @@ export default function AboutPage() {
         </Container>
       </Box>
     </Box>
+    </>
   )
 }

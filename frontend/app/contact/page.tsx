@@ -31,6 +31,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import axios from 'axios'
 import { motion } from 'framer-motion'
+import { NextSeo } from 'next-seo'
 
 const contactSchema = z.object({
   fullName: z.string().min(2, 'Name is required'),
@@ -79,7 +80,19 @@ export default function ContactPage() {
     }
   }
 
+
   return (
+    <>
+      <NextSeo
+        title="Contact Us - Get in Touch with Eminance Advice"
+        description="Have questions about career counseling, training, or placement? Contact our expert team today. We're here to help you succeed."
+        canonical="https://eminenceadvice.com/contact"
+        openGraph={{
+          url: 'https://eminenceadvice.com/contact',
+          title: 'Contact Eminance Advice - Career Guidance Experts',
+          description: 'Reach out to us for career counseling, training, and placement assistance.',
+        }}
+      />
     <Box sx={{ pt: 12, pb: 8, minHeight: '100vh', bgcolor: '#f5f5f5' }}>
       <Container maxWidth="lg">
         <motion.div
@@ -331,5 +344,6 @@ export default function ContactPage() {
         </Grid>
       </Container>
     </Box>
+     </>
   )
 }

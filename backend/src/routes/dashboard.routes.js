@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const dashboardController = require('../controllers/dashboard.controller');
-const authController = require('../controllers/auth.controller');
+const { protect, restrictTo } = require('../middleware/auth');
 
-router.use(authController.protect);
-router.use(authController.restrictTo('admin', 'super_admin'));
+router.use(protect);
+router.use(restrictTo('admin', 'super_admin'));
 
 router.get('/stats', dashboardController.getDashboardStats);
 router.get('/charts', dashboardController.getChartData);

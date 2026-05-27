@@ -22,6 +22,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { motion } from 'framer-motion'
 import { format } from 'date-fns'
+import { NextSeo } from 'next-seo'
 
 interface Blog {
   _id: string
@@ -76,7 +77,18 @@ export default function BlogsPage() {
     }
   }
 
-  return (
+   return (
+    <>
+      <NextSeo
+        title="Career Blogs - Tips, Insights & Guidance | Eminance Advice"
+        description="Read expert career advice, interview tips, resume building guides, and industry insights to accelerate your professional growth."
+        canonical="https://eminenceadvice.com/blogs"
+        openGraph={{
+          url: 'https://eminenceadvice.com/blogs',
+          title: 'Career Guidance Blogs - Expert Insights',
+          description: 'Stay updated with latest career trends and job search strategies.',
+        }}
+      />
     <Box sx={{ pt: 12, pb: 8, minHeight: '100vh', bgcolor: '#f5f5f5' }}>
       <Container maxWidth="lg">
         <motion.div
@@ -257,5 +269,6 @@ export default function BlogsPage() {
         )}
       </Container>
     </Box>
+    </>
   )
 }

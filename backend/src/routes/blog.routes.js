@@ -1,15 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
+const upload = require('../middleware/upload');
 const blogController = require('../controllers/blog.controller');
-const authController = require('../controllers/auth.controller');
+const { protect, restrictTo } = require('../middleware/auth');
 
-const upload = multer({ dest: 'uploads/' });
+// ✅ Admin routes PEHLE (specific routes before dynamic ones)
+router.get('/admin/list', protect, restrictTo('admin', 'super_admin'), blogController.getAllBlogsAdmin);
+router.get('/admin/:id', protect, restrictTo('admin', 'super_admin'), blogController.getBlogById);
+router.post('/', protect, restrictTo('admin', 'super_admin'), upload.single('featuredImage'), blogController.createBlog);
+router.put('/:id', protect, restrictTo('admin', 'super_admin'), upload.single('featuredImage'), blogController.updateBlog);
+router.delete('/:id', protect, restrictTo('admin', 'super_admin'), blogController.deleteBlog);
 
+// ✅ Public routes BAAD MEIN (dynamic routes last mein)
 router.get('/', blogController.getAllBlogs);
 router.get('/:slug', blogController.getBlogBySlug);
-router.post('/', authController.protect, authController.restrictTo('admin', 'super_admin'), upload.single('featuredImage'), blogController.createBlog);
-router.put('/:id', authController.protect, authController.restrictTo('admin', 'super_admin'), upload.single('featuredImage'), blogController.updateBlog);
-router.delete('/:id', authController.protect, authController.restrictTo('admin', 'super_admin'), blogController.deleteBlog);
 
 module.exports = router;
