@@ -1,6 +1,7 @@
 # robots.txt for Eminance Advice
 User-agent: *
 Allow: /
+Allow: /payment
 Disallow: /api/
 Disallow: /admin/
 Disallow: /_next/

@@ -21,46 +21,23 @@ const jobSchema = new mongoose.Schema({
     enum: ['Full-time', 'Part-time', 'Contract', 'Internship', 'Remote', 'Hybrid'],
     required: [true, 'Job type is required']
   },
-  experienceMin: {
-    type: Number,
-    default: 0
+  experience: {
+    min: { type: Number, default: 0 },
+    max: { type: Number, default: 0 }
   },
-  experienceMax: {
-    type: Number,
-    default: 0
+  salary: {
+    min: { type: Number, default: 0 },
+    max: { type: Number, default: 0 },
+    currency: { type: String, default: 'INR' }
   },
-  salaryMin: {
-    type: Number,
-    default: 0
-  },
-  salaryMax: {
-    type: Number,
-    default: 0
-  },
-  salaryCurrency: {
-    type: String,
-    default: 'INR'
-  },
-  skills: {
-    type: [String],
-    default: []
-  },
+  skills: { type: [String], default: [] },
   description: {
     type: String,
     required: [true, 'Job description is required']
   },
-  responsibilities: {
-    type: [String],
-    default: []
-  },
-  requirements: {
-    type: [String],
-    default: []
-  },
-  benefits: {
-    type: [String],
-    default: []
-  },
+  responsibilities: { type: [String], default: [] },
+  requirements: { type: [String], default: [] },
+  benefits: { type: [String], default: [] },
   category: {
     type: String,
     enum: ['IT', 'HR', 'Finance', 'Sales', 'Marketing', 'BDE', 'Other'],
@@ -83,19 +60,11 @@ const jobSchema = new mongoose.Schema({
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'Posted by is required']
+    required: true
   },
-  views: {
-    type: Number,
-    default: 0
-  },
-  applications: {
-    type: Number,
-    default: 0
-  }
-}, {
-  timestamps: true
-});
+  views: { type: Number, default: 0 },
+  applications: { type: Number, default: 0 }
+}, { timestamps: true });
 
 jobSchema.index({ title: 'text', description: 'text', skills: 'text' });
 

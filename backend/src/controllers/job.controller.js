@@ -5,13 +5,10 @@ exports.getAllJobs = async (req, res, next) => {
     const { page = 1, limit = 10, category, jobType, location, search } = req.query;
     
     let query = { status: 'active' };
-    
     if (category) query.category = category;
     if (jobType) query.jobType = jobType;
     if (location) query.location = { $regex: location, $options: 'i' };
-    if (search) {
-      query.$text = { $search: search };
-    }
+    if (search) query.$text = { $search: search };
     
     const jobs = await Job.find(query)
       .sort('-createdAt')
@@ -34,6 +31,22 @@ exports.getAllJobs = async (req, res, next) => {
   }
 };
 
+exports.getAllJobsAdmin = async (req, res, next) => {
+  try {
+    const jobs = await Job.find()
+      .sort('-createdAt')
+      .populate('postedBy', 'name email');
+    
+    res.status(200).json({
+      status: 'success',
+      results: jobs.length,
+      data: jobs
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getJobById = async (req, res, next) => {
   try {
     const job = await Job.findById(req.params.id).populate('postedBy', 'name email');
@@ -42,8 +55,8 @@ exports.getJobById = async (req, res, next) => {
       return res.status(404).json({ message: 'Job not found' });
     }
     
-    job.views += 1;
-    await job.save();
+    // ✅ updateOne use karo - save() hook issues avoid karne ke liye
+    await Job.updateOne({ _id: job._id }, { $inc: { views: 1 } });
     
     res.status(200).json({
       status: 'success',
@@ -56,8 +69,25 @@ exports.getJobById = async (req, res, next) => {
 
 exports.createJob = async (req, res, next) => {
   try {
-    req.body.postedBy = req.user._id;
-    const job = await Job.create(req.body);
+    const jobData = { ...req.body };
+    jobData.postedBy = req.user._id;
+    
+    // Parse arrays if sent as strings
+    ['skills', 'responsibilities', 'requirements', 'benefits'].forEach(field => {
+      if (jobData[field] && typeof jobData[field] === 'string') {
+        jobData[field] = jobData[field].split(',').map(s => s.trim()).filter(Boolean);
+      }
+    });
+
+    // Parse nested objects if sent as strings
+    if (jobData.salary && typeof jobData.salary === 'string') {
+      jobData.salary = JSON.parse(jobData.salary);
+    }
+    if (jobData.experience && typeof jobData.experience === 'string') {
+      jobData.experience = JSON.parse(jobData.experience);
+    }
+    
+    const job = await Job.create(jobData);
     
     res.status(201).json({
       status: 'success',
@@ -70,7 +100,22 @@ exports.createJob = async (req, res, next) => {
 
 exports.updateJob = async (req, res, next) => {
   try {
-    const job = await Job.findByIdAndUpdate(req.params.id, req.body, {
+    const jobData = { ...req.body };
+    
+    ['skills', 'responsibilities', 'requirements', 'benefits'].forEach(field => {
+      if (jobData[field] && typeof jobData[field] === 'string') {
+        jobData[field] = jobData[field].split(',').map(s => s.trim()).filter(Boolean);
+      }
+    });
+
+    if (jobData.salary && typeof jobData.salary === 'string') {
+      jobData.salary = JSON.parse(jobData.salary);
+    }
+    if (jobData.experience && typeof jobData.experience === 'string') {
+      jobData.experience = JSON.parse(jobData.experience);
+    }
+    
+    const job = await Job.findByIdAndUpdate(req.params.id, jobData, {
       new: true,
       runValidators: true
     });
@@ -96,10 +141,7 @@ exports.deleteJob = async (req, res, next) => {
       return res.status(404).json({ message: 'Job not found' });
     }
     
-    res.status(204).json({
-      status: 'success',
-      data: null
-    });
+    res.status(204).json({ status: 'success', data: null });
   } catch (error) {
     next(error);
   }

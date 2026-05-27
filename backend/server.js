@@ -75,6 +75,8 @@ const blogRoutes = require('./src/routes/blog.routes');
 const contactRoutes = require('./src/routes/contact.routes');
 const serviceRoutes = require('./src/routes/service.routes');
 const dashboardRoutes = require('./src/routes/dashboard.routes');
+const paymentRoutes = require('./src/routes/payment.routes');
+
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -84,6 +86,7 @@ app.use('/api/blogs', blogRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/payment', paymentRoutes);
 
 
 const errorHandler = require('./src/middleware/error');
