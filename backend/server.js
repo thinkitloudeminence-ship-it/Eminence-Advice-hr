@@ -23,12 +23,14 @@ app.use(helmet());
 app.use(compression());
 app.use(cors({
   origin: [
-    'http://localhost:3000', 
-    'http://localhost:3001', 
-    'http://localhost:3002',  // ← YEH ADD KARO (admin panel ka port)
-    'https://eminenceadvice.com', 
-    'https://www.eminenceadvice.com', 
-    'https://eminence-advice-hr.vercel.app'
+   'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'https://eminenceadvice.com',
+    'https://www.eminenceadvice.com',
+    'https://eminence-advice-hr.vercel.app',
+    'https://eminence-advice-hr-etfi.vercel.app',  // ← NAYA DOMAIN ADD KARO
+    'https://admin.eminenceadvice.com',
   ],
   credentials: true
 }));
