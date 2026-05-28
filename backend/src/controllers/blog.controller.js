@@ -103,6 +103,7 @@ exports.createBlog = async (req, res, next) => {
   try {
     const blogData = { ...req.body };
     blogData.author = req.user._id;
+
     
     // Parse SEO data if sent as string
     if (blogData.seo && typeof blogData.seo === 'string') {
@@ -112,7 +113,15 @@ exports.createBlog = async (req, res, next) => {
         blogData.seo = {};
       }
     }
-    
+     // ✅ Parse FAQs if sent as string (YEH ADD KARO)
+    if (blogData.faqs && typeof blogData.faqs === 'string') {
+      try {
+        blogData.faqs = JSON.parse(blogData.faqs);
+      } catch (e) {
+        blogData.faqs = [];
+      }
+    }
+
     // Upload image to Cloudinary if exists
     if (req.file) {
       try {
@@ -169,6 +178,15 @@ exports.updateBlog = async (req, res, next) => {
         blogData.seo = {};
       }
     }
+
+    // ✅ YEH ADD KARO — faqs parse karo (createBlog mein tha, updateBlog mein nahi tha)
+    if (blogData.faqs && typeof blogData.faqs === 'string') {
+      try {
+        blogData.faqs = JSON.parse(blogData.faqs);
+      } catch (e) {
+        blogData.faqs = [];
+      }
+    }
     
     // Parse tags
     if (blogData.tags && typeof blogData.tags === 'string') {
@@ -182,7 +200,6 @@ exports.updateBlog = async (req, res, next) => {
         if (existingBlog?.featuredImage?.publicId) {
           await cloudinary.uploader.destroy(existingBlog.featuredImage.publicId);
         }
-        
         const result = await cloudinary.uploader.upload(req.file.path, {
           folder: 'blogs',
           transformation: [{ width: 1200, height: 630, crop: 'fill' }]
@@ -199,11 +216,13 @@ exports.updateBlog = async (req, res, next) => {
     if (blogData.status === 'published' && !blogData.publishedAt) {
       blogData.publishedAt = Date.now();
     }
-    
-    const blog = await Blog.findByIdAndUpdate(req.params.id, blogData, {
-      new: true,
-      runValidators: true
-    });
+
+    // ✅ 'new: true' deprecated warning fix
+    const blog = await Blog.findByIdAndUpdate(
+      req.params.id,
+      blogData,
+      { returnDocument: 'after', runValidators: true }
+    );
     
     if (!blog) {
       return res.status(404).json({ message: 'Blog not found' });
