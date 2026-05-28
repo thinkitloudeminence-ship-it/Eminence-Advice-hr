@@ -9,9 +9,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
 
-const Sidebar = dynamic(() => import('@/components/AdminSidebar'), { ssr: false })
-const Navbar = dynamic(() => import('@/components/AdminNavbar'), { ssr: false })
-const ProtectedRoute = dynamic(() => import('@/components/ProtectedRoute'), { ssr: false })
+const Sidebar = dynamic(() => import('../components/AdminSidebar'), { ssr: false })
+const Navbar = dynamic(() => import('../components/AdminNavbar'), { ssr: false })
+const ProtectedRoute = dynamic(() => import('../components/ProtectedRoute'), { ssr: false })
 
 const theme = createTheme({
   palette: {
