@@ -32,7 +32,7 @@ exports.submitApplication = async (req, res, next) => {
       try {
         const result = await cloudinary.uploader.upload(req.file.path, {
           folder: 'resumes',
-          resource_type: 'auto'
+          resource_type: 'raw', 
         });
         applicationData.resume = {
           url: result.secure_url,
@@ -125,7 +125,7 @@ exports.updateApplicationStatus = async (req, res, next) => {
     const application = await Application.findByIdAndUpdate(
       req.params.id,
       { status, notes, reviewedBy: req.user._id, reviewedAt: Date.now() },
-      { new: true, runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     ).populate('job', 'title company');
 
     if (!application) {
