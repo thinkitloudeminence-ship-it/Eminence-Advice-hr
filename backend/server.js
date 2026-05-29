@@ -12,6 +12,9 @@ dotenv.config();
 
 const app = express();
 
+// ✅ TRUST PROXY - Render deployment ke liye (rate limit se PEHLE add karo)
+app.set('trust proxy', 1);
+
 // Ensure uploads folder exists
 const uploadDir = './uploads';
 if (!fs.existsSync(uploadDir)){
@@ -29,7 +32,7 @@ app.use(cors({
     'https://eminenceadvice.com',
     'https://www.eminenceadvice.com',
     'https://eminence-advice-hr.vercel.app',
-    'https://eminence-advice-hr-etfi.vercel.app',  // ← NAYA DOMAIN ADD KARO
+    'https://eminence-advice-hr-etfi.vercel.app',
     'https://admin.eminenceadvice.com',
   ],
   credentials: true

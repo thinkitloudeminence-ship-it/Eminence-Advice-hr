@@ -8,10 +8,9 @@ const jobSchema = new mongoose.Schema({
     trim: true
   },
   slug: {
-  type: String,
-  unique: true,
-  sparse: true
-},
+    type: String
+    // ✅ unique: true HATAO - index alag se banayenge
+  },
   company: {
     type: String,
     required: [true, 'Company name is required'],
@@ -72,15 +71,16 @@ const jobSchema = new mongoose.Schema({
   applications: { type: Number, default: 0 }
 }, { timestamps: true });
 
-// ✅ Auto-generate slug from title
+// ✅ Unique index yahan banao
+jobSchema.index({ slug: 1 }, { unique: true, sparse: true });
+jobSchema.index({ title: 'text', description: 'text', skills: 'text' });
+
+// ✅ Pre-save hook
 jobSchema.pre('save', function(next) {
-  if (this.isModified('title')) {
+  if (this.isModified('title') && this.title) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   }
   next();
 });
-
-jobSchema.index({ title: 'text', description: 'text', skills: 'text' });
-jobSchema.index({ slug: 1 });
 
 module.exports = mongoose.model('Job', jobSchema);

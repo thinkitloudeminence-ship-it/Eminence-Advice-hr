@@ -88,7 +88,7 @@ exports.getJobBySlug = async (req, res, next) => {
   }
 };
 
-// ✅ CREATE JOB - with slug generation
+// ✅ CREATE JOB - with slug generation (FIXED)
 exports.createJob = async (req, res, next) => {
   try {
     const jobData = { ...req.body };
@@ -101,9 +101,11 @@ exports.createJob = async (req, res, next) => {
       let counter = 1;
       
       // Check if slug already exists
-      while (await Job.findOne({ slug })) {
+      let existing = await Job.findOne({ slug });
+      while (existing) {
         slug = `${baseSlug}-${counter}`;
         counter++;
+        existing = await Job.findOne({ slug });
       }
       jobData.slug = slug;
     }
@@ -115,12 +117,53 @@ exports.createJob = async (req, res, next) => {
       }
     });
 
+    // Parse arrays if sent as JSON string
+    if (jobData.skills && typeof jobData.skills === 'string' && jobData.skills.startsWith('[')) {
+      try {
+        jobData.skills = JSON.parse(jobData.skills);
+      } catch (e) {
+        jobData.skills = [];
+      }
+    }
+    
+    if (jobData.responsibilities && typeof jobData.responsibilities === 'string' && jobData.responsibilities.startsWith('[')) {
+      try {
+        jobData.responsibilities = JSON.parse(jobData.responsibilities);
+      } catch (e) {
+        jobData.responsibilities = [];
+      }
+    }
+    
+    if (jobData.requirements && typeof jobData.requirements === 'string' && jobData.requirements.startsWith('[')) {
+      try {
+        jobData.requirements = JSON.parse(jobData.requirements);
+      } catch (e) {
+        jobData.requirements = [];
+      }
+    }
+    
+    if (jobData.benefits && typeof jobData.benefits === 'string' && jobData.benefits.startsWith('[')) {
+      try {
+        jobData.benefits = JSON.parse(jobData.benefits);
+      } catch (e) {
+        jobData.benefits = [];
+      }
+    }
+
     // Parse nested objects if sent as strings
     if (jobData.salary && typeof jobData.salary === 'string') {
-      jobData.salary = JSON.parse(jobData.salary);
+      try {
+        jobData.salary = JSON.parse(jobData.salary);
+      } catch (e) {
+        jobData.salary = { min: 0, max: 0, currency: 'INR' };
+      }
     }
     if (jobData.experience && typeof jobData.experience === 'string') {
-      jobData.experience = JSON.parse(jobData.experience);
+      try {
+        jobData.experience = JSON.parse(jobData.experience);
+      } catch (e) {
+        jobData.experience = { min: 0, max: 0 };
+      }
     }
     
     const job = await Job.create(jobData);
@@ -130,11 +173,12 @@ exports.createJob = async (req, res, next) => {
       data: job
     });
   } catch (error) {
+    console.error('Create job error:', error);
     next(error);
   }
 };
 
-// ✅ UPDATE JOB - with slug regeneration
+// ✅ UPDATE JOB - with slug regeneration (FIXED)
 exports.updateJob = async (req, res, next) => {
   try {
     const jobData = { ...req.body };
@@ -155,17 +199,59 @@ exports.updateJob = async (req, res, next) => {
       jobData.slug = slug;
     }
     
+    // Parse arrays if sent as strings
     ['skills', 'responsibilities', 'requirements', 'benefits'].forEach(field => {
       if (jobData[field] && typeof jobData[field] === 'string') {
         jobData[field] = jobData[field].split(',').map(s => s.trim()).filter(Boolean);
       }
     });
 
+    // Parse arrays if sent as JSON string
+    if (jobData.skills && typeof jobData.skills === 'string' && jobData.skills.startsWith('[')) {
+      try {
+        jobData.skills = JSON.parse(jobData.skills);
+      } catch (e) {
+        jobData.skills = [];
+      }
+    }
+    
+    if (jobData.responsibilities && typeof jobData.responsibilities === 'string' && jobData.responsibilities.startsWith('[')) {
+      try {
+        jobData.responsibilities = JSON.parse(jobData.responsibilities);
+      } catch (e) {
+        jobData.responsibilities = [];
+      }
+    }
+    
+    if (jobData.requirements && typeof jobData.requirements === 'string' && jobData.requirements.startsWith('[')) {
+      try {
+        jobData.requirements = JSON.parse(jobData.requirements);
+      } catch (e) {
+        jobData.requirements = [];
+      }
+    }
+    
+    if (jobData.benefits && typeof jobData.benefits === 'string' && jobData.benefits.startsWith('[')) {
+      try {
+        jobData.benefits = JSON.parse(jobData.benefits);
+      } catch (e) {
+        jobData.benefits = [];
+      }
+    }
+
     if (jobData.salary && typeof jobData.salary === 'string') {
-      jobData.salary = JSON.parse(jobData.salary);
+      try {
+        jobData.salary = JSON.parse(jobData.salary);
+      } catch (e) {
+        jobData.salary = { min: 0, max: 0, currency: 'INR' };
+      }
     }
     if (jobData.experience && typeof jobData.experience === 'string') {
-      jobData.experience = JSON.parse(jobData.experience);
+      try {
+        jobData.experience = JSON.parse(jobData.experience);
+      } catch (e) {
+        jobData.experience = { min: 0, max: 0 };
+      }
     }
     
     const job = await Job.findByIdAndUpdate(req.params.id, jobData, {
@@ -182,6 +268,7 @@ exports.updateJob = async (req, res, next) => {
       data: job
     });
   } catch (error) {
+    console.error('Update job error:', error);
     next(error);
   }
 };
