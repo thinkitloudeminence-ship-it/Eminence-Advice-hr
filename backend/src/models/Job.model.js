@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const jobSchema = new mongoose.Schema({
   title: {
@@ -6,6 +7,11 @@ const jobSchema = new mongoose.Schema({
     required: [true, 'Job title is required'],
     trim: true
   },
+  slug: {
+  type: String,
+  unique: true,
+  sparse: true
+},
   company: {
     type: String,
     required: [true, 'Company name is required'],
@@ -66,6 +72,15 @@ const jobSchema = new mongoose.Schema({
   applications: { type: Number, default: 0 }
 }, { timestamps: true });
 
+// ✅ Auto-generate slug from title
+jobSchema.pre('save', function(next) {
+  if (this.isModified('title')) {
+    this.slug = slugify(this.title, { lower: true, strict: true });
+  }
+  next();
+});
+
 jobSchema.index({ title: 'text', description: 'text', skills: 'text' });
+jobSchema.index({ slug: 1 });
 
 module.exports = mongoose.model('Job', jobSchema);

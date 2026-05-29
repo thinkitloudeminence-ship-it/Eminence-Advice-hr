@@ -7,7 +7,6 @@ exports.submitApplication = async (req, res, next) => {
   try {
     const applicationData = { ...req.body };
 
-    // Parse JSON fields if sent as strings
     if (applicationData.qualification && typeof applicationData.qualification === 'string') {
       applicationData.qualification = JSON.parse(applicationData.qualification);
     }
@@ -27,52 +26,34 @@ exports.submitApplication = async (req, res, next) => {
       return res.status(404).json({ message: 'Job not found' });
     }
 
-    // Upload resume to Cloudinary
-    // if (req.file) {
-    //   try {
-    //     const result = await cloudinary.uploader.upload(req.file.path, {
-    //       folder: 'resumes',
-    //       resource_type: 'raw', 
-    //     });
-    //     applicationData.resume = {
-    //       url: result.secure_url,
-    //       publicId: result.public_id
-    //     };
-    //   } catch (cloudErr) {
-    //     console.error('Resume upload error:', cloudErr.message);
-    //   }
-    // }
-if (req.file) {
-  try {
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: 'resumes',
-      resource_type: 'auto',  // ← 'raw' ki jagah 'auto'
-      access_mode: 'public',  // ← public access
-    });
-    applicationData.resume = {
-      url: result.secure_url,
-      publicId: result.public_id
-    };
-    console.log('Resume uploaded successfully:', result.secure_url);
-  } catch (cloudErr) {
-    console.error('Resume upload error:', cloudErr.message);
-  }
-}
+    if (req.file) {
+      try {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: 'resumes',
+          resource_type: 'raw'
+        });
+        applicationData.resume = {
+          url: result.secure_url,
+          publicId: result.public_id
+        };
+      } catch (cloudErr) {
+        console.error('Resume upload error:', cloudErr.message);
+      }
+    }
+
     const application = await Application.create(applicationData);
 
-    // ✅ updateOne use karo - save() hook issues avoid
     try {
       await Job.updateOne({ _id: job._id }, { $inc: { applications: 1 } });
     } catch (e) {
       console.warn('Job applications count update failed:', e.message);
     }
 
-    // ✅ Email send - non-blocking
     sendEmail({
       email: application.email,
       name: application.fullName,
       subject: 'Application Received - Eminance Advice',
-      message: `Your application for <strong>${job.title}</strong> at <strong>${job.company}</strong> has been received successfully. We will review your application and get back to you soon.`
+      message: `Your application for <strong>${job.title}</strong> at <strong>${job.company}</strong> has been received successfully.`
     }).catch(e => console.warn('Email failed:', e.message));
 
     res.status(201).json({

@@ -8,14 +8,14 @@ import {
 } from '@mui/material'
 import {
   LocationOn, Work, AttachMoney, Business, CalendarToday,
-  Close, Upload, ArrowBack, ArrowForward, CheckCircle,
+  Close, ArrowBack, ArrowForward, CheckCircle,
 } from '@mui/icons-material'
 import axios from 'axios'
 import { useParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
-const steps = ['Personal Info', 'Education & Skills', 'Upload & Submit']
+const steps = ['Personal Info', 'Education & Skills', 'Submit Application']
 
 const emptyForm = {
   fullName: '', email: '', phone: '', experienceType: 'fresher',
@@ -26,26 +26,32 @@ const emptyForm = {
 }
 
 export default function JobDetailPage() {
-  const { id } = useParams()
+  const params = useParams()
+  const slug = params.slug as string  // ✅ Correct way to get slug
   const router = useRouter()
   const [job, setJob] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [openDialog, setOpenDialog] = useState(false)
-  const [resumeFile, setResumeFile] = useState<File | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
   const [formData, setFormData] = useState(emptyForm)
   const [errors, setErrors] = useState<any>({})
 
-  useEffect(() => { fetchJob() }, [id])
+  useEffect(() => {
+    if (slug) fetchJob()
+  }, [slug])
 
   const fetchJob = async () => {
     try {
-      const res = await axios.get(`${API_URL}/jobs/${id}`)
+      const res = await axios.get(`${API_URL}/jobs/slug/${slug}`)
       setJob(res.data.data)
-    } catch (e) { console.error(e) }
-    finally { setLoading(false) }
+    } catch (e) {
+      console.error(e)
+      router.push('/jobs')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const set = (field: string, value: string) => {
@@ -68,9 +74,6 @@ export default function JobDetailPage() {
       if (!formData.preferredJobRole) e.preferredJobRole = 'Preferred role required'
       if (!formData.currentLocation) e.currentLocation = 'Location required'
     }
-    if (activeStep === 2) {
-      if (!resumeFile) e.resume = 'Resume required'
-    }
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -84,7 +87,7 @@ export default function JobDetailPage() {
     setSubmitting(true)
     try {
       const fd = new FormData()
-      fd.append('job', id as string)
+      fd.append('job', job._id)  // ✅ Use job._id from fetched job
       fd.append('fullName', formData.fullName)
       fd.append('email', formData.email)
       fd.append('phone', formData.phone)
@@ -109,7 +112,6 @@ export default function JobDetailPage() {
       if (formData.linkedinProfile) fd.append('linkedinProfile', formData.linkedinProfile)
       if (formData.portfolioUrl) fd.append('portfolioUrl', formData.portfolioUrl)
       if (formData.message) fd.append('message', formData.message)
-      fd.append('resume', resumeFile!)
 
       await axios.post(`${API_URL}/applications`, fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -125,7 +127,6 @@ export default function JobDetailPage() {
 
   const openApply = () => {
     setFormData(emptyForm)
-    setResumeFile(null)
     setErrors({})
     setActiveStep(0)
     setSuccess(false)
@@ -151,12 +152,10 @@ export default function JobDetailPage() {
     <Box sx={{ pt: 12, pb: 8, minHeight: '100vh', bgcolor: '#fafafa' }}>
       <Container maxWidth="lg">
         <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
-
           <Button startIcon={<ArrowBack />} onClick={() => router.back()}
             sx={{ mb: 3, color: '#ff6b35' }}>Back to Jobs</Button>
 
           <Paper sx={{ borderRadius: 3, overflow: 'hidden' }}>
-            {/* Orange Header */}
             <Box sx={{ bgcolor: '#ff6b35', p: 4, color: '#fff' }}>
               <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>{job.title}</Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
@@ -254,7 +253,7 @@ export default function JobDetailPage() {
         </motion.div>
       </Container>
 
-      {/* ─── Apply Dialog ─── */}
+      {/* Apply Dialog */}
       <Dialog open={openDialog} onClose={() => !submitting && setOpenDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle sx={{ bgcolor: '#ff6b35', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h6" sx={{ fontWeight: 700 }}>Apply for {job.title}</Typography>
@@ -268,23 +267,20 @@ export default function JobDetailPage() {
             <Box sx={{ textAlign: 'center', py: 6 }}>
               <CheckCircle sx={{ fontSize: 80, color: '#4caf50', mb: 2 }} />
               <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>Application Submitted!</Typography>
-              <Typography color="textSecondary">We'll review your application and get back to you soon.</Typography>
+              <Typography color="textSecondary">Our team will contact you shortly on your registered phone number.</Typography>
             </Box>
           ) : (
             <Box>
               <Stepper activeStep={activeStep} sx={{ mb: 4, mt: 1 }}>
                 {steps.map(label => (
                   <Step key={label}>
-                    <StepLabel sx={{ '& .MuiStepLabel-label.Mui-active': { color: '#ff6b35' }, '& .MuiStepIcon-root.Mui-active': { color: '#ff6b35' }, '& .MuiStepIcon-root.Mui-completed': { color: '#ff6b35' } }}>
-                      {label}
-                    </StepLabel>
+                    <StepLabel>{label}</StepLabel>
                   </Step>
                 ))}
               </Stepper>
 
               {errors.submit && <Alert severity="error" sx={{ mb: 2 }}>{errors.submit}</Alert>}
 
-              {/* Step 0 — Personal Info */}
               {activeStep === 0 && (
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={6}>
@@ -330,14 +326,12 @@ export default function JobDetailPage() {
                 </Grid>
               )}
 
-              {/* Step 1 — Education & Skills */}
               {activeStep === 1 && (
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={6}>
                     <TextField fullWidth label="Degree *" value={formData.degree}
                       onChange={e => set('degree', e.target.value)}
-                      error={!!errors.degree} helperText={errors.degree}
-                      placeholder="B.Tech, MBA, BCA..." />
+                      error={!!errors.degree} helperText={errors.degree} />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField fullWidth label="Institution *" value={formData.institution}
@@ -356,8 +350,7 @@ export default function JobDetailPage() {
                   <Grid item xs={12}>
                     <TextField fullWidth label="Skills * (comma separated)" value={formData.skills}
                       onChange={e => set('skills', e.target.value)}
-                      error={!!errors.skills} helperText={errors.skills || 'e.g. React, Node.js, Python'}
-                      placeholder="React, Node.js, Python" />
+                      error={!!errors.skills} helperText={errors.skills} />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField fullWidth label="Preferred Job Role *" value={formData.preferredJobRole}
@@ -372,63 +365,38 @@ export default function JobDetailPage() {
                 </Grid>
               )}
 
-              {/* Step 2 — Upload & Submit */}
               {activeStep === 2 && (
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
-                    <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, borderColor: errors.resume ? '#d32f2f' : '#ddd', borderStyle: 'dashed', textAlign: 'center' }}>
-                      <Upload sx={{ fontSize: 40, color: '#ff6b35', mb: 1 }} />
-                      <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 0.5 }}>Upload Resume *</Typography>
-                      <Typography variant="caption" color="textSecondary" sx={{ display: 'block', mb: 2 }}>
-                        PDF, DOC, DOCX (max 5MB)
-                      </Typography>
-                      <Button variant="outlined" component="label"
-                        sx={{ borderColor: '#ff6b35', color: '#ff6b35', '&:hover': { borderColor: '#e55a2b' } }}>
-                        Choose File
-                        <input type="file" hidden accept=".pdf,.doc,.docx"
-                          onChange={e => { setResumeFile(e.target.files?.[0] || null); setErrors((p: any) => ({ ...p, resume: '' })) }} />
-                      </Button>
-                      {resumeFile && (
-                        <Typography variant="body2" sx={{ mt: 1.5, color: '#4caf50', fontWeight: 600 }}>
-                          ✓ {resumeFile.name}
-                        </Typography>
-                      )}
-                      {errors.resume && <Typography variant="caption" color="error">{errors.resume}</Typography>}
-                    </Paper>
+                    <Alert severity="info" sx={{ mb: 2, bgcolor: '#fff5f0' }}>
+                      <strong>No resume required!</strong> Our team will contact you on your registered phone number.
+                    </Alert>
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField fullWidth label="LinkedIn Profile URL" value={formData.linkedinProfile}
-                      onChange={e => set('linkedinProfile', e.target.value)}
-                      placeholder="https://linkedin.com/in/yourprofile" />
+                      onChange={e => set('linkedinProfile', e.target.value)} />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <TextField fullWidth label="Portfolio / GitHub URL" value={formData.portfolioUrl}
-                      onChange={e => set('portfolioUrl', e.target.value)}
-                      placeholder="https://github.com/yourprofile" />
+                    <TextField fullWidth label="Portfolio URL" value={formData.portfolioUrl}
+                      onChange={e => set('portfolioUrl', e.target.value)} />
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField fullWidth multiline rows={3} label="Cover Message (Optional)"
-                      value={formData.message} onChange={e => set('message', e.target.value)}
-                      placeholder="Why are you a great fit for this role?" />
+                    <TextField fullWidth multiline rows={4} label="Additional Information"
+                      value={formData.message} onChange={e => set('message', e.target.value)} />
                   </Grid>
                 </Grid>
               )}
 
-              {/* Navigation Buttons */}
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, pt: 2, borderTop: '1px solid #f0f0f0' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
                 <Button onClick={() => setActiveStep(p => p - 1)} disabled={activeStep === 0}
-                  startIcon={<ArrowBack />} sx={{ color: '#ff6b35' }}>
-                  Back
-                </Button>
+                  startIcon={<ArrowBack />} sx={{ color: '#ff6b35' }}>Back</Button>
                 {activeStep < 2 ? (
                   <Button variant="contained" onClick={handleNext} endIcon={<ArrowForward />}
-                    sx={{ bgcolor: '#ff6b35', '&:hover': { bgcolor: '#e55a2b' }, borderRadius: 2, px: 4 }}>
-                    Next
-                  </Button>
+                    sx={{ bgcolor: '#ff6b35' }}>Next</Button>
                 ) : (
                   <Button variant="contained" onClick={handleSubmit} disabled={submitting}
-                    sx={{ bgcolor: '#ff6b35', '&:hover': { bgcolor: '#e55a2b' }, borderRadius: 2, px: 4 }}>
-                    {submitting ? <CircularProgress size={22} sx={{ color: '#fff' }} /> : 'Submit Application'}
+                    sx={{ bgcolor: '#ff6b35' }}>
+                    {submitting ? <CircularProgress size={22} /> : 'Submit Application'}
                   </Button>
                 )}
               </Box>

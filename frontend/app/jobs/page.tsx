@@ -24,6 +24,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
 interface Job {
   _id: string
   title: string
+  slug?: string  // ✅ Add this line
   company: string
   location: string
   jobType: string
@@ -110,7 +111,7 @@ export default function JobsPage() {
                       onChange={e => handleFilter('jobType', e.target.value)}
                       variant="standard" sx={{ '& .MuiInput-underline:before': { borderBottom: 'none' }, '& .MuiInput-underline:after': { borderBottom: 'none' } }}>
                       <MenuItem value="">All Job Types</MenuItem>
-                      {['Full-time','Part-time','Contract','Internship','Remote','Hybrid'].map(t =>
+                      {['Full-time', 'Part-time', 'Contract', 'Internship', 'Remote', 'Hybrid'].map(t =>
                         <MenuItem key={t} value={t}>{t}</MenuItem>)}
                     </TextField>
                   </Grid>
@@ -123,7 +124,7 @@ export default function JobsPage() {
         <Container maxWidth="lg">
           {loading ? (
             <Grid container spacing={3}>
-              {[1,2,3,4,5,6].map(i => (
+              {[1, 2, 3, 4, 5, 6].map(i => (
                 <Grid item xs={12} md={6} lg={4} key={i}>
                   <Skeleton variant="rectangular" height={280} sx={{ borderRadius: 3 }} />
                 </Grid>
@@ -141,9 +142,11 @@ export default function JobsPage() {
                   <Grid item xs={12} md={6} lg={4} key={job._id}>
                     <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
                       transition={{ duration: 0.4, delay: i * 0.07 }} whileHover={{ y: -4 }}>
-                      <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 3,
+                      <Card sx={{
+                        height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 3,
                         border: '1px solid #f0f0f0', transition: 'all 0.3s ease',
-                        '&:hover': { boxShadow: '0 8px 24px rgba(255,107,53,0.15)', borderColor: '#ff6b35' } }}>
+                        '&:hover': { boxShadow: '0 8px 24px rgba(255,107,53,0.15)', borderColor: '#ff6b35' }
+                      }}>
                         <CardContent sx={{ flexGrow: 1, p: 3 }}>
                           {/* Header */}
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
@@ -191,7 +194,11 @@ export default function JobsPage() {
                             {job.description}
                           </Typography>
 
-                          <Button component={Link} href={`/jobs/${job._id}`} variant="contained" fullWidth
+                          <Button
+                            component={Link}
+                            href={`/jobs/slug/${job.slug || job._id}`}  // ✅ Slug use karo
+                            variant="contained"
+                            fullWidth
                             sx={{ bgcolor: '#ff6b35', '&:hover': { bgcolor: '#e55a2b' }, borderRadius: 2, fontWeight: 600 }}>
                             View & Apply
                           </Button>

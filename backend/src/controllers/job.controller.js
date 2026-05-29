@@ -67,6 +67,28 @@ exports.getJobById = async (req, res, next) => {
   }
 };
 
+// ✅ Get job by slug (for public view)
+exports.getJobBySlug = async (req, res, next) => {
+  try {
+    const job = await Job.findOne({ slug: req.params.slug, status: 'active' })
+      .populate('postedBy', 'name email');
+    
+    if (!job) {
+      return res.status(404).json({ message: 'Job not found' });
+    }
+    
+    await Job.updateOne({ _id: job._id }, { $inc: { views: 1 } });
+    
+    res.status(200).json({
+      status: 'success',
+      data: job
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 exports.createJob = async (req, res, next) => {
   try {
     const jobData = { ...req.body };
