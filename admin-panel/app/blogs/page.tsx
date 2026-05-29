@@ -17,7 +17,13 @@ import axios from 'axios'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 // ✅ MDEditor - react-quill ki jagah (Next.js 14+ compatible)
-const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
+const MDEditor = dynamic(
+  () => import('@uiw/react-md-editor'),
+  { 
+    ssr: false,
+    loading: () => <div style={{ height: 500, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Editor...</div>
+  }
+)
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
 
