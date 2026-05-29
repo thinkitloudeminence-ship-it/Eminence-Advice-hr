@@ -28,21 +28,36 @@ exports.submitApplication = async (req, res, next) => {
     }
 
     // Upload resume to Cloudinary
-    if (req.file) {
-      try {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          folder: 'resumes',
-          resource_type: 'raw', 
-        });
-        applicationData.resume = {
-          url: result.secure_url,
-          publicId: result.public_id
-        };
-      } catch (cloudErr) {
-        console.error('Resume upload error:', cloudErr.message);
-      }
-    }
-
+    // if (req.file) {
+    //   try {
+    //     const result = await cloudinary.uploader.upload(req.file.path, {
+    //       folder: 'resumes',
+    //       resource_type: 'raw', 
+    //     });
+    //     applicationData.resume = {
+    //       url: result.secure_url,
+    //       publicId: result.public_id
+    //     };
+    //   } catch (cloudErr) {
+    //     console.error('Resume upload error:', cloudErr.message);
+    //   }
+    // }
+if (req.file) {
+  try {
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'resumes',
+      resource_type: 'auto',  // ← 'raw' ki jagah 'auto'
+      access_mode: 'public',  // ← public access
+    });
+    applicationData.resume = {
+      url: result.secure_url,
+      publicId: result.public_id
+    };
+    console.log('Resume uploaded successfully:', result.secure_url);
+  } catch (cloudErr) {
+    console.error('Resume upload error:', cloudErr.message);
+  }
+}
     const application = await Application.create(applicationData);
 
     // ✅ updateOne use karo - save() hook issues avoid
