@@ -1,4 +1,5 @@
 const Job = require('../models/Job.model');
+const slugify = require('slugify');
 
 exports.getAllJobs = async (req, res, next) => {
   try {
@@ -55,7 +56,6 @@ exports.getJobById = async (req, res, next) => {
       return res.status(404).json({ message: 'Job not found' });
     }
     
-    // ✅ updateOne use karo - save() hook issues avoid karne ke liye
     await Job.updateOne({ _id: job._id }, { $inc: { views: 1 } });
     
     res.status(200).json({
@@ -88,11 +88,25 @@ exports.getJobBySlug = async (req, res, next) => {
   }
 };
 
-
+// ✅ CREATE JOB - with slug generation
 exports.createJob = async (req, res, next) => {
   try {
     const jobData = { ...req.body };
     jobData.postedBy = req.user._id;
+    
+    // ✅ Generate slug from title
+    if (jobData.title) {
+      let baseSlug = slugify(jobData.title, { lower: true, strict: true });
+      let slug = baseSlug;
+      let counter = 1;
+      
+      // Check if slug already exists
+      while (await Job.findOne({ slug })) {
+        slug = `${baseSlug}-${counter}`;
+        counter++;
+      }
+      jobData.slug = slug;
+    }
     
     // Parse arrays if sent as strings
     ['skills', 'responsibilities', 'requirements', 'benefits'].forEach(field => {
@@ -120,9 +134,26 @@ exports.createJob = async (req, res, next) => {
   }
 };
 
+// ✅ UPDATE JOB - with slug regeneration
 exports.updateJob = async (req, res, next) => {
   try {
     const jobData = { ...req.body };
+    
+    // ✅ Regenerate slug if title changed
+    if (jobData.title) {
+      let baseSlug = slugify(jobData.title, { lower: true, strict: true });
+      let slug = baseSlug;
+      let counter = 1;
+      
+      // Check if slug already exists for other jobs
+      let existingJob = await Job.findOne({ slug, _id: { $ne: req.params.id } });
+      while (existingJob) {
+        slug = `${baseSlug}-${counter}`;
+        counter++;
+        existingJob = await Job.findOne({ slug, _id: { $ne: req.params.id } });
+      }
+      jobData.slug = slug;
+    }
     
     ['skills', 'responsibilities', 'requirements', 'benefits'].forEach(field => {
       if (jobData[field] && typeof jobData[field] === 'string') {
