@@ -9,7 +9,6 @@ const jobSchema = new mongoose.Schema({
   },
   slug: {
     type: String
-    // ✅ unique: true HATAO - index alag se banayenge
   },
   company: {
     type: String,
@@ -71,16 +70,15 @@ const jobSchema = new mongoose.Schema({
   applications: { type: Number, default: 0 }
 }, { timestamps: true });
 
-// ✅ Unique index yahan banao
+// ✅ Indexes
 jobSchema.index({ slug: 1 }, { unique: true, sparse: true });
 jobSchema.index({ title: 'text', description: 'text', skills: 'text' });
 
-// ✅ Pre-save hook
-jobSchema.pre('save', function(next) {
+// ✅ FIXED pre-save hook - Arrow function use karo
+jobSchema.pre('save', async function() {
   if (this.isModified('title') && this.title) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   }
-  next();
 });
 
 module.exports = mongoose.model('Job', jobSchema);

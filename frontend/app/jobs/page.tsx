@@ -196,7 +196,7 @@ export default function JobsPage() {
 
                           <Button
                             component={Link}
-                            href={`/jobs/slug/${job.slug || job._id}`}  // ✅ Slug use karo
+                            href={`/jobs/${job.slug || job._id}`} // ✅ Slug use karo
                             variant="contained"
                             fullWidth
                             sx={{ bgcolor: '#ff6b35', '&:hover': { bgcolor: '#e55a2b' }, borderRadius: 2, fontWeight: 600 }}>

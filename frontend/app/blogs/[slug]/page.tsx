@@ -64,7 +64,7 @@
 //     try {
 //       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/blogs/${slug}`)
 //       setBlog(response.data.data)
-      
+
 //       // Fetch related blogs
 //       const relatedResponse = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/blogs`, {
 //         params: { category: response.data.data.category, limit: 3 },
@@ -81,14 +81,14 @@
 //   const handleShare = (platform: string) => {
 //     const url = window.location.href
 //     const text = blog?.title || ''
-    
+
 //     const shareUrls = {
 //       facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
 //       twitter: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
 //       linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${text}`,
 //       whatsapp: `https://wa.me/?text=${text} ${url}`,
 //     }
-    
+
 //     window.open(shareUrls[platform as keyof typeof shareUrls], '_blank')
 //   }
 
@@ -285,6 +285,9 @@ import axios from 'axios'
 import { motion } from 'framer-motion'
 import { format } from 'date-fns'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
 
@@ -307,9 +310,9 @@ interface Blog {
 
 export default function BlogDetailPage() {
   const { slug } = useParams()
-  const router   = useRouter()
-  const [blog, setBlog]               = useState<Blog | null>(null)
-  const [loading, setLoading]         = useState(true)
+  const router = useRouter()
+  const [blog, setBlog] = useState<Blog | null>(null)
+  const [loading, setLoading] = useState(true)
   const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([])
 
   useEffect(() => { fetchBlog() }, [slug])
@@ -328,13 +331,13 @@ export default function BlogDetailPage() {
   }
 
   const handleShare = (platform: string) => {
-    const url  = window.location.href
+    const url = window.location.href
     const text = blog?.title || ''
     const urls: any = {
-      facebook:  `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-      twitter:   `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
-      linkedin:  `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${text}`,
-      whatsapp:  `https://wa.me/?text=${text} ${url}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      twitter: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+      linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${text}`,
+      whatsapp: `https://wa.me/?text=${text} ${url}`,
     }
     window.open(urls[platform], '_blank')
   }
@@ -365,9 +368,19 @@ export default function BlogDetailPage() {
 
           <Paper sx={{ overflow: 'hidden', borderRadius: 3 }}>
             {/* Featured Image */}
-            <Box component="img" src={blog.featuredImage?.url || '/blog-placeholder.jpg'} alt={blog.title}
-              sx={{ width: '100%', height: { xs: 250, md: 480 }, objectFit: 'cover' }} />
-
+            <Box
+              component="img"
+              src={blog.featuredImage?.url || '/blog-placeholder.jpg'}
+              alt={blog.title}
+              sx={{
+                width: '100%',
+                height: 'auto',
+                maxHeight: { xs: 300, md: 500 },  // ✅ Limit max height, but maintain aspect ratio
+                objectFit: 'contain',  // ✅ Full image dikhegi, cut nahi hogi
+                display: 'block',
+                bgcolor: '#f5f5f5'
+              }}
+            />
             <Box sx={{ p: { xs: 2, md: 4 } }}>
               {/* Meta */}
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
@@ -394,8 +407,62 @@ export default function BlogDetailPage() {
               </Typography>
 
               {/* Content */}
-              <div dangerouslySetInnerHTML={{ __html: blog.content }}
-                style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#333' }} />
+              <Box
+                sx={{
+                  '& h1, & h2, & h3, & h4': {
+                    fontWeight: 700,
+                    color: '#1a1a1a',
+                    mt: 4,
+                    mb: 2,
+                  },
+                  '& h1': { fontSize: { xs: '1.6rem', md: '2rem' } },
+                  '& h2': { fontSize: { xs: '1.4rem', md: '1.6rem' } },
+                  '& h3': { fontSize: { xs: '1.2rem', md: '1.3rem' } },
+                  '& p': { fontSize: '1.05rem', lineHeight: 1.9, mb: 2, color: '#333' },
+                  '& ul, & ol': { pl: 3, mb: 2 },
+                  '& li': { fontSize: '1.05rem', lineHeight: 1.8, mb: 0.5, color: '#333' },
+                  '& strong': { fontWeight: 700, color: '#1a1a1a' },
+                  '& em': { fontStyle: 'italic' },
+                  '& a': { color: '#ff6b35', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } },
+                  '& blockquote': {
+                    borderLeft: '4px solid #ff6b35',
+                    pl: 2, ml: 0, my: 2,
+                    color: '#555',
+                    fontStyle: 'italic',
+                    bgcolor: '#fff5f0',
+                    py: 1,
+                    borderRadius: '0 8px 8px 0',
+                  },
+                  '& code': {
+                    bgcolor: '#f5f5f5',
+                    px: 0.8, py: 0.2,
+                    borderRadius: 1,
+                    fontFamily: 'monospace',
+                    fontSize: '0.9em',
+                    color: '#e53935',
+                  },
+                  '& pre': {
+                    bgcolor: '#f5f5f5',
+                    p: 2,
+                    borderRadius: 2,
+                    overflow: 'auto',
+                    mb: 2,
+                    '& code': { color: '#333', bgcolor: 'transparent' },
+                  },
+                  '& hr': { my: 3, borderColor: '#e0e0e0' },
+                  '& img': { maxWidth: '100%', borderRadius: 2, my: 2 },
+                  '& table': { width: '100%', borderCollapse: 'collapse', mb: 2 },
+                  '& th, & td': { border: '1px solid #e0e0e0', p: 1.5, textAlign: 'left' },
+                  '& th': { bgcolor: '#fff5f0', fontWeight: 700 },
+                }}
+              >
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
+                >
+                  {blog.content}
+                </ReactMarkdown>
+              </Box>
 
               <Divider sx={{ my: 4 }} />
 
@@ -443,10 +510,10 @@ export default function BlogDetailPage() {
                 <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>Share this article</Typography>
                 <Box sx={{ display: 'flex', gap: 1 }}>
                   {[
-                    { key: 'facebook',  Icon: Facebook,  bg: '#1877f2' },
-                    { key: 'twitter',   Icon: Twitter,   bg: '#1da1f2' },
-                    { key: 'linkedin',  Icon: LinkedIn,  bg: '#0077b5' },
-                    { key: 'whatsapp',  Icon: WhatsApp,  bg: '#25d366' },
+                    { key: 'facebook', Icon: Facebook, bg: '#1877f2' },
+                    { key: 'twitter', Icon: Twitter, bg: '#1da1f2' },
+                    { key: 'linkedin', Icon: LinkedIn, bg: '#0077b5' },
+                    { key: 'whatsapp', Icon: WhatsApp, bg: '#25d366' },
                   ].map(({ key, Icon, bg }) => (
                     <IconButton key={key} onClick={() => handleShare(key)}
                       sx={{ bgcolor: bg, color: '#fff', '&:hover': { bgcolor: bg, opacity: 0.85 } }}>

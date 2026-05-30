@@ -368,9 +368,9 @@ export default function JobDetailPage() {
               {activeStep === 2 && (
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
-                    <Alert severity="info" sx={{ mb: 2, bgcolor: '#fff5f0' }}>
+                    {/* <Alert severity="info" sx={{ mb: 2, bgcolor: '#fff5f0' }}>
                       <strong>No resume required!</strong> Our team will contact you on your registered phone number.
-                    </Alert>
+                    </Alert> */}
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField fullWidth label="LinkedIn Profile URL" value={formData.linkedinProfile}
