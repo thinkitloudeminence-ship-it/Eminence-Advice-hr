@@ -46,7 +46,7 @@ export default function Navbar() {
   }
 
   const drawer = (
-    <Box sx={{ width: 260, p: 2 }}>
+    <Box sx={{ width: 280, p: 2 }}>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <IconButton onClick={handleDrawerToggle}>
           <CloseIcon />
@@ -56,8 +56,8 @@ export default function Navbar() {
         <Image
           src="/Eminenceadvicelogo.png"
           alt="Logo"
-          width={130}
-          height={40}
+          width={180}
+          height={70}
           style={{ objectFit: 'contain' }}
         />
       </Box>
@@ -104,17 +104,30 @@ export default function Navbar() {
         }}
       >
         <Container maxWidth="xl">
-          <Toolbar sx={{ justifyContent: 'space-between', minHeight: '64px !important', px: { xs: 1, sm: 2 } }}>
-            {/* Logo */}
-            <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
-              <Image
-                src="/Eminenceadvicelogo.png"
-                alt="Eminance Advice"
-                width={140}
-                height={42}
-                priority
-                style={{ width: 'auto', height: '42px', objectFit: 'contain' }}
-              />
+          <Toolbar sx={{
+            justifyContent: 'space-between',
+            minHeight: '70px !important',
+            px: { xs: 2, sm: 3, md: 4 },
+            py: 1
+          }}>
+            {/* Logo - AUR BADA */}
+            <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+              <Box
+                sx={{
+                  position: 'relative',
+                  width: { xs: 150, sm: 200, md: 280 },
+                  height: { xs: 48, sm: 60, md: 85 },
+                }}
+              >
+                <Image
+                  src="/Eminenceadvicelogo.png"
+                  alt="Eminance Advice"
+                  fill
+                  priority
+                  style={{ objectFit: 'contain' }}
+                  sizes="(max-width: 600px) 150px, (max-width: 900px) 200px, 280px"
+                />
+              </Box>
             </Link>
 
             {/* Desktop Menu */}
@@ -129,6 +142,7 @@ export default function Navbar() {
                     fontWeight: pathname === item.path ? 600 : 400,
                     fontSize: '0.9rem',
                     px: 1.5,
+                    textTransform: 'none',
                     '&:hover': { color: '#ff6b35', bgcolor: 'transparent' }
                   }}
                 >
@@ -154,8 +168,15 @@ export default function Navbar() {
               </Button>
             </Box>
 
-            {/* Mobile Menu */}
-            <IconButton onClick={handleDrawerToggle} sx={{ display: { xs: 'flex', md: 'none' }, color: '#ff6b35' }}>
+            {/* Mobile Menu Button */}
+            <IconButton
+              onClick={handleDrawerToggle}
+              sx={{
+                display: { xs: 'flex', md: 'none' },
+                color: '#ff6b35',
+                p: 1
+              }}
+            >
               <MenuIcon />
             </IconButton>
           </Toolbar>
@@ -166,7 +187,7 @@ export default function Navbar() {
         {drawer}
       </Drawer>
 
-      <Box sx={{ height: '64px' }} />
+      <Box sx={{ height: '70px' }} />
     </>
   )
 }
