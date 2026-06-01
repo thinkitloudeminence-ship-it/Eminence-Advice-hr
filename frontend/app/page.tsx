@@ -7,7 +7,6 @@ import ServicesHighlights from '@/components/sections/ServicesHighlights'
 import InternshipDomains from '@/components/sections/InternshipDomains'
 import WhyChooseUs from '@/components/sections/WhyChooseUs'
 import Testimonials from '@/components/sections/Testimonials'
-import CTASection from '@/components/sections/CTASection'
 import { NextSeo } from 'next-seo'
 
 export default function HomePage() {
@@ -34,7 +33,6 @@ export default function HomePage() {
         <InternshipDomains />
         <WhyChooseUs />
         <Testimonials />
-        <CTASection />
       </motion.div>
     </>
   )

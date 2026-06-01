@@ -15,7 +15,7 @@ const reasons = [
 
 export default function WhyChooseUs() {
   return (
-    <Box sx={{ py: 8, bgcolor: 'white' }}>
+    <Box sx={{ py: { xs: 6, sm: 8, md: 10 }, bgcolor: 'white' }}>
       <Container maxWidth="lg">
         <motion.div
           initial={{ y: -30, opacity: 0 }}
@@ -23,7 +23,7 @@ export default function WhyChooseUs() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <Box sx={{ textAlign: 'center', mb: 2 }}>
+          <Box sx={{ textAlign: 'center', mb: { xs: 3, sm: 4, md: 5 } }}>
             <Typography
               component="span"
               sx={{
@@ -42,43 +42,68 @@ export default function WhyChooseUs() {
             </Typography>
           </Box>
           
-          <Typography variant="h2" sx={{ 
-            fontSize: { xs: '1.8rem', md: '2.2rem', lg: '2.5rem' }, 
-            fontWeight: 'bold', 
-            textAlign: 'center', 
-            mb: 2,
-            color: '#1a1a1a',
-          }}>
-            Why Choose{' '}
+          <Typography 
+            variant="h2" 
+            sx={{ 
+              fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.5rem' }, 
+              fontWeight: 'bold', 
+              textAlign: 'center', 
+              mb: 2,
+              color: '#1a1a1a',
+            }}
+          >
+            Why Choose  Us?{' '}
             <Typography
               component="span"
               sx={{ color: '#ff6b35', display: 'inline-block' }}
             >
-              Us?
+             
             </Typography>
           </Typography>
           
-          <Typography variant="body1" sx={{ 
-            textAlign: 'center', 
-            color: '#666', 
-            maxWidth: 600, 
-            mx: 'auto', 
-            mb: 6,
-            fontSize: '0.95rem',
-            lineHeight: 1.6,
-          }}>
+          <Typography 
+            variant="body1" 
+            sx={{ 
+              textAlign: 'center', 
+              color: '#666', 
+              maxWidth: 600, 
+              mx: 'auto', 
+              mb: { xs: 4, sm: 5, md: 6 },
+              fontSize: { xs: '0.9rem', sm: '1rem' },
+              lineHeight: 1.6,
+            }}
+          >
             What makes Eminance Advice the preferred choice for career growth
           </Typography>
         </motion.div>
         
-        <Grid container spacing={3}>
+        {/* Grid - 3 cards per row on ALL devices (including mobile) */}
+        <Grid 
+          container 
+          spacing={{ xs: 1.5, sm: 2, md: 3 }}
+          sx={{ 
+            display: 'flex',
+            flexWrap: 'wrap',
+          }}
+        >
           {reasons.map((reason, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
+            <Grid 
+              item 
+              xs={4}       // ✅ Mobile pe 3 cards (12/4 = 3)
+              sm={4}       // ✅ Tablet pe 3 cards
+              md={4}       // ✅ Desktop pe 3 cards
+              lg={4}       // ✅ Large desktop pe 3 cards
+              key={index}
+              sx={{
+                display: 'flex',
+              }}
+            >
               <motion.div
                 initial={{ y: 40, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
                 viewport={{ once: true }}
+                style={{ width: '100%', height: '100%' }}
                 whileHover={{ y: -5 }}
               >
                 <Card 
@@ -87,24 +112,27 @@ export default function WhyChooseUs() {
                     textAlign: 'center',
                     transition: 'all 0.3s ease',
                     cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    borderRadius: { xs: 1.5, sm: 2, md: 3 },
                     '&:hover': {
                       boxShadow: '0 10px 30px rgba(255,107,53,0.12)',
                       borderBottom: `3px solid #ff6b35`,
                     }
                   }}
                 >
-                  <CardContent sx={{ p: 3 }}>
+                  <CardContent sx={{ p: { xs: 1, sm: 1.5, md: 3 } }}>
                     <Box
                       sx={{
                         bgcolor: '#fff5f0',
                         borderRadius: '50%',
-                        width: 65,
-                        height: 65,
+                        width: { xs: 40, sm: 50, md: 70 },
+                        height: { xs: 40, sm: 50, md: 70 },
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         mx: 'auto',
-                        mb: 2,
+                        mb: { xs: 0.8, sm: 1.5, md: 2 },
                         transition: 'all 0.3s ease',
                         '&:hover': {
                           transform: 'scale(1.05)',
@@ -115,13 +143,47 @@ export default function WhyChooseUs() {
                         }
                       }}
                     >
-                      <reason.icon sx={{ fontSize: 32, color: '#ff6b35', transition: 'all 0.3s ease' }} />
+                      <reason.icon sx={{ 
+                        fontSize: { xs: 20, sm: 26, md: 34 }, 
+                        color: '#ff6b35', 
+                        transition: 'all 0.3s ease' 
+                      }} />
                     </Box>
-                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: '#1a1a1a', fontSize: '1.1rem' }}>
+                    <Typography 
+                      variant="h6" 
+                      gutterBottom 
+                      sx={{ 
+                        fontWeight: 600, 
+                        color: '#1a1a1a', 
+                        fontSize: { xs: '0.7rem', sm: '0.85rem', md: '1.1rem' },
+                        mb: { xs: 0.5, sm: 0.8, md: 1 },
+                        lineHeight: 1.2
+                      }}
+                    >
                       {reason.title}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: '#666', lineHeight: 1.6, fontSize: '0.85rem' }}>
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                        color: '#666', 
+                        lineHeight: 1.4, 
+                        fontSize: { xs: '0.6rem', sm: '0.7rem', md: '0.85rem' },
+                        display: { xs: 'none', sm: 'block' }
+                      }}
+                    >
                       {reason.description}
+                    </Typography>
+                    {/* Mobile pe short description */}
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                        color: '#666', 
+                        lineHeight: 1.3, 
+                        fontSize: '0.55rem',
+                        display: { xs: 'block', sm: 'none' }
+                      }}
+                    >
+                      {reason.description.length > 50 ? reason.description.substring(0, 45) + '...' : reason.description}
                     </Typography>
                   </CardContent>
                 </Card>
@@ -131,23 +193,33 @@ export default function WhyChooseUs() {
         </Grid>
         
         {/* Trust Badge */}
-        <Box sx={{ textAlign: 'center', mt: 6 }}>
+        <Box sx={{ textAlign: 'center', mt: { xs: 3, sm: 5, md: 6 } }}>
           <Box
             sx={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: 1,
               bgcolor: '#fff5f0',
-              px: 3,
-              py: 1.5,
+              px: { xs: 1.5, sm: 3 },
+              py: { xs: 0.8, sm: 1.5 },
               borderRadius: 50,
+              flexWrap: 'wrap',
+              justifyContent: 'center',
             }}
           >
-            <Star sx={{ color: '#ff6b35', fontSize: 20 }} />
-            <Typography variant="body2" sx={{ color: '#ff6b35', fontWeight: 600 }}>
-              Trusted by 5000+ students and 200+ companies
+            <Star sx={{ color: '#ff6b35', fontSize: { xs: 14, sm: 18, md: 20 } }} />
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                color: '#ff6b35', 
+                fontWeight: 600, 
+                fontSize: { xs: '0.6rem', sm: '0.75rem', md: '0.85rem' },
+                textAlign: 'center'
+              }}
+            >
+              Trusted by 5000+ students & 200+ companies
             </Typography>
-            <Star sx={{ color: '#ff6b35', fontSize: 20 }} />
+            <Star sx={{ color: '#ff6b35', fontSize: { xs: 14, sm: 18, md: 20 } }} />
           </Box>
         </Box>
       </Container>

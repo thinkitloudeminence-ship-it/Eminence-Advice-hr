@@ -8,6 +8,7 @@ const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs');
 
+
 dotenv.config();
 
 const app = express();
@@ -41,6 +42,7 @@ app.use(cors({
 // Body parser
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
 
 // Simple NoSQL injection protection (manual)
 app.use((req, res, next) => {
@@ -81,6 +83,7 @@ const contactRoutes = require('./src/routes/contact.routes');
 const serviceRoutes = require('./src/routes/service.routes');
 const dashboardRoutes = require('./src/routes/dashboard.routes');
 const paymentRoutes = require('./src/routes/payment.routes');
+const reviewRoutes = require('./src/routes/reviews.routes');
 
 
 // Routes
@@ -92,7 +95,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/payment', paymentRoutes);
-
+app.use('/api/reviews', reviewRoutes);
 
 const errorHandler = require('./src/middleware/error');
 app.use(errorHandler);

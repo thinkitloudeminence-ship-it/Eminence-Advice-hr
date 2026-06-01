@@ -1,21 +1,13 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Box, Container, Typography, Grid, Card, CardContent, useMediaQuery, useTheme } from '@mui/material'
-import { School, Work, Business, TrendingUp, CheckCircle, People, EmojiEvents } from '@mui/icons-material'
-import Image from 'next/image'
-
-const stats = [
-  { number: '5000+', label: 'Students Placed', icon: School, color: '#ff6b35', delay: 0 },
-  { number: '200+', label: 'Corporate Partners', icon: Business, color: '#ff6b35', delay: 0.1 },
-  { number: '50+', label: 'Expert Trainers', icon: People, color: '#ff6b35', delay: 0.2 },
-  { number: '95%', label: 'Success Rate', icon: EmojiEvents, color: '#ff6b35', delay: 0.3 },
-]
+import { Box, Container, Typography, Grid, useMediaQuery, useTheme } from '@mui/material'
+import { CheckCircle } from '@mui/icons-material'
+import Lottie from 'lottie-react'
+import animationData from '@/public/about section animation.json'
 
 export default function AboutOverview() {
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'))
 
   return (
     <Box sx={{ py: { xs: 5, sm: 6, md: 8 }, bgcolor: 'white' }}>
@@ -57,12 +49,12 @@ export default function AboutOverview() {
                   textAlign: { xs: 'center', md: 'left' },
                 }}
               >
-                About{' '}
+                About Eminance Advice{' '}
                 <Typography
                   component="span"
                   sx={{ color: '#ff6b35', display: 'inline-block' }}
                 >
-                  Eminance Advice
+                  
                 </Typography>
               </Typography>
               
@@ -74,7 +66,6 @@ export default function AboutOverview() {
                   lineHeight: 1.6, 
                   fontSize: { xs: '0.85rem', sm: '0.9rem', md: '0.95rem' },
                   textAlign: { xs: 'center', md: 'left' },
-                  px: { xs: 1, sm: 0 }
                 }}
               >
                 Eminance Advice is a leading HR services and career counseling platform dedicated to 
@@ -90,7 +81,6 @@ export default function AboutOverview() {
                   lineHeight: 1.6, 
                   fontSize: { xs: '0.85rem', sm: '0.9rem', md: '0.95rem' },
                   textAlign: { xs: 'center', md: 'left' },
-                  px: { xs: 1, sm: 0 }
                 }}
               >
                 Our mission is to empower individuals with the right skills, guidance, and opportunities 
@@ -142,111 +132,81 @@ export default function AboutOverview() {
             </motion.div>
           </Grid>
           
-          {/* Right Side - Image */}
+          {/* Right Side - Lottie Animation */}
           <Grid item xs={12} md={6}>
             <motion.div
               initial={{ x: 50, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
+              style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
             >
               <Box
                 sx={{
+                  width: '100%',
+                  maxWidth: { xs: 280, sm: 350, md: 420, lg: 450 },
+                  mx: 'auto',
+                  bgcolor: '#fff5f0',
+                  borderRadius: { xs: 4, sm: 5, md: 6 },
+                  p: { xs: 2, sm: 2.5, md: 3 },
+                  textAlign: 'center',
                   position: 'relative',
-                  borderRadius: { xs: 2, sm: 3 },
                   overflow: 'hidden',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
-                  mx: { xs: 2, sm: 3, md: 0 },
+                  boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
+                  border: '1px solid rgba(255,107,53,0.1)',
                 }}
               >
-                <Box
-                  component="img"
-                  src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&h=450&fit=crop"
-                  alt="Business team collaboration"
-                  sx={{ 
-                    width: '100%', 
-                    height: 'auto',
-                    display: 'block',
-                    minHeight: { xs: 250, sm: 300, md: 350 },
-                    objectFit: 'cover',
-                  }}
-                />
+                {/* Animated Gradient Border */}
                 <Box
                   sx={{
                     position: 'absolute',
-                    bottom: { xs: 10, sm: 15, md: 20 },
-                    left: { xs: 10, sm: 15, md: 20 },
-                    right: { xs: 10, sm: 15, md: 20 },
-                    bgcolor: 'rgba(255,107,53,0.95)',
-                    color: 'white',
-                    p: { xs: 1, sm: 1.5 },
-                    borderRadius: { xs: 1.5, sm: 2 },
-                    textAlign: 'center',
+                    top: -2,
+                    left: -2,
+                    right: -2,
+                    bottom: -2,
+                    background: 'linear-gradient(90deg, #ff6b35, #ffb74d, #ff6b35)',
+                    borderRadius: 'inherit',
+                    opacity: 0.25,
+                    zIndex: -1,
+                    animation: 'borderRotate 4s linear infinite',
+                  }}
+                />
+                
+                {/* Lottie Animation */}
+                <Box 
+                  sx={{ 
+                    width: '100%',
+                    aspectRatio: '1/1',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  <Typography variant="body2" sx={{ fontWeight: 600, fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.85rem' } }}>
-                    10+ Years of Excellence in Career Guidance
-                  </Typography>
+                  <Lottie
+                    animationData={animationData}
+                    loop={true}
+                    autoplay={true}
+                    style={{ 
+                      width: '100%', 
+                      height: '100%',
+                      objectFit: 'contain'
+                    }}
+                  />
                 </Box>
               </Box>
             </motion.div>
           </Grid>
         </Grid>
-        
-        {/* Stats Cards - Fully Responsive */}
-        <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }} sx={{ mt: { xs: 3, sm: 4, md: 5 } }}>
-          {stats.map((stat, index) => (
-            <Grid item xs={6} sm={3} md={3} key={index}>
-              <motion.div
-                initial={{ y: 30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: stat.delay }}
-                viewport={{ once: true }}
-              >
-                <Card 
-                  sx={{ 
-                    textAlign: 'center', 
-                    py: { xs: 1.5, sm: 2, md: 2.5 },
-                    px: { xs: 0.5, sm: 1, md: 1 },
-                    height: '100%',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-5px)',
-                      boxShadow: '0 8px 20px rgba(255,107,53,0.12)',
-                      borderBottom: `2px solid #ff6b35`,
-                    },
-                    cursor: 'pointer',
-                  }}
-                >
-                  <CardContent sx={{ p: { xs: 0.5, sm: 1 } }}>
-                    <Box
-                      sx={{
-                        bgcolor: '#fff5f0',
-                        borderRadius: '50%',
-                        width: { xs: 40, sm: 45, md: 50 },
-                        height: { xs: 40, sm: 45, md: 50 },
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        mx: 'auto',
-                        mb: { xs: 1, sm: 1.5 },
-                      }}
-                    >
-                      <stat.icon sx={{ fontSize: { xs: 22, sm: 24, md: 28 }, color: stat.color }} />
-                    </Box>
-                    <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 0.5, color: '#1a1a1a', fontSize: { xs: '1rem', sm: '1.1rem', md: '1.3rem' } }}>
-                      {stat.number}
-                    </Typography>
-                    <Typography variant="caption" sx={{ color: '#666', fontWeight: 500, fontSize: { xs: '0.6rem', sm: '0.65rem', md: '0.7rem' } }}>
-                      {stat.label}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </Grid>
-          ))}
-        </Grid>
       </Container>
+
+      {/* Animation Keyframes */}
+      <style jsx global>{`
+        @keyframes borderRotate {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+      `}</style>
     </Box>
   )
 }
