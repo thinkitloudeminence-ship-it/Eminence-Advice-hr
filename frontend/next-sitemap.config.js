@@ -1,59 +1,60 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://eminenceadvice.com',
+  siteUrl: process.env.SITE_URL || 'https://eminenceadvice.com',
   generateRobotsTxt: true,
   robotsTxtOptions: {
     policies: [
       { userAgent: '*', allow: '/' },
-      { userAgent: 'Googlebot', allow: '/' },
-      { userAgent: 'Bingbot', allow: '/' },
     ],
   },
-  exclude: ['/admin/*', '/api/*', '/_next/*'],
+  exclude: ['/admin/*', '/api/*', '/server-sitemap.xml'],
+  generateIndexSitemap: false,
   
-  // 🔥 YAHI SE DYNAMIC BLOGS AUR JOBS ADD HONGE
+  // ✅ Additional paths for dynamic content
   additionalPaths: async (config) => {
-    const paths = []
+    const result = []
     
-    // 1. SARE BLOGS FETCH KARO
     try {
-      const blogRes = await fetch('https://eminenceadvice.com/api/blogs?limit=100')
-      const blogData = await blogRes.json()
-      const blogs = blogData.data || []
+      // Fetch all jobs for sitemap
+      const jobsResponse = await fetch('https://eminence-advice-hr.onrender.com/api/jobs?limit=100')
+      const jobsData = await jobsResponse.json()
+      const jobs = jobsData.data || []
       
-      for (const blog of blogs) {
-        paths.push({
-          loc: `/blogs/${blog.slug}`,
-          lastmod: blog.updatedAt || new Date().toISOString(),
-          changefreq: 'weekly',
-          priority: 0.8
-        })
-      }
-      console.log(`✅ Added ${blogs.length} blogs to sitemap`)
-    } catch (err) {
-      console.error('Blogs fetch error:', err)
-    }
-    
-    // 2. SARE JOBS FETCH KARO
-    try {
-      const jobRes = await fetch('https://eminenceadvice.com/api/jobs?limit=100')
-      const jobData = await jobRes.json()
-      const jobs = jobData.data || []
-      
-      for (const job of jobs) {
-        paths.push({
-          loc: `/jobs/${job.id}`,
-          lastmod: job.updatedAt || new Date().toISOString(),
+      jobs.forEach((job) => {
+        result.push({
+          loc: `/jobs/slug/${job.slug || job._id}`,
+          lastmod: new Date().toISOString(),
           changefreq: 'daily',
-          priority: 0.9
+          priority: 0.9,
         })
-      }
+      })
       console.log(`✅ Added ${jobs.length} jobs to sitemap`)
-    } catch (err) {
-      console.error('Jobs fetch error:', err)
+    } catch (error) {
+      console.error('Error fetching jobs for sitemap:', error)
     }
     
-    return paths
+    try {
+      // Fetch all blogs for sitemap
+      const blogsResponse = await fetch('https://eminence-advice-hr.onrender.com/api/blogs?limit=100')
+      const blogsData = await blogsResponse.json()
+      const blogs = blogsData.data || []
+      
+      blogs.forEach((blog) => {
+        if (blog.status === 'published') {
+          result.push({
+            loc: `/blogs/${blog.slug}`,
+            lastmod: new Date(blog.updatedAt || blog.createdAt).toISOString(),
+            changefreq: 'weekly',
+            priority: 0.8,
+          })
+        }
+      })
+      console.log(`✅ Added ${blogs.length} blogs to sitemap`)
+    } catch (error) {
+      console.error('Error fetching blogs for sitemap:', error)
+    }
+    
+    return result
   },
   
   transform: async (config, path) => {
@@ -63,18 +64,15 @@ module.exports = {
     if (path === '/') {
       priority = 1.0
       changefreq = 'daily'
-    } else if (path === '/payment') {
+    } else if (path === '/jobs') {
       priority = 0.9
+      changefreq = 'daily'
+    } else if (path === '/blogs') {
+      priority = 0.8
       changefreq = 'daily'
     } else if (path === '/about' || path === '/services' || path === '/contact') {
       priority = 0.8
       changefreq = 'monthly'
-    } else if (path.startsWith('/jobs')) {
-      priority = 0.9
-      changefreq = 'daily'
-    } else if (path.startsWith('/blogs')) {
-      priority = 0.8
-      changefreq = 'daily'
     }
     
     return {
@@ -83,5 +81,5 @@ module.exports = {
       priority,
       lastmod: new Date().toISOString(),
     }
-  }
+  },
 }

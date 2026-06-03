@@ -1,0 +1,16 @@
+name: Daily Sitemap Update
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Roz 12 AM IST
+  workflow_dispatch:
+
+jobs:
+  update-sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel Revalidation
+        run: |
+          curl -X POST https://eminenceadvice.com/api/revalidate \
+            -H "Content-Type: application/json" \
+            -d '{"secret":"your-super-secret-key-123"}'

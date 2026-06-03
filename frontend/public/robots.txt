@@ -1,17 +1,6 @@
-# *
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
 
-# Googlebot
-User-agent: Googlebot
-Allow: /
-
-# Bingbot
-User-agent: Bingbot
-Allow: /
-
-# Host
-Host: https://eminenceadvice.com
-
-# Sitemaps
 Sitemap: https://eminenceadvice.com/sitemap.xml
