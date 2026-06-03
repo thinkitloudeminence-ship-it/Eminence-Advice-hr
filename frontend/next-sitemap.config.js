@@ -29,7 +29,7 @@ module.exports = {
       changefreq = 'daily'
     } else if (path.startsWith('/blogs')) {
       priority = 0.8
-      changefreq = 'weekly'
+      changefreq = 'daily'
     }
     
     return {

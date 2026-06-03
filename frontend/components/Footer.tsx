@@ -5,7 +5,7 @@ import {
   Container,
   Grid,
   Typography,
-  Link,
+  Link as MuiLink,
   IconButton,
   Divider,
   Stack,
@@ -21,6 +21,7 @@ import {
   AccessTime,
 } from '@mui/icons-material'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const footerLinks = {
   Company: [
@@ -48,6 +49,12 @@ const footerLinks = {
   ],
 }
 
+const socialLinks = [
+  { icon: Facebook, name: 'Facebook', url: 'https://www.facebook.com/eminenceadvice/', bgcolor: '#1877f2' },
+  { icon: Instagram, name: 'Instagram', url: 'https://www.instagram.com/eminenceadvice/', bgcolor: '#e4405f' },
+  { icon: LinkedIn, name: 'LinkedIn', url: 'https://in.linkedin.com/in/eminence-advice-ab630637a', bgcolor: '#0077b5' },
+]
+
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
@@ -68,22 +75,25 @@ export default function Footer() {
       }}
     >
       <Container maxWidth="xl">
-        {/* Main Footer Row - All in one row on desktop */}
-        <Grid container spacing={{ xs: 3, sm: 4, md: 3 }} alignItems="center">
-          {/* Logo Column - Bigger Logo */}
+        {/* Main Footer Row */}
+        <Grid container spacing={{ xs: 3, sm: 4, md: 3 }}>
+          {/* Logo Column */}
           <Grid item xs={12} sm={6} md={2}>
             <Box sx={{ textAlign: { xs: 'center', sm: 'left', md: 'center' } }}>
-              <Image
-                src="/Eminenceadvicelogo.png"
-                alt="Eminance Advice Logo"
-                width={200}
-                height={65}
-                style={{
-                  width: '200px',
-                  height: '65px',
-                  objectFit: 'contain',
-                }}
-              />
+              <Link href="/">
+                <Image
+                  src="/Eminenceadvicelogo.png"
+                  alt="Eminance Advice Logo"
+                  width={160}
+                  height={50}
+                  style={{
+                    width: '160px',
+                    height: '50px',
+                    objectFit: 'contain',
+                    cursor: 'pointer',
+                  }}
+                />
+              </Link>
             </Box>
           </Grid>
 
@@ -94,19 +104,20 @@ export default function Footer() {
             </Typography>
             <Stack spacing={1}>
               {footerLinks.Company.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  sx={{
-                    color: '#6b7280',
-                    textDecoration: 'none',
-                    fontSize: '0.75rem',
-                    display: 'inline-block',
-                    '&:hover': { color: '#ff6b35', transform: 'translateX(3px)' },
-                    transition: 'all 0.3s',
-                  }}
-                >
-                  {link.label}
+                <Link key={link.label} href={link.href} passHref legacyBehavior>
+                  <MuiLink
+                    sx={{
+                      color: '#6b7280',
+                      textDecoration: 'none',
+                      fontSize: '0.75rem',
+                      display: 'inline-block',
+                      '&:hover': { color: '#ff6b35', transform: 'translateX(3px)' },
+                      transition: 'all 0.3s',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {link.label}
+                  </MuiLink>
                 </Link>
               ))}
             </Stack>
@@ -119,19 +130,20 @@ export default function Footer() {
             </Typography>
             <Stack spacing={1}>
               {footerLinks.Services.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  sx={{
-                    color: '#6b7280',
-                    textDecoration: 'none',
-                    fontSize: '0.75rem',
-                    display: 'inline-block',
-                    '&:hover': { color: '#ff6b35', transform: 'translateX(3px)' },
-                    transition: 'all 0.3s',
-                  }}
-                >
-                  {link.label}
+                <Link key={link.label} href={link.href} passHref legacyBehavior>
+                  <MuiLink
+                    sx={{
+                      color: '#6b7280',
+                      textDecoration: 'none',
+                      fontSize: '0.75rem',
+                      display: 'inline-block',
+                      '&:hover': { color: '#ff6b35', transform: 'translateX(3px)' },
+                      transition: 'all 0.3s',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {link.label}
+                  </MuiLink>
                 </Link>
               ))}
             </Stack>
@@ -144,19 +156,20 @@ export default function Footer() {
             </Typography>
             <Stack spacing={1}>
               {footerLinks.Resources.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  sx={{
-                    color: '#6b7280',
-                    textDecoration: 'none',
-                    fontSize: '0.75rem',
-                    display: 'inline-block',
-                    '&:hover': { color: '#ff6b35', transform: 'translateX(3px)' },
-                    transition: 'all 0.3s',
-                  }}
-                >
-                  {link.label}
+                <Link key={link.label} href={link.href} passHref legacyBehavior>
+                  <MuiLink
+                    sx={{
+                      color: '#6b7280',
+                      textDecoration: 'none',
+                      fontSize: '0.75rem',
+                      display: 'inline-block',
+                      '&:hover': { color: '#ff6b35', transform: 'translateX(3px)' },
+                      transition: 'all 0.3s',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {link.label}
+                  </MuiLink>
                 </Link>
               ))}
             </Stack>
@@ -169,19 +182,20 @@ export default function Footer() {
             </Typography>
             <Stack spacing={1}>
               {footerLinks.QuickLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  sx={{
-                    color: '#6b7280',
-                    textDecoration: 'none',
-                    fontSize: '0.75rem',
-                    display: 'inline-block',
-                    '&:hover': { color: '#ff6b35', transform: 'translateX(3px)' },
-                    transition: 'all 0.3s',
-                  }}
-                >
-                  {link.label}
+                <Link key={link.label} href={link.href} passHref legacyBehavior>
+                  <MuiLink
+                    sx={{
+                      color: '#6b7280',
+                      textDecoration: 'none',
+                      fontSize: '0.75rem',
+                      display: 'inline-block',
+                      '&:hover': { color: '#ff6b35', transform: 'translateX(3px)' },
+                      transition: 'all 0.3s',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {link.label}
+                  </MuiLink>
                 </Link>
               ))}
             </Stack>
@@ -203,15 +217,19 @@ export default function Footer() {
 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
                   <Phone sx={{ fontSize: 14, color: '#ff6b35' }} />
-                  <Link href="tel:9826667279" sx={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.65rem', '&:hover': { color: '#ff6b35' } }}>
-                    98266 67279
+                  <Link href="tel:9826667279" passHref legacyBehavior>
+                    <MuiLink sx={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.65rem', '&:hover': { color: '#ff6b35' } }}>
+                      98266 67279
+                    </MuiLink>
                   </Link>
                 </Box>
 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
                   <Email sx={{ fontSize: 14, color: '#ff6b35' }} />
-                  <Link href="mailto:info@eminanceadvice.com" sx={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.65rem', '&:hover': { color: '#ff6b35' } }}>
-                    info@eminanceadvice.com
+                  <Link href="mailto:info@eminanceadvice.com" passHref legacyBehavior>
+                    <MuiLink sx={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.65rem', '&:hover': { color: '#ff6b35' } }}>
+                      info@eminanceadvice.com
+                    </MuiLink>
                   </Link>
                 </Box>
 
@@ -221,21 +239,35 @@ export default function Footer() {
                 </Box>
               </Stack>
 
-              {/* Social Icons */}
-              <Stack direction="row" spacing={1} sx={{ justifyContent: { xs: 'center', md: 'center' }, mt: 1.5 }}>
-                <IconButton sx={{ color: '#6b7280', '&:hover': { color: '#ff6b35' }, p: 0.3 }}>
-                  <Facebook sx={{ fontSize: 18 }} />
-                </IconButton>
-                <IconButton sx={{ color: '#6b7280', '&:hover': { color: '#ff6b35' }, p: 0.3 }}>
-                  <Twitter sx={{ fontSize: 18 }} />
-                </IconButton>
-                <IconButton sx={{ color: '#6b7280', '&:hover': { color: '#ff6b35' }, p: 0.3 }}>
-                  <LinkedIn sx={{ fontSize: 18 }} />
-                </IconButton>
-                <IconButton sx={{ color: '#6b7280', '&:hover': { color: '#ff6b35' }, p: 0.3 }}>
-                  <Instagram sx={{ fontSize: 18 }} />
-                </IconButton>
-              </Stack>
+              {/* Social Links */}
+              <Box sx={{ mt: 3 }}>
+                <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 'bold', color: '#ff6b35', mb: 2, fontSize: '0.85rem' }}>
+                  Follow Us
+                </Typography>
+                <Stack direction="row" spacing={1.5} justifyContent={{ xs: 'center', md: 'center' }}>
+                  {socialLinks.map((social, index) => (
+                    <IconButton
+                      key={index}
+                      component={Link}
+                      href={social.url}
+                      target="_blank"
+                      sx={{
+                        bgcolor: social.bgcolor,
+                        color: 'white',
+                        width: 35,
+                        height: 35,
+                        '&:hover': {
+                          transform: 'translateY(-3px)',
+                          boxShadow: '0 5px 15px rgba(0,0,0,0.2)',
+                        },
+                        transition: 'all 0.3s ease',
+                      }}
+                    >
+                      <social.icon sx={{ fontSize: 18 }} />
+                    </IconButton>
+                  ))}
+                </Stack>
+              </Box>
             </Box>
           </Grid>
         </Grid>
