@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://eminenceadvice.com/sitemap.xml
+Sitemap: https://eminenceadvice.com/api/sitemap
