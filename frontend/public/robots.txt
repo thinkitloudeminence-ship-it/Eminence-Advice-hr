@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /api/
 
-Sitemap: https://eminenceadvice.com/api/sitemap
+Sitemap: https://eminenceadvice.com/sitemap.xml
