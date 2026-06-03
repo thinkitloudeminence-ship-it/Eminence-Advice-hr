@@ -1,17 +1,17 @@
-# robots.txt for Eminance Advice
+# *
 User-agent: *
 Allow: /
-Allow: /payment
-Disallow: /api/
-Disallow: /admin/
-Disallow: /_next/
-Disallow: /static/
 
-# Sitemap location
-Sitemap: https://eminenceadvice.com/sitemap.xml
+# Googlebot
+User-agent: Googlebot
+Allow: /
 
-# Crawl delay for Googlebot
-Crawl-delay: 1
+# Bingbot
+User-agent: Bingbot
+Allow: /
 
-# Host directive
+# Host
 Host: https://eminenceadvice.com
+
+# Sitemaps
+Sitemap: https://eminenceadvice.com/sitemap.xml
