@@ -38,6 +38,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { NextSeo } from 'next-seo'
 
+
 const steps = ['Personal Info', 'Payment', 'Confirmation']
 
 // Validation Schema

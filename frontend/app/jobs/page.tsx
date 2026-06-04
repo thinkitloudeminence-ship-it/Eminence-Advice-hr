@@ -17,6 +17,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { NextSeo } from 'next-seo'
 
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
 
 // ─── JOBS LIST PAGE ────────────────────────────────────────────────────────────

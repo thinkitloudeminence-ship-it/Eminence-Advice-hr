@@ -32,6 +32,7 @@ import { NextSeo } from 'next-seo'
 import Lottie from 'lottie-react'
 import animationData from '@/public/ourserviceanimation.json'
 
+
 const serviceCategories = [
   {
     title: 'Counseling Services',
