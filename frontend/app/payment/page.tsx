@@ -344,34 +344,7 @@ export default function PaymentPage() {
 
   return (
     <>
-      <NextSeo
-        title="Payment | Career Guidance Plan - ₹99 Only | Eminance Advice"
-        description="Get expert career counseling, resume review, interview preparation, and placement assistance for just ₹99 + GST. Limited time offer. Start your career journey today!"
-        canonical="https://eminenceadvice.com/payment"
-        openGraph={{
-          url: 'https://eminenceadvice.com/payment',
-          title: 'Career Guidance Plan - Unlock Your Career Growth @ ₹99',
-          description: 'Get expert career guidance, placement assistance, and 24/7 support at an unbeatable price of ₹99. Limited slots available!',
-          images: [
-            {
-              url: 'https://eminenceadvice.com/payment-og.jpg',
-              width: 1200,
-              height: 630,
-              alt: 'Eminance Advice Payment - Career Guidance Plan',
-            },
-          ],
-        }}
-        additionalMetaTags={[
-          {
-            name: 'keywords',
-            content: 'career guidance payment, buy career plan, online payment, career counseling fee, placement assistance cost, ₹99 career plan',
-          },
-          {
-            name: 'robots',
-            content: 'index, follow',
-          },
-        ]}
-      />
+       
       <Box sx={{ pt: 12, pb: 8, minHeight: '100vh', bgcolor: '#f8fafc' }}>
         <Container maxWidth="lg">
           <motion.div initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.6 }}>
