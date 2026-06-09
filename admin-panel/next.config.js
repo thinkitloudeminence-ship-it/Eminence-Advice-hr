@@ -16,10 +16,10 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   typescript: {
-    ignoreBuildErrors: true,  // ✅ TypeScript errors ignore karo
+    ignoreBuildErrors: true,
   },
   eslint: {
-    ignoreDuringBuilds: true,  // ✅ ESLint errors ignore karo
+    ignoreDuringBuilds: true,
   },
 }
 
