@@ -1,29 +1,35 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Box, Container, Typography, Card, CardContent, Avatar, Rating, Chip, Button, CircularProgress } from '@mui/material'
 import Slider from 'react-slick'
 import { motion } from 'framer-motion'
 import { Google, Star, Verified, FormatQuote } from '@mui/icons-material'
 import axios from 'axios'
+// @ts-ignore: imported CSS has no type declarations
+import 'slick-carousel/slick/slick.css'
+// @ts-ignore: imported CSS has no type declarations
+import 'slick-carousel/slick/slick-theme.css'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
 
+// ✅ Slider Settings - 5 slides visible, auto-play every 5 seconds
 const sliderSettings = {
   dots: true,
   infinite: true,
   speed: 800,
-  slidesToShow: 3,
+  slidesToShow: 5,
   slidesToScroll: 1,
   autoplay: true,
   autoplaySpeed: 5000,
   pauseOnHover: true,
   arrows: true,
+  centerMode: false,
   responsive: [
-    { breakpoint: 1200, settings: { slidesToShow: 2.5, slidesToScroll: 1 } },
-    { breakpoint: 992, settings: { slidesToShow: 2, slidesToScroll: 1 } },
-    { breakpoint: 768, settings: { slidesToShow: 1.2, slidesToScroll: 1, centerMode: true, centerPadding: '20px' } },
-    { breakpoint: 576, settings: { slidesToShow: 1, slidesToScroll: 1, centerMode: true, centerPadding: '15px' } }
+    { breakpoint: 1400, settings: { slidesToShow: 4, slidesToScroll: 1 } },
+    { breakpoint: 1200, settings: { slidesToShow: 3, slidesToScroll: 1 } },
+    { breakpoint: 900, settings: { slidesToShow: 2, slidesToScroll: 1 } },
+    { breakpoint: 600, settings: { slidesToShow: 1, slidesToScroll: 1, centerMode: true, centerPadding: '20px' } }
   ]
 }
 
@@ -40,9 +46,19 @@ export default function Testimonials() {
   const [loading, setLoading] = useState(true)
   const [rating, setRating] = useState(0)
   const [totalReviews, setTotalReviews] = useState(0)
+  const sliderRef = useRef<Slider>(null)
 
   useEffect(() => {
     fetchGoogleReviews()
+    
+    // Auto-play interval backup
+    const interval = setInterval(() => {
+      if (sliderRef.current) {
+        sliderRef.current.slickNext()
+      }
+    }, 5000)
+    
+    return () => clearInterval(interval)
   }, [])
 
   const fetchGoogleReviews = async () => {
@@ -58,7 +74,7 @@ export default function Testimonials() {
     }
   }
 
-  // ✅ Helper function to format date - Fixed TypeScript error
+  // Format date
   const formatReviewDate = (dateString: string): string => {
     const date = new Date(dateString)
     const now = new Date()
@@ -73,7 +89,7 @@ export default function Testimonials() {
     return `${Math.floor(diffDays / 365)} years ago`
   }
 
-  // Static fallback data if API fails
+  // Static fallback data
   const fallbackReviews: Review[] = [
     {
       name: 'Rahul Sharma',
@@ -95,6 +111,20 @@ export default function Testimonials() {
       text: 'The mock interview sessions were very helpful. I improved my communication skills.',
       date: '3 weeks ago',
       avatar: 'https://ui-avatars.com/api/?name=Amit+Kumar&background=ff6b35&color=fff'
+    },
+    {
+      name: 'Neha Gupta',
+      rating: 5,
+      text: 'Great learning experience! The trainers are very knowledgeable and supportive.',
+      date: '1 week ago',
+      avatar: 'https://ui-avatars.com/api/?name=Neha+Gupta&background=ff6b35&color=fff'
+    },
+    {
+      name: 'Vikram Singh',
+      rating: 5,
+      text: 'Got placed in my dream company thanks to their placement assistance.',
+      date: '2 months ago',
+      avatar: 'https://ui-avatars.com/api/?name=Vikram+Singh&background=ff6b35&color=fff'
     }
   ]
 
@@ -147,31 +177,17 @@ export default function Testimonials() {
               color: '#1a1a1a',
             }}
           >
-            What Our{' '}
+            What Our Students Say 
             <Typography
               component="span"
               sx={{ color: '#ff6b35', display: 'inline-block' }}
             >
-              Students Say
+              
             </Typography>
           </Typography>
           
-          {/* Real Google Rating Badge */}
+          {/* Rating Badge */}
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
-            <Chip
-              icon={<Google sx={{ color: '#ff6b35' }} />}
-              label="Google Reviews"
-              sx={{ bgcolor: '#fff5f0', color: '#ff6b35' }}
-            />
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <Star sx={{ color: '#ffb400', fontSize: { xs: 18, md: 20 } }} />
-              <Typography sx={{ fontWeight: 'bold', fontSize: { xs: '0.9rem', md: '1rem' } }}>
-                {rating || 4.9}
-              </Typography>
-              <Typography sx={{ color: '#666', fontSize: { xs: '0.75rem', md: '0.85rem' } }}>
-                ({totalReviews || 128} reviews)
-              </Typography>
-            </Box>
           </Box>
           
           <Typography 
@@ -191,9 +207,9 @@ export default function Testimonials() {
         </motion.div>
         
         {displayReviews.length > 0 && (
-          <Slider {...sliderSettings}>
+          <Slider ref={sliderRef} {...sliderSettings}>
             {displayReviews.map((review, index) => (
-              <Box key={index} sx={{ px: { xs: 1, sm: 1.5, md: 2 } }}>
+              <Box key={index} sx={{ px: 1 }}>
                 <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   whileInView={{ scale: 1, opacity: 1 }}
@@ -211,6 +227,8 @@ export default function Testimonials() {
                       cursor: 'pointer',
                       position: 'relative',
                       overflow: 'visible',
+                      bgcolor: '#ffffff',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                       '&:hover': {
                         transform: 'translateY(-8px)',
                         boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
@@ -276,7 +294,7 @@ export default function Testimonials() {
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: { xs: 1, sm: 1.5 } }}>
                         <Verified sx={{ color: '#4caf50', fontSize: { xs: 14, sm: 16 } }} />
                         <Typography variant="caption" sx={{ color: '#4caf50', fontSize: { xs: '0.6rem', sm: '0.7rem' } }}>
-                          Verified Google Review
+                          Verified Review
                         </Typography>
                       </Box>
                       
@@ -300,28 +318,22 @@ export default function Testimonials() {
         )}
         
         <Box sx={{ textAlign: 'center', mt: { xs: 4, sm: 5, md: 6 } }}>
-          <Button
-            component="a"
-            href="https://g.page/r/tOBIeRoN8xl45e0jZ/review"
-            target="_blank"
-            variant="outlined"
-            startIcon={<Google />}
-            sx={{
-              borderColor: '#ff6b35',
-              color: '#ff6b35',
-              borderRadius: '50px',
-              px: { xs: 3, sm: 4 },
-              py: { xs: 0.8, sm: 1 },
-              '&:hover': {
-                borderColor: '#e55a2b',
-                bgcolor: 'rgba(255,107,53,0.05)',
-              }
-            }}
-          >
-            Write a Review on Google
-          </Button>
+          
         </Box>
       </Container>
+      
+      {/* Custom CSS for Slider */}
+      <style jsx global>{`
+        .slick-prev:before, .slick-next:before {
+          color: #ff6b35 !important;
+        }
+        .slick-dots li button:before {
+          color: #ff6b35 !important;
+        }
+        .slick-dots li.slick-active button:before {
+          color: #ff6b35 !important;
+        }
+      `}</style>
     </Box>
   )
 }
