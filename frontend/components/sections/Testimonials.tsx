@@ -182,7 +182,6 @@ export default function Testimonials() {
               component="span"
               sx={{ color: '#ff6b35', display: 'inline-block' }}
             >
-
             </Typography>
           </Typography>
 
