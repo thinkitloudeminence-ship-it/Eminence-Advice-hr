@@ -50,14 +50,14 @@ export default function Testimonials() {
 
   useEffect(() => {
     fetchGoogleReviews()
-    
+
     // Auto-play interval backup
     const interval = setInterval(() => {
       if (sliderRef.current) {
         sliderRef.current.slickNext()
       }
     }, 5000)
-    
+
     return () => clearInterval(interval)
   }, [])
 
@@ -80,7 +80,7 @@ export default function Testimonials() {
     const now = new Date()
     const diffTime = Math.abs(now.getTime() - date.getTime())
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-    
+
     if (diffDays === 0) return 'Today'
     if (diffDays === 1) return 'Yesterday'
     if (diffDays < 7) return `${diffDays} days ago`
@@ -166,37 +166,37 @@ export default function Testimonials() {
               Testimonials
             </Typography>
           </Box>
-          
-          <Typography 
-            variant="h2" 
-            sx={{ 
-              fontSize: { xs: '1.8rem', sm: '2rem', md: '2.5rem' }, 
-              fontWeight: 'bold', 
-              textAlign: 'center', 
+
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: { xs: '1.8rem', sm: '2rem', md: '2.5rem' },
+              fontWeight: 'bold',
+              textAlign: 'center',
               mb: 1,
               color: '#1a1a1a',
             }}
           >
-            What Our Students Say 
+            What Our Students Say
             <Typography
               component="span"
               sx={{ color: '#ff6b35', display: 'inline-block' }}
             >
-              
+
             </Typography>
           </Typography>
-          
+
           {/* Rating Badge */}
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
           </Box>
-          
-          <Typography 
-            variant="body1" 
-            sx={{ 
-              textAlign: 'center', 
-              color: '#666', 
-              maxWidth: 600, 
-              mx: 'auto', 
+
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: 'center',
+              color: '#666',
+              maxWidth: 600,
+              mx: 'auto',
               mb: { xs: 4, sm: 5, md: 6 },
               fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
               lineHeight: 1.6,
@@ -205,7 +205,7 @@ export default function Testimonials() {
             Real success stories from students and professionals who achieved their career goals
           </Typography>
         </motion.div>
-        
+
         {displayReviews.length > 0 && (
           <Slider ref={sliderRef} {...sliderSettings}>
             {displayReviews.map((review, index) => (
@@ -216,9 +216,9 @@ export default function Testimonials() {
                   transition={{ duration: 0.5, delay: index * 0.05 }}
                   viewport={{ once: true }}
                 >
-                  <Card 
-                    sx={{ 
-                      height: '100%', 
+                  <Card
+                    sx={{
+                      height: '100%',
                       minHeight: { xs: 240, sm: 260, md: 280 },
                       display: 'flex',
                       flexDirection: 'column',
@@ -235,53 +235,53 @@ export default function Testimonials() {
                       }
                     }}
                   >
-                    <FormatQuote 
-                      sx={{ 
-                        position: 'absolute', 
-                        top: { xs: 10, sm: 15 }, 
-                        right: { xs: 10, sm: 15 }, 
-                        fontSize: { xs: 40, sm: 50, md: 60 }, 
+                    <FormatQuote
+                      sx={{
+                        position: 'absolute',
+                        top: { xs: 10, sm: 15 },
+                        right: { xs: 10, sm: 15 },
+                        fontSize: { xs: 40, sm: 50, md: 60 },
                         color: '#fff5f0',
                         zIndex: 0
-                      }} 
+                      }}
                     />
-                    
+
                     <CardContent sx={{ p: { xs: 2, sm: 2.5, md: 3 }, flexGrow: 1, position: 'relative', zIndex: 1 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, sm: 2 }, mb: { xs: 1.5, sm: 2 } }}>
-                        <Avatar 
-                          src={review.avatar} 
+                        <Avatar
+                          src={review.avatar}
                           alt={review.name}
-                          sx={{ 
-                            width: { xs: 45, sm: 55, md: 65 }, 
+                          sx={{
+                            width: { xs: 45, sm: 55, md: 65 },
                             height: { xs: 45, sm: 55, md: 65 },
                             border: '2px solid #ff6b35',
                             bgcolor: '#fff5f0'
-                          }} 
+                          }}
                         />
                         <Box>
-                          <Typography 
-                            variant="h6" 
-                            sx={{ 
-                              fontWeight: 600, 
+                          <Typography
+                            variant="h6"
+                            sx={{
+                              fontWeight: 600,
                               fontSize: { xs: '0.85rem', sm: '0.95rem', md: '1rem' },
                               color: '#1a1a1a'
                             }}
                           >
                             {review.name}
                           </Typography>
-                          <Rating 
-                            value={review.rating} 
-                            readOnly 
-                            size="small" 
-                            sx={{ 
+                          <Rating
+                            value={review.rating}
+                            readOnly
+                            size="small"
+                            sx={{
                               '& .MuiRating-iconFilled': { color: '#ffb400' },
                               fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }
-                            }} 
+                            }}
                           />
-                          <Typography 
-                            variant="caption" 
-                            sx={{ 
-                              color: '#999', 
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: '#999',
                               display: 'block',
                               fontSize: { xs: '0.6rem', sm: '0.65rem' }
                             }}
@@ -290,18 +290,18 @@ export default function Testimonials() {
                           </Typography>
                         </Box>
                       </Box>
-                      
+
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: { xs: 1, sm: 1.5 } }}>
                         <Verified sx={{ color: '#4caf50', fontSize: { xs: 14, sm: 16 } }} />
                         <Typography variant="caption" sx={{ color: '#4caf50', fontSize: { xs: '0.6rem', sm: '0.7rem' } }}>
                           Verified Review
                         </Typography>
                       </Box>
-                      
-                      <Typography 
-                        variant="body2" 
-                        sx={{ 
-                          color: '#555', 
+
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: '#555',
                           lineHeight: { xs: 1.5, sm: 1.6 },
                           fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.85rem' },
                           fontStyle: 'italic'
@@ -316,12 +316,12 @@ export default function Testimonials() {
             ))}
           </Slider>
         )}
-        
+
         <Box sx={{ textAlign: 'center', mt: { xs: 4, sm: 5, md: 6 } }}>
-          
+
         </Box>
       </Container>
-      
+
       {/* Custom CSS for Slider */}
       <style jsx global>{`
         .slick-prev:before, .slick-next:before {
