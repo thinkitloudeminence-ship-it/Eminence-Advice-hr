@@ -260,7 +260,7 @@ export default function HeroSection() {
                     <TrendingUp sx={{ color: '#ff6b35', fontSize: { xs: 16, sm: 18, md: 20 } }} />
                   </Box>
                   <Box>
-                    <Typography sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' } }}>5000+</Typography>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' } }}>10,000+</Typography>
                     <Typography variant="caption" sx={{ color: '#666', fontSize: { xs: '0.6rem', sm: '0.65rem' } }}>
                       Students Placed
                     </Typography>
@@ -272,7 +272,7 @@ export default function HeroSection() {
                     <BusinessCenter sx={{ color: '#ff6b35', fontSize: { xs: 16, sm: 18, md: 20 } }} />
                   </Box>
                   <Box>
-                    <Typography sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' } }}>200+</Typography>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' } }}>500+</Typography>
                     <Typography variant="caption" sx={{ color: '#666', fontSize: { xs: '0.6rem', sm: '0.65rem' } }}>
                       Companies
                     </Typography>
