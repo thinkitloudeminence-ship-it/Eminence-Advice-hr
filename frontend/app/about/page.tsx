@@ -48,7 +48,7 @@ const teamMembers = [
     name: 'Savin Jain',
     role: 'Founder & CEO',
     description: 'Visionary leader with over 15 years of experience in career counseling and HR services. Founded Eminance Advice in 2009 with a mission to transform career guidance in India.',
-    expertise: ['Career Strategy', 'Leadership', 'Business Development'],
+    expertise: ['Image counsultant', 'Leadership', 'Business Development'],
     image: '/savinjain.jpeg',
   },
   {
