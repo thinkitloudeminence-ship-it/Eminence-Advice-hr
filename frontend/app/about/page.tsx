@@ -9,25 +9,21 @@ import {
   Paper,
   Card,
   CardContent,
-  Avatar,
   Button,
   Chip,
 } from '@mui/material'
 import {
   School,
-  Work,
   EmojiPeople,
   TrendingUp,
   Handshake,
   Lightbulb,
   Visibility,
   Assignment,
-  CheckCircle,
   ArrowForward,
-  LinkedIn,
-  Phone,
 } from '@mui/icons-material'
 import Link from 'next/link'
+import Image from 'next/image'
 import { NextSeo } from 'next-seo'
 import Lottie from 'lottie-react'
 import animationData from '@/public/about section animation.json'
@@ -46,23 +42,21 @@ const values = [
   { icon: Assignment, title: 'Excellence', description: 'Striving for the highest quality in all our services.' },
 ]
 
-// Team Members Data
+// Team Members Data with Images
 const teamMembers = [
   {
     name: 'Savin Jain',
     role: 'Founder & CEO',
     description: 'Visionary leader with over 15 years of experience in career counseling and HR services. Founded Eminance Advice in 2009 with a mission to transform career guidance in India.',
     expertise: ['Career Strategy', 'Leadership', 'Business Development'],
-    image: '/team/savin-jain.jpg',
-    linkedin: 'https://in.linkedin.com/in/savin-jain-745342b3',
+    image: '/savinjain.jpeg',
   },
   {
     name: 'Abhishek Gurjar',
     role: 'Managing Director - HR',
     description: 'HR expert with extensive experience in talent acquisition, corporate training, and placement strategies. Leads the HR vertical at Eminance Advice.',
     expertise: ['HR Strategy', 'Talent Acquisition', 'Corporate Training'],
-    image: '/team/abhishek-gurjar.jpg',
-    linkedin: 'https://www.linkedin.com/in/abhishek-gurjar/',
+    image: '/abhishek.jpeg',
   },
 ]
 
@@ -426,7 +420,7 @@ export default function AboutPage() {
           </Container>
         </Box>
 
-        {/* OUR TEAM SECTION */}
+        {/* OUR TEAM SECTION - FIXED IMAGE DISPLAY */}
         <Container maxWidth="lg" sx={{ py: 8 }}>
           <motion.div
             initial={{ y: -30, opacity: 0 }}
@@ -491,12 +485,12 @@ export default function AboutPage() {
                     }}
                   >
                     <Grid container>
-                      {/* Image Section */}
+                      {/* Image Section - Fixed */}
                       <Grid item xs={12} sm={4}>
                         <Box
                           sx={{
                             height: '100%',
-                            minHeight: { xs: 200, sm: 'auto' },
+                            minHeight: { xs: 250, sm: '100%' },
                             bgcolor: '#fff5f0',
                             display: 'flex',
                             alignItems: 'center',
@@ -504,16 +498,29 @@ export default function AboutPage() {
                             p: 3,
                           }}
                         >
-                          <Avatar
+                          <Box
                             sx={{
-                              width: { xs: 120, sm: 140 },
-                              height: { xs: 120, sm: 140 },
-                              bgcolor: '#ff6b35',
-                              fontSize: { xs: '2rem', sm: '2.5rem' },
+                              width: 180,
+                              height: 180,
+                              position: 'relative',
+                              borderRadius: 2,
+                              overflow: 'hidden',
+                              boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
                             }}
                           >
-                            {member.name.charAt(0)}
-                          </Avatar>
+                            <img
+                              src={member.image}
+                              alt={member.name}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                              }}
+                              onError={(e) => {
+                                e.currentTarget.src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(member.name) + '&background=ff6b35&color=fff';
+                              }}
+                            />
+                          </Box>
                         </Box>
                       </Grid>
 
@@ -569,23 +576,6 @@ export default function AboutPage() {
                               />
                             ))}
                           </Box>
-
-                          {/* LinkedIn Button Only (Email removed) */}
-                          <Link href={member.linkedin} target="_blank" passHref legacyBehavior>
-                            <Button
-                              size="small"
-                              variant="contained"
-                              startIcon={<LinkedIn sx={{ fontSize: 16 }} />}
-                              sx={{
-                                bgcolor: '#0077b5',
-                                fontSize: '0.7rem',
-                                textTransform: 'none',
-                                '&:hover': { bgcolor: '#005582' }
-                              }}
-                            >
-                              LinkedIn Profile
-                            </Button>
-                          </Link>
                         </CardContent>
                       </Grid>
                     </Grid>
