@@ -56,8 +56,8 @@ export default function Navbar() {
         <Image
           src="/Eminenceadvicelogo.png"
           alt="Logo"
-          width={180}
-          height={70}
+          width={120}
+          height={50}
           style={{ objectFit: 'contain' }}
         />
       </Box>
@@ -110,13 +110,13 @@ export default function Navbar() {
             px: { xs: 2, sm: 3, md: 4 },
             py: 1
           }}>
-            {/* Logo - AUR BADA */}
+            {/* Logo - OPTIMIZED SIZE */}
             <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
               <Box
                 sx={{
                   position: 'relative',
-                  width: { xs: 150, sm: 200, md: 280 },
-                  height: { xs: 48, sm: 60, md: 85 },
+                  width: { xs: 120, sm: 150, md: 180 },
+                  height: { xs: 40, sm: 48, md: 55 },
                 }}
               >
                 <Image
@@ -125,7 +125,7 @@ export default function Navbar() {
                   fill
                   priority
                   style={{ objectFit: 'contain' }}
-                  sizes="(max-width: 600px) 150px, (max-width: 900px) 200px, 280px"
+                  sizes="(max-width: 600px) 120px, (max-width: 900px) 150px, 180px"
                 />
               </Box>
             </Link>

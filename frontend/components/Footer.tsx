@@ -52,7 +52,7 @@ const footerLinks = {
 const socialLinks = [
   { icon: Facebook, name: 'Facebook', url: 'https://www.facebook.com/eminenceadvice/', bgcolor: '#1877f2' },
   { icon: Instagram, name: 'Instagram', url: 'https://www.instagram.com/eminenceadvice/', bgcolor: '#e4405f' },
-  { icon: LinkedIn, name: 'LinkedIn', url: 'https://in.linkedin.com/in/eminence-advice-ab630637a', bgcolor: '#0077b5' },
+  { icon: LinkedIn, name: 'LinkedIn', url: 'https://www.linkedin.com/company/eminence-advice-hr-services', bgcolor: '#0077b5' },
 ]
 
 export default function Footer() {
@@ -77,22 +77,25 @@ export default function Footer() {
       <Container maxWidth="xl">
         {/* Main Footer Row */}
         <Grid container spacing={{ xs: 3, sm: 4, md: 3 }}>
-          {/* Logo Column */}
+          {/* Logo Column - OPTIMIZED SIZE */}
           <Grid item xs={12} sm={6} md={2}>
             <Box sx={{ textAlign: { xs: 'center', sm: 'left', md: 'center' } }}>
               <Link href="/">
-                <Image
-                  src="/Eminenceadvicelogo.png"
-                  alt="Eminance Advice Logo"
-                  width={160}
-                  height={50}
-                  style={{
-                    width: '160px',
-                    height: '50px',
-                    objectFit: 'contain',
-                    cursor: 'pointer',
-                  }}
-                />
+                <Box sx={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center' }}>
+                  <Image
+                    src="/Eminenceadvicelogo.png"
+                    alt="Eminance Advice Logo"
+                    width={140}
+                    height={45}
+                    style={{
+                      width: '140px',
+                      height: '45px',
+                      objectFit: 'contain',
+                      cursor: 'pointer',
+                    }}
+                    priority
+                  />
+                </Box>
               </Link>
             </Box>
           </Grid>
@@ -254,8 +257,8 @@ export default function Footer() {
                       sx={{
                         bgcolor: social.bgcolor,
                         color: 'white',
-                        width: 35,
-                        height: 35,
+                        width: 32,
+                        height: 32,
                         '&:hover': {
                           transform: 'translateY(-3px)',
                           boxShadow: '0 5px 15px rgba(0,0,0,0.2)',
@@ -263,7 +266,7 @@ export default function Footer() {
                         transition: 'all 0.3s ease',
                       }}
                     >
-                      <social.icon sx={{ fontSize: 18 }} />
+                      <social.icon sx={{ fontSize: 16 }} />
                     </IconButton>
                   ))}
                 </Stack>

@@ -32,7 +32,6 @@ import { NextSeo } from 'next-seo'
 import Lottie from 'lottie-react'
 import animationData from '@/public/ourserviceanimation.json'
 
-
 const serviceCategories = [
   {
     title: 'Counseling Services',
@@ -103,9 +102,9 @@ export default function ServicesPage() {
           description: 'Expert career guidance and placement services for students and professionals.',
         }}
       />
-
+      
       <Box sx={{ pt: 12, pb: 8, bgcolor: 'white', overflow: 'hidden' }}>
-
+        
         {/* Hero Section with Animation Background */}
         <Box sx={{ bgcolor: '#ff6b35', color: 'white', py: 8, position: 'relative', overflow: 'hidden' }}>
           <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.1 }}>
@@ -144,122 +143,128 @@ export default function ServicesPage() {
           </Container>
         </Box>
 
-        {/* Service Categories - 4 cards per row using flexbox */}
-        {serviceCategories.map((category, catIndex) => (
-          <Container maxWidth="lg" key={catIndex} sx={{ py: 8 }}>
-            <motion.div
-              initial={{ y: -30, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 4, justifyContent: { xs: 'center', md: 'flex-start' } }}>
-                <Box
-                  sx={{
-                    bgcolor: category.bg,
-                    borderRadius: '50%',
-                    width: { xs: 50, sm: 60 },
-                    height: { xs: 50, sm: 60 },
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    mr: { xs: 1.5, md: 2 },
-                  }}
-                >
-                  <category.icon sx={{ fontSize: { xs: 28, sm: 32 }, color: category.color }} />
-                </Box>
-                <Typography
-                  variant="h3"
-                  sx={{
-                    fontWeight: 'bold',
-                    color: '#1a1a1a',
-                    fontSize: { xs: '1.5rem', sm: '1.8rem', md: '2rem' }
-                  }}
-                >
-                  {category.title}
-                </Typography>
-              </Box>
-            </motion.div>
-
-            {/* ✅ 4 cards per row using flexbox */}
-            <Box
-              sx={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-                gap: { xs: 2, sm: 2.5, md: 3 },
-              }}
-            >
-              {category.services.map((service, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    flex: { xs: '0 0 100%', sm: '0 0 calc(50% - 20px)', md: '0 0 calc(25% - 24px)' },
-                    minWidth: { xs: '100%', sm: '220px', md: '250px' },
-                  }}
-                >
-                  <motion.div
-                    initial={{ y: 40, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.4, delay: index * 0.05 }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -5 }}
+        {/* Service Categories - 4 cards per row */}
+        <Container maxWidth="lg" sx={{ py: 8 }}>
+          {serviceCategories.map((category, catIndex) => (
+            <Box key={catIndex} sx={{ mb: 8 }}>
+              <motion.div
+                initial={{ y: -30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 4, justifyContent: { xs: 'center', md: 'flex-start' } }}>
+                  <Box
+                    sx={{
+                      bgcolor: category.bg,
+                      borderRadius: '50%',
+                      width: { xs: 50, sm: 60 },
+                      height: { xs: 50, sm: 60 },
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      mr: { xs: 1.5, md: 2 },
+                    }}
                   >
-                    <Card
-                      sx={{
-                        height: '100%',
-                        transition: 'all 0.3s ease',
-                        borderRadius: { xs: 2, sm: 3 },
-                        '&:hover': {
-                          boxShadow: '0 10px 30px rgba(255,107,53,0.12)',
-                          borderBottom: '3px solid #ff6b35',
-                        }
-                      }}
-                    >
-                      <CardContent sx={{ p: { xs: 2, sm: 2.5 } }}>
-                        <Box
-                          sx={{
-                            bgcolor: '#fff5f0',
-                            borderRadius: '50%',
-                            width: { xs: 45, sm: 50 },
-                            height: { xs: 45, sm: 50 },
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            mb: 1.5,
-                          }}
-                        >
-                          <CheckCircle sx={{ color: '#ff6b35', fontSize: { xs: 24, sm: 26 } }} />
-                        </Box>
-                        <Typography
-                          variant="h6"
-                          gutterBottom
-                          sx={{
-                            fontWeight: 600,
-                            color: '#1a1a1a',
-                            fontSize: { xs: '0.95rem', sm: '1rem', md: '1.1rem' }
-                          }}
-                        >
-                          {service.name}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color="textSecondary"
-                          sx={{ lineHeight: 1.6, fontSize: { xs: '0.75rem', sm: '0.8rem' } }}
-                        >
-                          {service.description}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
+                    <category.icon sx={{ fontSize: { xs: 28, sm: 32 }, color: category.color }} />
+                  </Box>
+                  <Typography 
+                    variant="h3" 
+                    sx={{ 
+                      fontWeight: 'bold', 
+                      color: '#1a1a1a', 
+                      fontSize: { xs: '1.5rem', sm: '1.8rem', md: '2rem' } 
+                    }}
+                  >
+                    {category.title}
+                  </Typography>
                 </Box>
-              ))}
-            </Box>
-            {catIndex < serviceCategories.length - 1 && <Divider sx={{ my: 6, borderColor: '#e0e0e0' }} />}
-          </Container>
-        ))}
+              </motion.div>
 
-        {/* Internship Domains - Responsive grid */}
+              {/* ✅ 4 cards per row layout */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 3,
+                  justifyContent: 'center',
+                }}
+              >
+                {category.services.map((service, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      flex: {
+                        xs: '0 0 100%',
+                        sm: '0 0 calc(50% - 12px)',
+                        md: '0 0 calc(25% - 24px)',
+                      },
+                      minWidth: { xs: '100%', sm: '280px', md: '250px' },
+                    }}
+                  >
+                    <motion.div
+                      initial={{ y: 40, opacity: 0 }}
+                      whileInView={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.4, delay: index * 0.05 }}
+                      viewport={{ once: true }}
+                      whileHover={{ y: -5 }}
+                    >
+                      <Card 
+                        sx={{ 
+                          height: '100%',
+                          transition: 'all 0.3s ease',
+                          borderRadius: { xs: 2, sm: 3 },
+                          '&:hover': {
+                            boxShadow: '0 10px 30px rgba(255,107,53,0.12)',
+                            borderBottom: '3px solid #ff6b35',
+                          }
+                        }}
+                      >
+                        <CardContent sx={{ p: { xs: 2, sm: 2.5 } }}>
+                          <Box
+                            sx={{
+                              bgcolor: '#fff5f0',
+                              borderRadius: '50%',
+                              width: { xs: 45, sm: 50 },
+                              height: { xs: 45, sm: 50 },
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              mb: 1.5,
+                            }}
+                          >
+                            <CheckCircle sx={{ color: '#ff6b35', fontSize: { xs: 24, sm: 26 } }} />
+                          </Box>
+                          <Typography 
+                            variant="h6" 
+                            gutterBottom 
+                            sx={{ 
+                              fontWeight: 600, 
+                              color: '#1a1a1a', 
+                              fontSize: { xs: '0.95rem', sm: '1rem', md: '1.1rem' } 
+                            }}
+                          >
+                            {service.name}
+                          </Typography>
+                          <Typography 
+                            variant="body2" 
+                            color="textSecondary" 
+                            sx={{ lineHeight: 1.6, fontSize: { xs: '0.75rem', sm: '0.8rem' } }}
+                          >
+                            {service.description}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  </Box>
+                ))}
+              </Box>
+              {catIndex < serviceCategories.length - 1 && <Divider sx={{ my: 6, borderColor: '#e0e0e0' }} />}
+            </Box>
+          ))}
+        </Container>
+
+        {/* Internship Domains */}
         <Box sx={{ bgcolor: '#f5f5f5', py: 8 }}>
           <Container maxWidth="lg">
             <motion.div
@@ -286,14 +291,14 @@ export default function ServicesPage() {
                   Explore Opportunities
                 </Typography>
               </Box>
-              <Typography
-                variant="h3"
-                sx={{
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  mb: 3,
-                  color: '#1a1a1a',
-                  fontSize: { xs: '1.6rem', sm: '1.8rem', md: '2rem', lg: '2.2rem' }
+              <Typography 
+                variant="h3" 
+                sx={{ 
+                  fontWeight: 'bold', 
+                  textAlign: 'center', 
+                  mb: 3, 
+                  color: '#1a1a1a', 
+                  fontSize: { xs: '1.6rem', sm: '1.8rem', md: '2rem', lg: '2.2rem' } 
                 }}
               >
                 Internship <span style={{ color: '#ff6b35' }}>Domains</span>
@@ -306,29 +311,33 @@ export default function ServicesPage() {
               </Typography>
             </motion.div>
 
-            <Paper
-              elevation={0}
-              sx={{
-                p: { xs: 2, sm: 3, md: 4 },
-                bgcolor: 'white',
+            {/* ✅ 4 cards per row for domains */}
+            <Paper 
+              elevation={0} 
+              sx={{ 
+                p: { xs: 2, sm: 3, md: 4 }, 
+                bgcolor: 'white', 
                 borderRadius: { xs: 2, sm: 3 },
                 boxShadow: '0 5px 20px rgba(0,0,0,0.05)',
               }}
             >
-              {/* ✅ 4 columns for domains */}
               <Box
                 sx={{
                   display: 'flex',
                   flexWrap: 'wrap',
+                  gap: 1.5,
                   justifyContent: 'center',
-                  gap: { xs: 1, sm: 1.5 },
                 }}
               >
                 {internshipDomains.map((domain, index) => (
                   <Box
                     key={index}
                     sx={{
-                      flex: { xs: '0 0 calc(50% - 8px)', sm: '0 0 calc(33.33% - 16px)', md: '0 0 calc(25% - 16px)', lg: '0 0 calc(20% - 16px)' },
+                      flex: {
+                        xs: '0 0 calc(50% - 6px)',
+                        sm: '0 0 calc(33.33% - 12px)',
+                        md: '0 0 calc(25% - 12px)',
+                      },
                     }}
                   >
                     <motion.div
@@ -355,10 +364,10 @@ export default function ServicesPage() {
                           },
                         }}
                       >
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontSize: { xs: '0.7rem', sm: '0.75rem', md: '0.8rem' },
+                        <Typography 
+                          variant="body2" 
+                          sx={{ 
+                            fontSize: { xs: '0.7rem', sm: '0.75rem', md: '0.8rem' }, 
                             fontWeight: 500,
                             '&:hover': { color: 'white' }
                           }}
@@ -374,7 +383,7 @@ export default function ServicesPage() {
           </Container>
         </Box>
 
-        {/* Why Choose Our Services - 3 cards per row for 6 cards */}
+        {/* Why Choose Our Services - 3 cards per row */}
         <Container maxWidth="lg" sx={{ py: 8 }}>
           <motion.div
             initial={{ y: -30, opacity: 0 }}
@@ -400,14 +409,14 @@ export default function ServicesPage() {
                 Our Advantages
               </Typography>
             </Box>
-            <Typography
-              variant="h3"
-              sx={{
-                fontWeight: 'bold',
-                textAlign: 'center',
-                mb: 3,
-                color: '#1a1a1a',
-                fontSize: { xs: '1.6rem', sm: '1.8rem', md: '2rem', lg: '2.2rem' }
+            <Typography 
+              variant="h3" 
+              sx={{ 
+                fontWeight: 'bold', 
+                textAlign: 'center', 
+                mb: 3, 
+                color: '#1a1a1a', 
+                fontSize: { xs: '1.6rem', sm: '1.8rem', md: '2rem', lg: '2.2rem' } 
               }}
             >
               Why Choose Our <span style={{ color: '#ff6b35' }}>Services?</span>
@@ -420,21 +429,25 @@ export default function ServicesPage() {
             </Typography>
           </motion.div>
 
-          {/* ✅ 3 cards per row for benefits (6 cards total = 2 rows of 3) */}
+          {/* ✅ 3 cards per row layout for benefits */}
           <Box
             sx={{
               display: 'flex',
               flexWrap: 'wrap',
+              gap: 3,
               justifyContent: 'center',
-              gap: { xs: 2, sm: 2.5, md: 3 },
             }}
           >
             {benefits.map((benefit, index) => (
               <Box
                 key={index}
                 sx={{
-                  flex: { xs: '0 0 100%', sm: '0 0 calc(50% - 20px)', md: '0 0 calc(33.33% - 24px)' },
-                  minWidth: { xs: '100%', sm: '250px', md: '280px' },
+                  flex: {
+                    xs: '0 0 100%',
+                    sm: '0 0 calc(50% - 12px)',
+                    md: '0 0 calc(33.33% - 24px)',
+                  },
+                  minWidth: { xs: '100%', sm: '280px', md: '300px' },
                 }}
               >
                 <motion.div
@@ -444,9 +457,9 @@ export default function ServicesPage() {
                   viewport={{ once: true }}
                   whileHover={{ y: -5 }}
                 >
-                  <Card
-                    sx={{
-                      height: '100%',
+                  <Card 
+                    sx={{ 
+                      height: '100%', 
                       textAlign: 'center',
                       transition: 'all 0.3s ease',
                       borderRadius: { xs: 2, sm: 3 },
@@ -472,20 +485,20 @@ export default function ServicesPage() {
                       >
                         <benefit.icon sx={{ fontSize: { xs: 28, sm: 30, md: 32 }, color: '#ff6b35' }} />
                       </Box>
-                      <Typography
-                        variant="h6"
-                        gutterBottom
-                        sx={{
-                          fontWeight: 600,
-                          color: '#1a1a1a',
-                          fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' }
+                      <Typography 
+                        variant="h6" 
+                        gutterBottom 
+                        sx={{ 
+                          fontWeight: 600, 
+                          color: '#1a1a1a', 
+                          fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } 
                         }}
                       >
                         {benefit.title}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
+                      <Typography 
+                        variant="body2" 
+                        color="textSecondary" 
                         sx={{ lineHeight: 1.6, fontSize: { xs: '0.7rem', sm: '0.75rem', md: '0.8rem' } }}
                       >
                         {benefit.description}
@@ -509,10 +522,10 @@ export default function ServicesPage() {
             >
               <Grid container spacing={3} alignItems="center" justifyContent="center" textAlign="center">
                 <Grid item xs={12}>
-                  <Typography
-                    variant="h4"
-                    gutterBottom
-                    sx={{
+                  <Typography 
+                    variant="h4" 
+                    gutterBottom 
+                    sx={{ 
                       fontWeight: 'bold',
                       fontSize: { xs: '1.5rem', sm: '1.8rem', md: '2rem' }
                     }}
@@ -531,7 +544,7 @@ export default function ServicesPage() {
                     sx={{
                       bgcolor: 'white',
                       color: '#ff6b35',
-                      '&:hover': {
+                      '&:hover': { 
                         bgcolor: 'rgba(255,255,255,0.95)',
                         transform: 'translateY(-2px)',
                       },
