@@ -42,7 +42,7 @@ export default function HeroSection() {
           zIndex: 0,
         }}
       />
-      
+
       {/* Floating Bubbles Background */}
       {[...Array(12)].map((_, i) => (
         <Box
@@ -61,16 +61,16 @@ export default function HeroSection() {
           }}
         />
       ))}
-      
-      <Container 
+
+      <Container
         maxWidth="xl"
-        sx={{ 
-          position: 'relative', 
-          zIndex: 2, 
+        sx={{
+          position: 'relative',
+          zIndex: 2,
           px: { xs: 2, sm: 3, md: 4, lg: 6 },
         }}
       >
-        <Stack 
+        <Stack
           direction={{ xs: 'column', lg: 'row' }}
           spacing={{ xs: 4, sm: 5, md: 6, lg: 8 }}
           alignItems="center"
@@ -137,7 +137,7 @@ export default function HeroSection() {
                 </Box>
                 {' with Expert Guidance'}
               </Typography>
-              
+
               {/* Description */}
               <Typography
                 sx={{
@@ -155,15 +155,15 @@ export default function HeroSection() {
                   mx: { xs: 'auto', lg: 0 },
                 }}
               >
-                Eminance Advice helps students, freshers, professionals, and companies with 
+                Eminance Advice helps students, freshers, professionals, and companies with
                 career counseling, training, internships, placements, recruitment, and HR support services.
               </Typography>
-              
+
               {/* CTA Buttons */}
-              <Stack 
-                direction="row" 
-                spacing={{ xs: 1, sm: 2 }} 
-                sx={{ 
+              <Stack
+                direction="row"
+                spacing={{ xs: 1, sm: 2 }}
+                sx={{
                   mb: { xs: 4, sm: 5 },
                   alignItems: 'center',
                   justifyContent: { xs: 'center', lg: 'flex-start' },
@@ -179,7 +179,7 @@ export default function HeroSection() {
                   sx={{
                     bgcolor: '#ff6b35',
                     color: 'white',
-                    '&:hover': { 
+                    '&:hover': {
                       bgcolor: '#e55a2b',
                       transform: 'translateY(-2px)',
                       boxShadow: '0 10px 20px rgba(255,107,53,0.3)',
@@ -195,7 +195,7 @@ export default function HeroSection() {
                 >
                   Get Started
                 </Button>
-                
+
                 <Button
                   component={Link}
                   href="/jobs"
@@ -203,7 +203,7 @@ export default function HeroSection() {
                   sx={{
                     borderColor: '#ff6b35',
                     color: '#ff6b35',
-                    '&:hover': { 
+                    '&:hover': {
                       borderColor: '#e55a2b',
                       color: '#e55a2b',
                       bgcolor: 'rgba(255,107,53,0.05)',
@@ -220,14 +220,14 @@ export default function HeroSection() {
                 >
                   Apply Jobs
                 </Button>
-                
+
                 <Button
                   component={Link}
                   href="/contact"
                   variant="text"
                   sx={{
                     color: '#666',
-                    '&:hover': { 
+                    '&:hover': {
                       color: '#ff6b35',
                       transform: 'translateY(-2px)',
                       bgcolor: 'transparent',
@@ -244,12 +244,12 @@ export default function HeroSection() {
                   Contact
                 </Button>
               </Stack>
-              
+
               {/* Trust Badges */}
-              <Stack 
-                direction="row" 
+              <Stack
+                direction="row"
                 spacing={{ xs: 2, sm: 3, md: 4 }}
-                sx={{ 
+                sx={{
                   justifyContent: { xs: 'center', lg: 'flex-start' },
                   flexWrap: 'wrap',
                   rowGap: { xs: 1.5, sm: 0 }
@@ -266,7 +266,7 @@ export default function HeroSection() {
                     </Typography>
                   </Box>
                 </Box>
-                
+
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Box sx={{ bgcolor: '#fff5f0', borderRadius: '50%', p: { xs: 0.6, sm: 0.8 } }}>
                     <BusinessCenter sx={{ color: '#ff6b35', fontSize: { xs: 16, sm: 18, md: 20 } }} />
@@ -278,7 +278,7 @@ export default function HeroSection() {
                     </Typography>
                   </Box>
                 </Box>
-                
+
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Box sx={{ bgcolor: '#fff5f0', borderRadius: '50%', p: { xs: 0.6, sm: 0.8 } }}>
                     <EmojiEvents sx={{ color: '#ff6b35', fontSize: { xs: 16, sm: 18, md: 20 } }} />
@@ -293,11 +293,11 @@ export default function HeroSection() {
               </Stack>
             </motion.div>
           </Box>
-          
+
           {/* Right Side - Lottie Animation - Fixed Size */}
-          <Box 
-            sx={{ 
-              flex: { xs: '1 1 100%', lg: '1 1 45%' }, 
+          <Box
+            sx={{
+              flex: { xs: '1 1 100%', lg: '1 1 45%' },
               width: '100%',
               display: 'flex',
               justifyContent: 'center',
@@ -308,8 +308,8 @@ export default function HeroSection() {
               initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              style={{ 
-                width: '100%', 
+              style={{
+                width: '100%',
                 maxWidth: 480,
                 margin: '0 auto'
               }}
@@ -345,10 +345,10 @@ export default function HeroSection() {
                     animation: 'borderRotate 4s linear infinite',
                   }}
                 />
-                
+
                 {/* Lottie Animation - Perfect Square */}
-                <Box 
-                  sx={{ 
+                <Box
+                  sx={{
                     width: '100%',
                     height: '100%',
                     display: 'flex',
@@ -360,8 +360,8 @@ export default function HeroSection() {
                     animationData={animationData}
                     loop={true}
                     autoplay={true}
-                    style={{ 
-                      width: '100%', 
+                    style={{
+                      width: '100%',
                       height: '100%',
                       objectFit: 'contain'
                     }}

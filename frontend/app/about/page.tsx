@@ -11,6 +11,7 @@ import {
   CardContent,
   Avatar,
   Button,
+  Chip,
 } from '@mui/material'
 import {
   School,
@@ -23,6 +24,8 @@ import {
   Assignment,
   CheckCircle,
   ArrowForward,
+  LinkedIn,
+  Phone,
 } from '@mui/icons-material'
 import Link from 'next/link'
 import { NextSeo } from 'next-seo'
@@ -30,8 +33,8 @@ import Lottie from 'lottie-react'
 import animationData from '@/public/about section animation.json'
 
 const stats = [
-  { number: '5000+', label: 'Students Placed', icon: School, delay: 0 },
-  { number: '200+', label: 'Corporate Partners', icon: Handshake, delay: 0.1 },
+  { number: '10,000+', label: 'Students Placed', icon: School, delay: 0 },
+  { number: '500+', label: 'Corporate Partners', icon: Handshake, delay: 0.1 },
   { number: '50+', label: 'Expert Trainers', icon: EmojiPeople, delay: 0.2 },
   { number: '95%', label: 'Success Rate', icon: TrendingUp, delay: 0.3 },
 ]
@@ -41,6 +44,26 @@ const values = [
   { icon: Visibility, title: 'Transparency', description: 'Clear communication and honest guidance at every step.' },
   { icon: Handshake, title: 'Integrity', description: 'Ethical practices and commitment to excellence.' },
   { icon: Assignment, title: 'Excellence', description: 'Striving for the highest quality in all our services.' },
+]
+
+// Team Members Data
+const teamMembers = [
+  {
+    name: 'Savin Jain',
+    role: 'Founder & CEO',
+    description: 'Visionary leader with over 15 years of experience in career counseling and HR services. Founded Eminance Advice in 2009 with a mission to transform career guidance in India.',
+    expertise: ['Career Strategy', 'Leadership', 'Business Development'],
+    image: '/team/savin-jain.jpg',
+    linkedin: 'https://in.linkedin.com/in/savin-jain-745342b3',
+  },
+  {
+    name: 'Abhishek Gurjar',
+    role: 'Managing Director - HR',
+    description: 'HR expert with extensive experience in talent acquisition, corporate training, and placement strategies. Leads the HR vertical at Eminance Advice.',
+    expertise: ['HR Strategy', 'Talent Acquisition', 'Corporate Training'],
+    image: '/team/abhishek-gurjar.jpg',
+    linkedin: 'https://www.linkedin.com/in/abhishek-gurjar/',
+  },
 ]
 
 export default function AboutPage() {
@@ -402,6 +425,176 @@ export default function AboutPage() {
             </Grid>
           </Container>
         </Box>
+
+        {/* OUR TEAM SECTION */}
+        <Container maxWidth="lg" sx={{ py: 8 }}>
+          <motion.div
+            initial={{ y: -30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <Box sx={{ textAlign: 'center', mb: 2 }}>
+              <Typography
+                component="span"
+                sx={{
+                  bgcolor: '#fff5f0',
+                  color: '#ff6b35',
+                  px: 2,
+                  py: 0.5,
+                  borderRadius: 20,
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  display: 'inline-block',
+                  mb: 2,
+                }}
+              >
+                Meet Our Leaders
+              </Typography>
+            </Box>
+            <Typography 
+              variant="h3" 
+              sx={{ 
+                fontWeight: 'bold', 
+                textAlign: 'center', 
+                mb: 3, 
+                color: '#1a1a1a', 
+                fontSize: { xs: '1.8rem', sm: '2rem', md: '2.2rem' } 
+              }}
+            >
+              Our <span style={{ color: '#ff6b35' }}>Leadership</span> Team
+            </Typography>
+            <Typography variant="body1" sx={{ textAlign: 'center', color: '#666', mb: 6, maxWidth: 600, mx: 'auto', fontSize: '0.9rem' }}>
+              Meet the visionaries behind Eminance Advice's success
+            </Typography>
+          </motion.div>
+
+          <Grid container spacing={4} justifyContent="center">
+            {teamMembers.map((member, index) => (
+              <Grid item xs={12} sm={6} md={6} key={index}>
+                <motion.div
+                  initial={{ y: 40, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <Card 
+                    sx={{ 
+                      height: '100%',
+                      overflow: 'hidden',
+                      transition: 'all 0.3s ease',
+                      borderRadius: 3,
+                      '&:hover': {
+                        transform: 'translateY(-5px)',
+                        boxShadow: '0 15px 30px rgba(255,107,53,0.15)',
+                      }
+                    }}
+                  >
+                    <Grid container>
+                      {/* Image Section */}
+                      <Grid item xs={12} sm={4}>
+                        <Box
+                          sx={{
+                            height: '100%',
+                            minHeight: { xs: 200, sm: 'auto' },
+                            bgcolor: '#fff5f0',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            p: 3,
+                          }}
+                        >
+                          <Avatar
+                            sx={{
+                              width: { xs: 120, sm: 140 },
+                              height: { xs: 120, sm: 140 },
+                              bgcolor: '#ff6b35',
+                              fontSize: { xs: '2rem', sm: '2.5rem' },
+                            }}
+                          >
+                            {member.name.charAt(0)}
+                          </Avatar>
+                        </Box>
+                      </Grid>
+
+                      {/* Content Section */}
+                      <Grid item xs={12} sm={8}>
+                        <CardContent sx={{ p: 3 }}>
+                          <Typography 
+                            variant="h4" 
+                            sx={{ 
+                              fontWeight: 'bold', 
+                              color: '#1a1a1a',
+                              fontSize: { xs: '1.3rem', sm: '1.5rem', md: '1.8rem' },
+                              mb: 0.5
+                            }}
+                          >
+                            {member.name}
+                          </Typography>
+                          <Chip
+                            label={member.role}
+                            sx={{
+                              bgcolor: '#ff6b35',
+                              color: 'white',
+                              mb: 2,
+                              fontSize: '0.7rem',
+                              fontWeight: 600,
+                            }}
+                          />
+                          <Typography 
+                            variant="body2" 
+                            sx={{ 
+                              color: '#666', 
+                              lineHeight: 1.6, 
+                              mb: 2,
+                              fontSize: '0.85rem'
+                            }}
+                          >
+                            {member.description}
+                          </Typography>
+                          
+                          {/* Expertise Chips */}
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, mb: 2 }}>
+                            {member.expertise.map((skill, i) => (
+                              <Chip
+                                key={i}
+                                label={skill}
+                                size="small"
+                                variant="outlined"
+                                sx={{
+                                  borderColor: '#ff6b35',
+                                  color: '#ff6b35',
+                                  fontSize: '0.65rem',
+                                }}
+                              />
+                            ))}
+                          </Box>
+
+                          {/* LinkedIn Button Only (Email removed) */}
+                          <Link href={member.linkedin} target="_blank" passHref legacyBehavior>
+                            <Button
+                              size="small"
+                              variant="contained"
+                              startIcon={<LinkedIn sx={{ fontSize: 16 }} />}
+                              sx={{
+                                bgcolor: '#0077b5',
+                                fontSize: '0.7rem',
+                                textTransform: 'none',
+                                '&:hover': { bgcolor: '#005582' }
+                              }}
+                            >
+                              LinkedIn Profile
+                            </Button>
+                          </Link>
+                        </CardContent>
+                      </Grid>
+                    </Grid>
+                  </Card>
+                </motion.div>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
 
         {/* CTA Section */}
         <Box sx={{ bgcolor: '#ff6b35', color: 'white', py: 6 }}>
