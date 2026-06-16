@@ -52,7 +52,7 @@
 //           src="https://www.googletagmanager.com/gtm.js?id=GTM-NMSPJSS5"
 //           strategy="afterInteractive"
 //         />
-        
+
 //         {/* Google Tag Manager - Noscript fallback */}
 //         <noscript>
 //           <iframe 
@@ -62,10 +62,10 @@
 //             style={{ display: 'none', visibility: 'hidden' }}
 //           />
 //         </noscript>
-        
+
 //         <StructuredData />
 //         <BreadcrumbSchema />
-        
+
 //         <Providers>
 //           <ThemeProvider theme={theme}>
 //             <CssBaseline />
@@ -109,7 +109,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <StructuredData />
         <BreadcrumbSchema />
-        
+
         <Providers>
           <ThemeProvider theme={theme}>
             <CssBaseline />

@@ -1,3 +1,4 @@
+// app/jobs/[slug]/page.tsx
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -13,6 +14,7 @@ import {
 import axios from 'axios'
 import { useParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+import { NextSeo } from 'next-seo'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
 const steps = ['Personal Info', 'Education & Skills', 'Submit Application']
@@ -27,7 +29,7 @@ const emptyForm = {
 
 export default function JobDetailPage() {
   const params = useParams()
-  const slug = params.slug as string  // ✅ Correct way to get slug
+  const slug = params.slug as string
   const router = useRouter()
   const [job, setJob] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -87,7 +89,7 @@ export default function JobDetailPage() {
     setSubmitting(true)
     try {
       const fd = new FormData()
-      fd.append('job', job._id)  // ✅ Use job._id from fetched job
+      fd.append('job', job._id)
       fd.append('fullName', formData.fullName)
       fd.append('email', formData.email)
       fd.append('phone', formData.phone)
@@ -149,109 +151,136 @@ export default function JobDetailPage() {
   )
 
   return (
-    <Box sx={{ pt: 12, pb: 8, minHeight: '100vh', bgcolor: '#fafafa' }}>
-      <Container maxWidth="lg">
-        <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
-          <Button startIcon={<ArrowBack />} onClick={() => router.back()}
-            sx={{ mb: 3, color: '#ff6b35' }}>Back to Jobs</Button>
+    <>
+      <NextSeo
+        title={`${job.title} - Apply Now | Eminance Advice Job Portal`}
+        description={`Apply for ${job.title} position at ${job.company}. View job details, requirements, skills, and apply online. Join top companies through Eminance Advice placement assistance.`}
+        canonical={`https://eminenceadvice.com/jobs/${slug}`}
+        openGraph={{
+          url: `https://eminenceadvice.com/jobs/${slug}`,
+          title: `${job.title} - Apply Now | Eminance Advice`,
+          description: `Apply for ${job.title} position at ${job.company}. View job details and apply online.`,
+          images: [
+            {
+              url: 'https://eminenceadvice.com/job-og.jpg',
+              width: 1200,
+              height: 630,
+              alt: job.title,
+            },
+          ],
+        }}
+        additionalMetaTags={[
+          { name: 'keywords', content: `${job.title}, ${job.company} jobs, job application, career opportunity, job vacancy, ${job.skills?.join(', ')}, recruitment, placement` },
+          { name: 'author', content: 'Eminance Advice' },
+          { name: 'publisher', content: 'Eminance Advice' },
+          { name: 'robots', content: 'index, follow' },
+        ]}
+      />
 
-          <Paper sx={{ borderRadius: 3, overflow: 'hidden' }}>
-            <Box sx={{ bgcolor: '#ff6b35', p: 4, color: '#fff' }}>
-              <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>{job.title}</Typography>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
-                <Chip icon={<Business sx={{ color: '#fff !important' }} />} label={job.company}
-                  sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
-                <Chip icon={<LocationOn sx={{ color: '#fff !important' }} />} label={job.location}
-                  sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
-                <Chip icon={<Work sx={{ color: '#fff !important' }} />} label={job.jobType}
-                  sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
-                <Chip icon={<AttachMoney sx={{ color: '#fff !important' }} />}
-                  label={`${job.salary?.currency} ${job.salary?.min?.toLocaleString()} - ${job.salary?.max?.toLocaleString()}`}
-                  sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
-                <Chip icon={<CalendarToday sx={{ color: '#fff !important' }} />}
-                  label={`Deadline: ${new Date(job.deadline).toLocaleDateString()}`}
-                  sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
+      <Box sx={{ pt: 12, pb: 8, minHeight: '100vh', bgcolor: '#fafafa' }}>
+        <Container maxWidth="lg">
+          <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
+            <Button startIcon={<ArrowBack />} onClick={() => router.back()}
+              sx={{ mb: 3, color: '#ff6b35' }}>Back to Jobs</Button>
+
+            <Paper sx={{ borderRadius: 3, overflow: 'hidden' }}>
+              <Box sx={{ bgcolor: '#ff6b35', p: 4, color: '#fff' }}>
+                <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>{job.title}</Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
+                  <Chip icon={<Business sx={{ color: '#fff !important' }} />} label={job.company}
+                    sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
+                  <Chip icon={<LocationOn sx={{ color: '#fff !important' }} />} label={job.location}
+                    sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
+                  <Chip icon={<Work sx={{ color: '#fff !important' }} />} label={job.jobType}
+                    sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
+                  <Chip icon={<AttachMoney sx={{ color: '#fff !important' }} />}
+                    label={`${job.salary?.currency} ${job.salary?.min?.toLocaleString()} - ${job.salary?.max?.toLocaleString()}`}
+                    sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
+                  <Chip icon={<CalendarToday sx={{ color: '#fff !important' }} />}
+                    label={`Deadline: ${new Date(job.deadline).toLocaleDateString()}`}
+                    sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: '#fff' }} />
+                </Box>
               </Box>
-            </Box>
 
-            <Box sx={{ p: 4 }}>
-              <Grid container spacing={4}>
-                <Grid item xs={12} md={8}>
-                  <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff6b35', mb: 1 }}>Description</Typography>
-                  <Typography sx={{ color: '#444', lineHeight: 1.8, mb: 3 }}>{job.description}</Typography>
+              <Box sx={{ p: 4 }}>
+                <Grid container spacing={4}>
+                  <Grid item xs={12} md={8}>
+                    <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff6b35', mb: 1 }}>Description</Typography>
+                    <Typography sx={{ color: '#444', lineHeight: 1.8, mb: 3 }}>{job.description}</Typography>
 
-                  {job.responsibilities?.length > 0 && <>
-                    <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff6b35', mb: 1 }}>Responsibilities</Typography>
-                    <Box component="ul" sx={{ pl: 2, mb: 3 }}>
-                      {job.responsibilities.map((r: string, i: number) => (
-                        <Box component="li" key={i} sx={{ mb: 0.5 }}>
-                          <Typography sx={{ color: '#444' }}>{r}</Typography>
-                        </Box>
-                      ))}
-                    </Box>
-                  </>}
-
-                  {job.requirements?.length > 0 && <>
-                    <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff6b35', mb: 1 }}>Requirements</Typography>
-                    <Box component="ul" sx={{ pl: 2, mb: 3 }}>
-                      {job.requirements.map((r: string, i: number) => (
-                        <Box component="li" key={i} sx={{ mb: 0.5 }}>
-                          <Typography sx={{ color: '#444' }}>{r}</Typography>
-                        </Box>
-                      ))}
-                    </Box>
-                  </>}
-
-                  {job.benefits?.length > 0 && <>
-                    <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff6b35', mb: 1 }}>Benefits</Typography>
-                    <Box component="ul" sx={{ pl: 2, mb: 3 }}>
-                      {job.benefits.map((b: string, i: number) => (
-                        <Box component="li" key={i} sx={{ mb: 0.5 }}>
-                          <Typography sx={{ color: '#444' }}>{b}</Typography>
-                        </Box>
-                      ))}
-                    </Box>
-                  </>}
-                </Grid>
-
-                <Grid item xs={12} md={4}>
-                  <Paper sx={{ p: 3, borderRadius: 2, border: '1px solid #f0f0f0', mb: 3 }}>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2 }}>Job Details</Typography>
-                    {[
-                      { label: 'Category', value: job.category },
-                      { label: 'Experience', value: `${job.experience?.min}-${job.experience?.max} years` },
-                      { label: 'Positions', value: job.positions },
-                      { label: 'Status', value: job.status },
-                    ].map(({ label, value }) => (
-                      <Box key={label} sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5, pb: 1.5, borderBottom: '1px solid #f5f5f5' }}>
-                        <Typography variant="body2" color="textSecondary">{label}</Typography>
-                        <Typography variant="body2" sx={{ fontWeight: 600, textTransform: 'capitalize' }}>{value}</Typography>
-                      </Box>
-                    ))}
-                  </Paper>
-
-                  {job.skills?.length > 0 && (
-                    <Paper sx={{ p: 3, borderRadius: 2, border: '1px solid #f0f0f0', mb: 3 }}>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2 }}>Required Skills</Typography>
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                        {job.skills.map((s: string) => (
-                          <Chip key={s} label={s} size="small"
-                            sx={{ bgcolor: '#fff5f0', color: '#ff6b35', fontWeight: 600 }} />
+                    {job.responsibilities?.length > 0 && <>
+                      <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff6b35', mb: 1 }}>Responsibilities</Typography>
+                      <Box component="ul" sx={{ pl: 2, mb: 3 }}>
+                        {job.responsibilities.map((r: string, i: number) => (
+                          <Box component="li" key={i} sx={{ mb: 0.5 }}>
+                            <Typography sx={{ color: '#444' }}>{r}</Typography>
+                          </Box>
                         ))}
                       </Box>
-                    </Paper>
-                  )}
+                    </>}
 
-                  <Button variant="contained" fullWidth size="large" onClick={openApply}
-                    sx={{ bgcolor: '#ff6b35', '&:hover': { bgcolor: '#e55a2b' }, borderRadius: 2, py: 1.5, fontWeight: 700, fontSize: '1rem' }}>
-                    Apply Now
-                  </Button>
+                    {job.requirements?.length > 0 && <>
+                      <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff6b35', mb: 1 }}>Requirements</Typography>
+                      <Box component="ul" sx={{ pl: 2, mb: 3 }}>
+                        {job.requirements.map((r: string, i: number) => (
+                          <Box component="li" key={i} sx={{ mb: 0.5 }}>
+                            <Typography sx={{ color: '#444' }}>{r}</Typography>
+                          </Box>
+                        ))}
+                      </Box>
+                    </>}
+
+                    {job.benefits?.length > 0 && <>
+                      <Typography variant="h6" sx={{ fontWeight: 700, color: '#ff6b35', mb: 1 }}>Benefits</Typography>
+                      <Box component="ul" sx={{ pl: 2, mb: 3 }}>
+                        {job.benefits.map((b: string, i: number) => (
+                          <Box component="li" key={i} sx={{ mb: 0.5 }}>
+                            <Typography sx={{ color: '#444' }}>{b}</Typography>
+                          </Box>
+                        ))}
+                      </Box>
+                    </>}
+                  </Grid>
+
+                  <Grid item xs={12} md={4}>
+                    <Paper sx={{ p: 3, borderRadius: 2, border: '1px solid #f0f0f0', mb: 3 }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2 }}>Job Details</Typography>
+                      {[
+                        { label: 'Category', value: job.category },
+                        { label: 'Experience', value: `${job.experience?.min}-${job.experience?.max} years` },
+                        { label: 'Positions', value: job.positions },
+                        { label: 'Status', value: job.status },
+                      ].map(({ label, value }) => (
+                        <Box key={label} sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5, pb: 1.5, borderBottom: '1px solid #f5f5f5' }}>
+                          <Typography variant="body2" color="textSecondary">{label}</Typography>
+                          <Typography variant="body2" sx={{ fontWeight: 600, textTransform: 'capitalize' }}>{value}</Typography>
+                        </Box>
+                      ))}
+                    </Paper>
+
+                    {job.skills?.length > 0 && (
+                      <Paper sx={{ p: 3, borderRadius: 2, border: '1px solid #f0f0f0', mb: 3 }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2 }}>Required Skills</Typography>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                          {job.skills.map((s: string) => (
+                            <Chip key={s} label={s} size="small"
+                              sx={{ bgcolor: '#fff5f0', color: '#ff6b35', fontWeight: 600 }} />
+                          ))}
+                        </Box>
+                      </Paper>
+                    )}
+
+                    <Button variant="contained" fullWidth size="large" onClick={openApply}
+                      sx={{ bgcolor: '#ff6b35', '&:hover': { bgcolor: '#e55a2b' }, borderRadius: 2, py: 1.5, fontWeight: 700, fontSize: '1rem' }}>
+                      Apply Now
+                    </Button>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Box>
-          </Paper>
-        </motion.div>
-      </Container>
+              </Box>
+            </Paper>
+          </motion.div>
+        </Container>
+      </Box>
 
       {/* Apply Dialog */}
       <Dialog open={openDialog} onClose={() => !submitting && setOpenDialog(false)} maxWidth="md" fullWidth>
@@ -367,11 +396,6 @@ export default function JobDetailPage() {
 
               {activeStep === 2 && (
                 <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    {/* <Alert severity="info" sx={{ mb: 2, bgcolor: '#fff5f0' }}>
-                      <strong>No resume required!</strong> Our team will contact you on your registered phone number.
-                    </Alert> */}
-                  </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField fullWidth label="LinkedIn Profile URL" value={formData.linkedinProfile}
                       onChange={e => set('linkedinProfile', e.target.value)} />
@@ -404,6 +428,6 @@ export default function JobDetailPage() {
           )}
         </DialogContent>
       </Dialog>
-    </Box>
+    </>
   )
 }

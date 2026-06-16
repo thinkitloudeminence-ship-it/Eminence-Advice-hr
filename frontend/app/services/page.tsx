@@ -1,3 +1,4 @@
+// app/services/page.tsx
 'use client'
 
 import { motion } from 'framer-motion'
@@ -93,14 +94,28 @@ export default function ServicesPage() {
   return (
     <>
       <NextSeo
-        title="Our Services | Career Counseling, Training & Placement"
-        description="Explore Eminance Advice's comprehensive career services: career counseling, soft skills training, placement assistance, resume building, interview prep, and freelancing support."
+        title="Our Services - Career Counseling, Training & Placement | Eminance Advice"
+        description="Explore Eminance Advice's comprehensive career services. Get expert career counseling, soft skills training, placement assistance, resume building, interview preparation, freelancing support, and recruitment services."
         canonical="https://eminenceadvice.com/services"
         openGraph={{
           url: 'https://eminenceadvice.com/services',
           title: 'Eminance Advice Services - Your Career Growth Partner',
           description: 'Expert career guidance and placement services for students and professionals.',
+          images: [
+            {
+              url: 'https://eminenceadvice.com/services-og.jpg',
+              width: 1200,
+              height: 630,
+              alt: 'Eminance Advice Services',
+            },
+          ],
         }}
+        additionalMetaTags={[
+          { name: 'keywords', content: 'career counseling services, soft skills training, placement assistance, resume building, interview preparation, freelancing support, HR services, career guidance, professional training, job placement services' },
+          { name: 'author', content: 'Eminance Advice' },
+          { name: 'publisher', content: 'Eminance Advice' },
+          { name: 'robots', content: 'index, follow' },
+        ]}
       />
       
       <Box sx={{ pt: 12, pb: 8, bgcolor: 'white', overflow: 'hidden' }}>
@@ -143,7 +158,7 @@ export default function ServicesPage() {
           </Container>
         </Box>
 
-        {/* Service Categories - 4 cards per row */}
+        {/* Service Categories */}
         <Container maxWidth="lg" sx={{ py: 8 }}>
           {serviceCategories.map((category, catIndex) => (
             <Box key={catIndex} sx={{ mb: 8 }}>
@@ -181,7 +196,6 @@ export default function ServicesPage() {
                 </Box>
               </motion.div>
 
-              {/* ✅ 4 cards per row layout */}
               <Box
                 sx={{
                   display: 'flex',
@@ -311,7 +325,6 @@ export default function ServicesPage() {
               </Typography>
             </motion.div>
 
-            {/* ✅ 4 cards per row for domains */}
             <Paper 
               elevation={0} 
               sx={{ 
@@ -383,7 +396,7 @@ export default function ServicesPage() {
           </Container>
         </Box>
 
-        {/* Why Choose Our Services - 3 cards per row */}
+        {/* Benefits */}
         <Container maxWidth="lg" sx={{ py: 8 }}>
           <motion.div
             initial={{ y: -30, opacity: 0 }}
@@ -429,7 +442,6 @@ export default function ServicesPage() {
             </Typography>
           </motion.div>
 
-          {/* ✅ 3 cards per row layout for benefits */}
           <Box
             sx={{
               display: 'flex',

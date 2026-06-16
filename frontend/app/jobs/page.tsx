@@ -1,3 +1,4 @@
+// app/jobs/page.tsx
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -17,15 +18,12 @@ import { useParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { NextSeo } from 'next-seo'
 
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
-
-// ─── JOBS LIST PAGE ────────────────────────────────────────────────────────────
 
 interface Job {
   _id: string
   title: string
-  slug?: string  // ✅ Add this line
+  slug?: string
   company: string
   location: string
   jobType: string
@@ -72,9 +70,28 @@ export default function JobsPage() {
   return (
     <>
       <NextSeo
-        title="Job Openings | Apply Now for Latest Vacancies"
-        description="Find your dream job with Eminance Advice. Browse latest job openings across IT, HR, Finance, Sales, and more."
+        title="Latest Job Openings - Apply Now for Top Companies | Eminance Advice"
+        description="Find your dream job with Eminance Advice. Browse latest job openings across IT, HR, Finance, Sales, Digital Marketing, and more. Apply now for internships and full-time positions."
         canonical="https://eminenceadvice.com/jobs"
+        openGraph={{
+          url: 'https://eminenceadvice.com/jobs',
+          title: 'Latest Job Openings - Apply Now | Eminance Advice',
+          description: 'Browse and apply for latest job vacancies across multiple industries. Find your dream job today!',
+          images: [
+            {
+              url: 'https://eminenceadvice.com/jobs-og.jpg',
+              width: 1200,
+              height: 630,
+              alt: 'Eminance Advice Jobs',
+            },
+          ],
+        }}
+        additionalMetaTags={[
+          { name: 'keywords', content: 'job openings, latest jobs, career opportunities, job vacancies, IT jobs, HR jobs, finance jobs, sales jobs, digital marketing jobs, internship opportunities, placement jobs' },
+          { name: 'author', content: 'Eminance Advice' },
+          { name: 'publisher', content: 'Eminance Advice' },
+          { name: 'robots', content: 'index, follow' },
+        ]}
       />
 
       <Box sx={{ pt: 12, pb: 8, minHeight: '100vh', bgcolor: '#fafafa' }}>
@@ -197,7 +214,7 @@ export default function JobsPage() {
 
                           <Button
                             component={Link}
-                            href={`/jobs/${job.slug || job._id}`} // ✅ Slug use karo
+                            href={`/jobs/${job.slug || job._id}`}
                             variant="contained"
                             fullWidth
                             sx={{ bgcolor: '#ff6b35', '&:hover': { bgcolor: '#e55a2b' }, borderRadius: 2, fontWeight: 600 }}>

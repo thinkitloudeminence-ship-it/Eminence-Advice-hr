@@ -1,3 +1,4 @@
+// app/payment/page.tsx
 'use client'
 
 import { useState } from 'react'
@@ -38,10 +39,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { NextSeo } from 'next-seo'
 
-
 const steps = ['Personal Info', 'Payment', 'Confirmation']
 
-// Validation Schema
 const userSchema = z.object({
   name: z.string()
     .min(3, 'Name must be at least 3 characters')
@@ -344,6 +343,30 @@ export default function PaymentPage() {
 
   return (
     <>
+      <NextSeo
+        title="Unlock Career Growth - Pay for Career Guidance Plan | Eminance Advice"
+        description="Get expert career counseling, resume review, interview preparation, and job alerts. Pay securely for our Career Guidance Plan and start your career transformation journey."
+        canonical="https://eminenceadvice.com/payment"
+        openGraph={{
+          url: 'https://eminenceadvice.com/payment',
+          title: 'Career Guidance Plan - Pay Now | Eminance Advice',
+          description: 'Pay securely for career counseling and placement assistance. Start your career growth journey today.',
+          images: [
+            {
+              url: 'https://eminenceadvice.com/payment-og.jpg',
+              width: 1200,
+              height: 630,
+              alt: 'Eminance Advice Payment',
+            },
+          ],
+        }}
+        additionalMetaTags={[
+          { name: 'keywords', content: 'career guidance payment, career counseling fees, placement assistance payment, career plan, career guidance subscription, pay for career counseling' },
+          { name: 'author', content: 'Eminance Advice' },
+          { name: 'publisher', content: 'Eminance Advice' },
+          { name: 'robots', content: 'index, follow' },
+        ]}
+      />
        
       <Box sx={{ pt: 12, pb: 8, minHeight: '100vh', bgcolor: '#f8fafc' }}>
         <Container maxWidth="lg">

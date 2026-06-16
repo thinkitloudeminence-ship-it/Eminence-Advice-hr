@@ -1,3 +1,4 @@
+// app/about/page.tsx
 'use client'
 
 import { motion } from 'framer-motion'
@@ -23,7 +24,6 @@ import {
   ArrowForward,
 } from '@mui/icons-material'
 import Link from 'next/link'
-import Image from 'next/image'
 import { NextSeo } from 'next-seo'
 import Lottie from 'lottie-react'
 import animationData from '@/public/about section animation.json'
@@ -42,13 +42,12 @@ const values = [
   { icon: Assignment, title: 'Excellence', description: 'Striving for the highest quality in all our services.' },
 ]
 
-// Team Members Data with Images
 const teamMembers = [
   {
     name: 'Savin Jain',
     role: 'Founder & CEO',
     description: 'Visionary leader with over 15 years of experience in career counseling and HR services. Founded Eminance Advice in 2009 with a mission to transform career guidance in India.',
-    expertise: ['Image counsultant', 'Leadership', 'Business Development'],
+    expertise: ['Image Consultant', 'Leadership', 'Business Development'],
     image: '/savinjain.jpeg',
   },
   {
@@ -64,14 +63,28 @@ export default function AboutPage() {
   return (
     <>
       <NextSeo
-        title="About Us | Eminance Advice - Our Story & Mission"
-        description="Learn about Eminance Advice - India's trusted career counseling and HR services platform. Founded in 2009, we've helped 5000+ students achieve their career dreams."
+        title="About Eminance Advice - Our Story, Mission & Team Since 2009"
+        description="Learn about Eminance Advice - India's trusted career counseling and HR services platform. Founded in 2009, we've helped 10,000+ students achieve their career dreams. Meet our leadership team and discover our mission."
         canonical="https://eminenceadvice.com/about"
         openGraph={{
           url: 'https://eminenceadvice.com/about',
-          title: 'About Eminance Advice - Our Journey Since 2009',
-          description: 'Discover our mission to bridge the gap between talent and opportunity.',
+          title: 'About Eminance Advice - Our Story, Mission & Team Since 2009',
+          description: 'Discover our mission to bridge the gap between talent and opportunity. Founded in 2009, we\'ve helped 10,000+ students achieve their career dreams.',
+          images: [
+            {
+              url: 'https://eminenceadvice.com/about-og.jpg',
+              width: 1200,
+              height: 630,
+              alt: 'About Eminance Advice',
+            },
+          ],
         }}
+        additionalMetaTags={[
+          { name: 'keywords', content: 'about Eminance Advice, career counseling history, HR services India, career guidance platform, Eminance Advice team, mission vision values, career counseling since 2009, placement services India' },
+          { name: 'author', content: 'Eminance Advice' },
+          { name: 'publisher', content: 'Eminance Advice' },
+          { name: 'robots', content: 'index, follow' },
+        ]}
       />
       
       <Box sx={{ pt: 12, pb: 8, bgcolor: 'white' }}>
@@ -420,7 +433,7 @@ export default function AboutPage() {
           </Container>
         </Box>
 
-        {/* OUR TEAM SECTION - FIXED IMAGE DISPLAY */}
+        {/* Team Section */}
         <Container maxWidth="lg" sx={{ py: 8 }}>
           <motion.div
             initial={{ y: -30, opacity: 0 }}
@@ -485,7 +498,6 @@ export default function AboutPage() {
                     }}
                   >
                     <Grid container>
-                      {/* Image Section - Fixed */}
                       <Grid item xs={12} sm={4}>
                         <Box
                           sx={{
@@ -523,8 +535,6 @@ export default function AboutPage() {
                           </Box>
                         </Box>
                       </Grid>
-
-                      {/* Content Section */}
                       <Grid item xs={12} sm={8}>
                         <CardContent sx={{ p: 3 }}>
                           <Typography 
@@ -559,8 +569,6 @@ export default function AboutPage() {
                           >
                             {member.description}
                           </Typography>
-                          
-                          {/* Expertise Chips */}
                           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, mb: 2 }}>
                             {member.expertise.map((skill, i) => (
                               <Chip

@@ -1,3 +1,4 @@
+// app/contact/page.tsx
 'use client'
 
 import { useState } from 'react'
@@ -115,21 +116,31 @@ export default function ContactPage() {
     }
   }
 
-  const openGoogleMap = () => {
-    window.open('https://www.google.com/maps?q=near+Hotel+Amrit,+Chhoti+Gwaltoli,+Indore,+Madhya+Pradesh+452001', '_blank')
-  }
-
   return (
     <>
       <NextSeo
-        title="Contact Us | Get in Touch with Career Experts"
-        description="Have questions about career counseling, training, or placement? Contact Eminance Advice today. Our expert team is here to help you succeed in your career journey."
+        title="Contact Us - Career Counseling Experts | Eminance Advice"
+        description="Have questions about career counseling, training, or placement? Contact Eminance Advice today. Our expert team is here to help you succeed in your career journey. Call or email us now."
         canonical="https://eminenceadvice.com/contact"
         openGraph={{
           url: 'https://eminenceadvice.com/contact',
           title: 'Contact Eminance Advice - Career Guidance Experts',
-          description: 'Reach out to us for career counseling and placement assistance.',
+          description: 'Reach out to us for career counseling and placement assistance. Our team is here to help you succeed.',
+          images: [
+            {
+              url: 'https://eminenceadvice.com/contact-og.jpg',
+              width: 1200,
+              height: 630,
+              alt: 'Contact Eminance Advice',
+            },
+          ],
         }}
+        additionalMetaTags={[
+          { name: 'keywords', content: 'contact Eminance Advice, career counseling contact, placement assistance contact, HR services contact, career guidance enquiry, career help, job placement contact' },
+          { name: 'author', content: 'Eminance Advice' },
+          { name: 'publisher', content: 'Eminance Advice' },
+          { name: 'robots', content: 'index, follow' },
+        ]}
       />
       <Box sx={{ pt: 12, pb: 8, minHeight: '100vh', bgcolor: '#ffffff' }}>
         <Container maxWidth="lg">

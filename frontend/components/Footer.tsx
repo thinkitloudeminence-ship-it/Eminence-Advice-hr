@@ -110,7 +110,7 @@ export default function Footer() {
                 <Link key={link.label} href={link.href} passHref legacyBehavior>
                   <MuiLink
                     sx={{
-                      color: '#6b7280',
+                      color: '#6b7280', 
                       textDecoration: 'none',
                       fontSize: '0.75rem',
                       display: 'inline-block',
