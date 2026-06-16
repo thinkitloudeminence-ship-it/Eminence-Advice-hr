@@ -26,7 +26,7 @@ import {
 import Link from 'next/link'
 import { NextSeo } from 'next-seo'
 import Lottie from 'lottie-react'
-import animationData from '@/public/about section animation.json'
+import animationData from '../../public/about section animation.json'
 
 const stats = [
   { number: '10,000+', label: 'Students Placed', icon: School, delay: 0 },
