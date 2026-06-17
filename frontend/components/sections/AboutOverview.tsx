@@ -1,13 +1,24 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Box, Container, Typography, Grid, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Container, Typography, Grid, useTheme } from '@mui/material'
 import { CheckCircle } from '@mui/icons-material'
 import Lottie from 'lottie-react'
-import animationData from '@/public/about section animation.json'
+import { useEffect, useState } from 'react'
+
+// Load animation from the public folder at runtime to avoid build-time module resolution errors
+// (public files are not importable via module aliases). The filename has spaces, so encode the URI.
 
 export default function AboutOverview() {
   const theme = useTheme()
+  const [animationData, setAnimationData] = useState(null)
+
+  useEffect(() => {
+    fetch('/animations/about-animation.json')
+      .then(res => res.json())
+      .then(data => setAnimationData(data))
+      .catch(err => console.error('Error loading animation:', err))
+  }, [])
 
   return (
     <Box sx={{ py: { xs: 5, sm: 6, md: 8 }, bgcolor: 'white' }}>

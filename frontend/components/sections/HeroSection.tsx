@@ -5,10 +5,19 @@ import { Box, Container, Typography, Button, Stack, useMediaQuery, useTheme } fr
 import Link from 'next/link'
 import { ArrowForward, TrendingUp, BusinessCenter, EmojiEvents, Work } from '@mui/icons-material'
 import Lottie from 'lottie-react'
-import animationData from '@/public/herosectionanimation.json'
+import { useEffect, useState } from 'react'
 
 export default function HeroSection() {
   const theme = useTheme()
+  const [animationData, setAnimationData] = useState<any>(null)
+
+  useEffect(() => {
+    // public folder assets should be fetched at runtime
+    fetch('/herosectionanimation.json')
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data))
+      .catch(() => setAnimationData(null))
+  }, [])
 
   return (
     <Box
@@ -356,16 +365,18 @@ export default function HeroSection() {
                     justifyContent: 'center',
                   }}
                 >
-                  <Lottie
-                    animationData={animationData}
-                    loop={true}
-                    autoplay={true}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain'
-                    }}
-                  />
+                  {animationData && (
+                    <Lottie
+                      animationData={animationData}
+                      loop={true}
+                      autoplay={true}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain'
+                      }}
+                    />
+                  )}
                 </Box>
               </Box>
             </motion.div>

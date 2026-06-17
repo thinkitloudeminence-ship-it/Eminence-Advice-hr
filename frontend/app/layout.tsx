@@ -87,17 +87,17 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import theme from '../theme'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import { Providers } from '@/redux/provider'
-import ScrollToTop from '@/components/common/ScrollToTop'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+import { Providers } from '../redux/provider'
+import ScrollToTop from '../components/common/ScrollToTop'
 import Script from 'next/script'
 import dynamic from 'next/dynamic'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const StructuredData = dynamic(() => import('@/components/StructuredData'), { ssr: false })
-const BreadcrumbSchema = dynamic(() => import('@/components/BreadcrumbSchema'), { ssr: false })
+const StructuredData = dynamic(() => import('../components/StructuredData'), { ssr: false })
+const BreadcrumbSchema = dynamic(() => import('../components/BreadcrumbSchema'), { ssr: false })
 
 export default function RootLayout({
   children,

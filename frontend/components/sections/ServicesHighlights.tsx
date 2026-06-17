@@ -11,7 +11,7 @@ import PsychologyIcon from '@mui/icons-material/Psychology'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import Lottie from 'lottie-react'
 import Link from 'next/link'
-import animationData from '@/public/ourserviceanimation.json'
+import { useEffect, useState } from 'react'
 
 const services = [
   { icon: SchoolIcon, title: 'Career Counseling', description: 'Expert guidance for career paths, job roles, and professional growth.' },
@@ -24,6 +24,15 @@ const services = [
 
 export default function ServicesHighlights() {
   const theme = useTheme()
+  const [animationData, setAnimationData] = useState<any | null>(null)
+
+  useEffect(() => {
+    // Load the Lottie JSON at runtime to avoid module resolution issues with alias paths
+    fetch('/ourserviceanimation.json')
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data))
+      .catch(() => setAnimationData(null))
+  }, [])
 
   return (
     <Box sx={{ py: { xs: 6, sm: 8, md: 10 }, bgcolor: '#f8fafc', position: 'relative', overflow: 'hidden' }}>
