@@ -29,7 +29,7 @@ const emptyForm = {
 
 export default function JobDetailPage() {
   const params = useParams()
-  const slug = params.slug as string
+  const slug = params.slug
   const router = useRouter()
   const [job, setJob] = useState<any>(null)
   const [loading, setLoading] = useState(true)

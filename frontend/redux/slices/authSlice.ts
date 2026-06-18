@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+
 interface AuthState {
   user: any | null
   token: string | null
@@ -18,10 +20,7 @@ const initialState: AuthState = {
 export const login = createAsyncThunk(
   'auth/login',
   async ({ email, password }: { email: string; password: string }) => {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-      email,
-      password,
-    })
+    const response = await axios.post(`${API_URL}/auth/login`, { email, password })
     return response.data
   }
 )
@@ -29,7 +28,7 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk(
   'auth/register',
   async (userData: any) => {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, userData)
+    const response = await axios.post(`${API_URL}/auth/register`, userData)
     return response.data
   }
 )
@@ -55,7 +54,7 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false
-        state.user = action.payload.data.user
+        state.user = action.payload.data?.user || action.payload.user
         state.token = action.payload.token
         localStorage.setItem('token', action.payload.token)
       })
@@ -68,7 +67,7 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false
-        state.user = action.payload.data.user
+        state.user = action.payload.data?.user || action.payload.user
         state.token = action.payload.token
         localStorage.setItem('token', action.payload.token)
       })

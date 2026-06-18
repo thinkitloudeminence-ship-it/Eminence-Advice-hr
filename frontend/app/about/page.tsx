@@ -1,4 +1,3 @@
-// app/about/page.tsx
 'use client'
 
 import { motion } from 'framer-motion'
@@ -24,9 +23,9 @@ import {
   ArrowForward,
 } from '@mui/icons-material'
 import Link from 'next/link'
-import { NextSeo } from 'next-seo'
+import Head from 'next/head'
 import Lottie from 'lottie-react'
-import animationData from '../../public/about section animation.json'
+import { useState, useEffect } from 'react'
 
 const stats = [
   { number: '10,000+', label: 'Students Placed', icon: School, delay: 0 },
@@ -60,32 +59,39 @@ const teamMembers = [
 ]
 
 export default function AboutPage() {
+  const [animationData, setAnimationData] = useState<any>(null)
+
+  useEffect(() => {
+    // Use encodeURI to handle spaces in the filename
+    const animationPath = encodeURI('/about section animation.json')
+    fetch(animationPath)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`)
+        }
+        return res.json()
+      })
+      .then(data => setAnimationData(data))
+      .catch(err => console.error('Animation load error:', err))
+  }, [])
+
   return (
     <>
-      <NextSeo
-        title="About Eminance Advice - Our Story, Mission & Team Since 2009"
-        description="Learn about Eminance Advice - India's trusted career counseling and HR services platform. Founded in 2009, we've helped 10,000+ students achieve their career dreams. Meet our leadership team and discover our mission."
-        canonical="https://eminenceadvice.com/about"
-        openGraph={{
-          url: 'https://eminenceadvice.com/about',
-          title: 'About Eminance Advice - Our Story, Mission & Team Since 2009',
-          description: 'Discover our mission to bridge the gap between talent and opportunity. Founded in 2009, we\'ve helped 10,000+ students achieve their career dreams.',
-          images: [
-            {
-              url: 'https://eminenceadvice.com/about-og.jpg',
-              width: 1200,
-              height: 630,
-              alt: 'About Eminance Advice',
-            },
-          ],
-        }}
-        additionalMetaTags={[
-          { name: 'keywords', content: 'about Eminance Advice, career counseling history, HR services India, career guidance platform, Eminance Advice team, mission vision values, career counseling since 2009, placement services India' },
-          { name: 'author', content: 'Eminance Advice' },
-          { name: 'publisher', content: 'Eminance Advice' },
-          { name: 'robots', content: 'index, follow' },
-        ]}
-      />
+      <Head>
+        <title>About Eminance Advice - Our Story, Mission & Team Since 2009</title>
+        <meta name="description" content="Learn about Eminance Advice - India's trusted career counseling and HR services platform. Founded in 2009, we've helped 10,000+ students achieve their career dreams. Meet our leadership team and discover our mission." />
+        <meta name="keywords" content="about Eminance Advice, career counseling history, HR services India, career guidance platform, Eminance Advice team, mission vision values, career counseling since 2009, placement services India" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://eminenceadvice.com/about" />
+        <meta property="og:title" content="About Eminance Advice - Our Story, Mission & Team Since 2009" />
+        <meta property="og:description" content="Discover our mission to bridge the gap between talent and opportunity. Founded in 2009, we've helped 10,000+ students achieve their career dreams." />
+        <meta property="og:url" content="https://eminenceadvice.com/about" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://eminenceadvice.com/about-og.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="About Eminance Advice - Our Story, Mission & Team Since 2009" />
+        <meta name="twitter:description" content="Discover our mission to bridge the gap between talent and opportunity. Founded in 2009, we've helped 10,000+ students achieve their career dreams." />
+      </Head>
       
       <Box sx={{ pt: 12, pb: 8, bgcolor: 'white' }}>
         {/* Hero Section */}
@@ -193,12 +199,29 @@ export default function AboutPage() {
                     boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
                   }}
                 >
-                  <Lottie
-                    animationData={animationData}
-                    loop={true}
-                    autoplay={true}
-                    style={{ width: '100%', height: 'auto' }}
-                  />
+                  {animationData ? (
+                    <Lottie
+                      animationData={animationData}
+                      loop={true}
+                      autoplay={true}
+                      style={{ width: '100%', height: 'auto' }}
+                    />
+                  ) : (
+                    <Box
+                      sx={{
+                        width: '100%',
+                        height: 300,
+                        bgcolor: '#fff5f0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Typography variant="body1" color="textSecondary">
+                        Loading animation...
+                      </Typography>
+                    </Box>
+                  )}
                   <Box
                     sx={{
                       position: 'absolute',

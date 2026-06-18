@@ -6,16 +6,20 @@ import { CheckCircle } from '@mui/icons-material'
 import Lottie from 'lottie-react'
 import { useEffect, useState } from 'react'
 
-// Load animation from the public folder at runtime to avoid build-time module resolution errors
-// (public files are not importable via module aliases). The filename has spaces, so encode the URI.
-
 export default function AboutOverview() {
   const theme = useTheme()
   const [animationData, setAnimationData] = useState(null)
 
   useEffect(() => {
-    fetch('/animations/about-animation.json')
-      .then(res => res.json())
+    // Use encodeURI to handle spaces in the filename
+    const animationPath = encodeURI('/about section animation.json')
+    fetch(animationPath)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`)
+        }
+        return res.json()
+      })
       .then(data => setAnimationData(data))
       .catch(err => console.error('Error loading animation:', err))
   }, [])
@@ -193,16 +197,32 @@ export default function AboutOverview() {
                     justifyContent: 'center',
                   }}
                 >
-                  <Lottie
-                    animationData={animationData}
-                    loop={true}
-                    autoplay={true}
-                    style={{ 
-                      width: '100%', 
-                      height: '100%',
-                      objectFit: 'contain'
-                    }}
-                  />
+                  {animationData ? (
+                    <Lottie
+                      animationData={animationData}
+                      loop={true}
+                      autoplay={true}
+                      style={{ 
+                        width: '100%', 
+                        height: '100%',
+                        objectFit: 'contain'
+                      }}
+                    />
+                  ) : (
+                    <Box
+                      sx={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Typography variant="body2" color="textSecondary">
+                        Loading...
+                      </Typography>
+                    </Box>
+                  )}
                 </Box>
               </Box>
             </motion.div>

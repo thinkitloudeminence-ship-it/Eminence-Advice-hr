@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+
 interface JobState {
   jobs: any[]
   currentJob: any | null
@@ -18,7 +20,7 @@ const initialState: JobState = {
 export const fetchJobs = createAsyncThunk(
   'jobs/fetchJobs',
   async (params?: any) => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/jobs`, { params })
+    const response = await axios.get(`${API_URL}/jobs`, { params })
     return response.data
   }
 )
@@ -26,7 +28,7 @@ export const fetchJobs = createAsyncThunk(
 export const fetchJobById = createAsyncThunk(
   'jobs/fetchJobById',
   async (id: string) => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/jobs/${id}`)
+    const response = await axios.get(`${API_URL}/jobs/${id}`)
     return response.data
   }
 )
@@ -34,7 +36,7 @@ export const fetchJobById = createAsyncThunk(
 export const applyForJob = createAsyncThunk(
   'jobs/applyForJob',
   async (formData: FormData) => {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/applications`, formData, {
+    const response = await axios.post(`${API_URL}/applications`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
     return response.data
@@ -56,7 +58,7 @@ const jobSlice = createSlice({
       })
       .addCase(fetchJobs.fulfilled, (state, action) => {
         state.isLoading = false
-        state.jobs = action.payload.data
+        state.jobs = action.payload.data || action.payload || []
       })
       .addCase(fetchJobs.rejected, (state, action) => {
         state.isLoading = false
@@ -67,7 +69,7 @@ const jobSlice = createSlice({
       })
       .addCase(fetchJobById.fulfilled, (state, action) => {
         state.isLoading = false
-        state.currentJob = action.payload.data
+        state.currentJob = action.payload.data || action.payload
       })
       .addCase(fetchJobById.rejected, (state, action) => {
         state.isLoading = false
