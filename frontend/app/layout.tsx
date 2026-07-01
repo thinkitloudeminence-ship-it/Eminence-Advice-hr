@@ -1,9 +1,11 @@
 // app/layout.tsx - Server Component
 import { Inter } from 'next/font/google'
+
+// ✅ SAHI PATH - file app folder ke andar hai, isliye './globals.css'
 import './globals.css'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
-import theme from '../theme'  // ✅ 'use client' wala theme
+import theme from '../theme'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { Providers } from '../redux/provider'
@@ -19,6 +21,9 @@ const BreadcrumbSchema = dynamic(() => import('../components/BreadcrumbSchema'),
 export const metadata = {
   title: 'Eminance Advice - Career Counseling, Training & Placement Services',
   description: 'Transform your career with expert guidance. 10,000+ students placed successfully.',
+  verification: {
+    google: 'uvWsOIv6Az0M82lxlAd6B4azFEsxGh1I70pNNFPoIL0',
+  },
 }
 
 export default function RootLayout({
@@ -28,6 +33,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="google-site-verification" content="uvWsOIv6Az0M82lxlAd6B4azFEsxGh1I70pNNFPoIL0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
       <body className={inter.className}>
         <StructuredData />
         <BreadcrumbSchema />

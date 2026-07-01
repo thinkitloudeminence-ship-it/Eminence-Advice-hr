@@ -1,9 +1,13 @@
-// frontend/app/metadata.ts
+// app/metadata.ts
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Eminance Advice - Career Counseling, Training & Placement Services Since 2009',
   description: 'Transform your career with expert guidance. 10,000+ students placed successfully.',
+  // ✅ GOOGLE VERIFICATION ADDED
+  verification: {
+    google: 'uvWsOIv6Az0M82lxlAd6B4azFEsxGh1I70pNNFPoIL0',
+  },
   openGraph: {
     title: 'Eminance Advice - Career Counseling & Placement Services Since 2009',
     description: 'Career counseling, training, internships, placements, recruitment, and HR support services.',

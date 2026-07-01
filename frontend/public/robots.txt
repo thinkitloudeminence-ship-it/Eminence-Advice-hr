@@ -1,4 +1,6 @@
+# robots.txt
 User-agent: *
 Allow: /
 
-Sitemap: https://eminenceadvice.com/sitemap.xml
+Sitemap: https://www.eminenceadvice.com/sitemap.xml
+Host: https://www.eminenceadvice.com
