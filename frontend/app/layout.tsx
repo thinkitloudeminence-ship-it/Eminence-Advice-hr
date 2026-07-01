@@ -1,7 +1,6 @@
-// app/layout.tsx - Server Component
+// frontend/app/layout.tsx
 import { Inter } from 'next/font/google'
-
-// ✅ SAHI PATH - file app folder ke andar hai, isliye './globals.css'
+// @ts-ignore: CSS imports are handled by Next.js and don't have explicit type declarations here
 import './globals.css'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
